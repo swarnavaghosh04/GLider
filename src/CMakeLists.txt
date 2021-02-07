@@ -23,16 +23,13 @@ target_sources(
     ${HermyGL_SOURCES}
 )
 
-target_link_libraries(HermyGL PUBLIC SDL2::SDL2-static glad ${OPENGL_LIBRARIES})
+target_link_libraries(HermyGL PUBLIC SDL2::SDL2 glad ${OPENGL_LIBRARIES})
 
-get_target_property(glad_include glad INTERFACE_INCLUDE_DIRECTORIES)
-get_target_property(SDL2_include SDL2::SDL2-static INTERFACE_INCLUDE_DIRECTORIES)
+# get_target_property(glad_include glad INTERFACE_INCLUDE_DIRECTORIES)
+# get_target_property(SDL2_include SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
 
 target_include_directories(
     HermyGL PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    # INTERFACE
-    #     ${glad_include}
-    #     ${SDL2_include}
 )

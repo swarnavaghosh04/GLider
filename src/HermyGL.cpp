@@ -10,30 +10,30 @@ hgl::error hgl::initialize(){
         return ret;
     }
 
-    auto call = [&](int code){
-        if(code < 0) throw code;
-    };
+    ret.code = -1;
 
-    ret.code = 0;
+    auto checkError = [&](int funcReturn){
+        if(funcReturn != 0) throw 0;
+        else ret.code--;
+    };
 
     try{
     
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
-        SDL_GL_SetSwapInterval(0);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+        checkError(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE));
+        checkError(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4));
+        checkError(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6));
+        checkError(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1));
+        checkError(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32));
+        checkError(SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1));
+        checkError(SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4));
+        checkError(SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1));
     
-    }catch(int err){
-        ret = {err, SDL_GetError()};
+    }catch(...){
+        ret.message = SDL_GetError();
+        return ret;
     }
 
-    return ret;
+    return {0, hgl::noError};
 }
 
 void hgl::quit(){
@@ -62,14 +62,18 @@ hgl::Window::Window(hgl::error &ret, const char* title, int width, int height, U
     }
     
     glContext = SDL_GL_CreateContext(window);
-
     if(glContext == NULL){
         ret = {-3, SDL_GetError()};
         return;
     }
 
+    if(SDL_GL_SetSwapInterval(0) != 0){
+        ret = {-4, SDL_GetError()};
+        return;
+    }
+
     if(!gladLoadGL()) {
-        ret = {-4, "Glad OpenGL Load error!"};
+        ret = {-5, "Glad OpenGL Load Error!"};
         return;
     }
 
@@ -79,6 +83,8 @@ hgl::Window::Window(hgl::error &ret, const char* title, int width, int height, U
 
 hgl::Window::~Window(){
 
+    SDL_GL_DeleteContext(glContext);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     return;
     

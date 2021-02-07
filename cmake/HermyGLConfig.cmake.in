@@ -1,5 +1,8 @@
 @PACKAGE_INIT@
 
+find_package(OpenGL REQUIRED)
+find_package(SDL2 REQUIRED)
+
 if(
     NOT TARGET HermyGL::HermyGL OR
     NOT TARGET HermyGL::glad

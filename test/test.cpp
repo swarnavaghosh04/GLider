@@ -7,11 +7,12 @@ inline void printError(const char* message, const hgl::error& e){
 
 int main(int argc, const char* argv[]){
 
-    printError("Initialization", hgl::initialize());
-
     hgl::error err;
 
-    hgl::Window w = {err, "Test Window", 500, 400, SDL_WINDOW_SHOWN, 0};
+    err = hgl::initialize();
+    printError("Initialization", err);
+
+    hgl::Window window = {err, "Test Window", 500, 400, 0, 0};
     printError("Window Creation", err);
 
     bool keepRunning = true;
