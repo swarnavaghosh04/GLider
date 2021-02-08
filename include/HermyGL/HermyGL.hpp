@@ -1,3 +1,19 @@
+
+/*========================TODO========================
+
+Make a base class for opengl classes like
+{
+private:
+    unsigned int id[n];
+public:
+    bind();
+    unbind();
+    operator[]
+    getId();
+}
+
+=====================================================*/
+
 #ifndef HERMYGL__H_
 #define HERMYGL__H_
 

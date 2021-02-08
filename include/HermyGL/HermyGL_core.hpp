@@ -5,7 +5,6 @@
 #include "glad/glad.h"
 #include "HermyGL/HermyGL_export.h"
 
-
 namespace hgl{
 
     struct error{
