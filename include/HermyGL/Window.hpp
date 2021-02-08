@@ -1,0 +1,26 @@
+#ifndef HGL_WINDOW__H_
+#define HGL_WINDOW__H_
+
+#include "HermyGL/HermyGL_core.hpp"
+
+namespace hgl{
+
+    class HERMYGL_EXPORT Window{
+
+    private:
+
+        SDL_Window *window;
+        SDL_Renderer *renderer;
+        SDL_GLContext glContext;
+        
+    public:
+
+        Window(error &ret, const char* title, int width, int height, Uint32 windowFlags, Uint32 rendererFlags);
+        ~Window();
+
+        inline const SDL_Window* getWindow() const {return window;}
+    };
+    
+}
+
+#endif

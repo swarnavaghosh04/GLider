@@ -1,3 +1,5 @@
+#define HGL_DEBUG
+
 #include "HermyGL/HermyGL.hpp"
 #include <iostream>
 
