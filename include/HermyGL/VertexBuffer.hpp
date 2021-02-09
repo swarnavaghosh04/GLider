@@ -5,43 +5,48 @@
 
 namespace hgl{
 
-    struct LayoutElement{
-        unsigned short count;
-        bool normalized;
-    };
-
-    template<typename T, AllocType dataAllocType>
-    class HERMYGL_EXPORT VertexBuffer : public OpenGLBase<dataAllocType>{
-
+    template<AllocType allocType = AllocType::heap>
+    class HERMYGL_EXPORT VertexBuffer : public OpenGLBase<allocType>{
     public:
-        VertexBuffer();
+        VertexBuffer(unsigned short count = 1,unsigned int* buf = nullptr);
         ~VertexBuffer();
-        inline void bind(unsigned short index) const;
-        inline void unbind() const;
+        void bind(unsigned short index = 0) const;
+        void unbind() const;
+        template<typename T>
+        void feedData(const T* data, unsigned int count, unsigned int usage, unsigned short index = 0);
     };
 
+    template<AllocType allocType>
+    VertexBuffer<allocType>::VertexBuffer(unsigned short count, unsigned int* buf):
+        OpenGLBase<allocType>(count, buf)
+    {
+        GL_CALL(glGenBuffers(this->count, this->id));
+    }
+
+    template<AllocType allocType>
+    VertexBuffer<allocType>::~VertexBuffer(){
+        GL_CALL(glDeleteBuffers(this->count, this->id));
+    }
+
+    template<AllocType allocType>
+    inline void VertexBuffer<allocType>::bind(unsigned short index) const{
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, this->id[index]));
+    }
+
+    template<AllocType allocType>
+    inline void VertexBuffer<allocType>::unbind() const{
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    }
+
+    template<AllocType allocType>
+    template<typename T>
+    void VertexBuffer<allocType>::feedData(const T* data, unsigned int dataCount, unsigned int usage, unsigned short index){
+        bind(index);
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, dataCount*sizeof(T), data, usage));
+    }
+
 }
 
-template<typename T, hgl::AllocType dataAllocType>
-hgl::VertexBuffer<T, dataAllocType>::VertexBuffer(unsigned short count):
-    hgl::OpenGLBase<dataAllocType>(count)
-{
-    GL_CALL(glGenBuffers(count, id));
-}
 
-template<typename T, hgl::AllocType dataAllocType>
-hgl::VertexBuffer<T, dataAllocType>::~VertexBuffer(){
-    GL_CALL(glDeleteBuffers(count, id));
-}
-
-template<typename T, hgl::AllocType dataAllocType>
-hgl::VertexBuffer<T, dataAllocType>::bind(unsigned short index) const{
-    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, id[index]));
-}
-
-template<typename T, hgl::AllocType dataAllocType>
-hgl::VertexBuffer<T, dataAllocType>::unbind() const{
-    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-}
 
 #endif
