@@ -23,6 +23,8 @@ public:
 
 #include "HermyGL/HermyGL_core.hpp"
 #include "HermyGL/Window.hpp"
+#include "HermyGL/VertexBuffer.hpp"
+#include "HermyGL/VertexArray.hpp"
 
 namespace hgl{
 

@@ -9,7 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 include(GNUInstallDirs)
 
@@ -52,16 +52,16 @@ install(
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         COMPONENT HermyGL_Runtime
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT HermyGL_Development # NAMELINK_SKIP # HermyGL_Development
+        COMPONENT HermyGL_Runtime NAMELINK_SKIP
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT HermyGL_Development
 )
-# install(
-#     TARGETS HermyGL
-#     EXPORT HermyGLTargets
-#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#         COMPONENT HermyGL_Development NAMELINK_ONLY
-# )
+install(
+    TARGETS HermyGL
+    EXPORT HermyGLTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT HermyGL_Development NAMELINK_ONLY
+)
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HermyGL
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}

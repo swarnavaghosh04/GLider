@@ -9,10 +9,10 @@
 #  ifndef HERMYGL_EXPORT
 #    ifdef HermyGL_EXPORTS
         /* We are building this library */
-#      define HERMYGL_EXPORT 
+#      define HERMYGL_EXPORT __declspec(dllexport)
 #    else
         /* We are using this library */
-#      define HERMYGL_EXPORT 
+#      define HERMYGL_EXPORT __declspec(dllimport)
 #    endif
 #  endif
 

@@ -2,48 +2,59 @@
 #define HGL_VERTEXBUFFER__H_
 
 #include "HermyGL/OpenGLBase.hpp"
+#include "HermyGL/VertexBuffer.hpp"
 
 namespace hgl{
 
-    template<AllocType allocType = AllocType::heap>
-    class HERMYGL_EXPORT VertexBuffer : public OpenGLBase<allocType>{
-    public:
-        VertexBuffer(unsigned short count = 1,unsigned int* buf = nullptr);
-        ~VertexBuffer();
-        void bind(unsigned short index = 0) const;
-        void unbind() const;
-        template<typename T>
-        void feedData(const T* data, unsigned int count, unsigned int usage, unsigned short index = 0);
+    enum Dimensions : unsigned char{
+        Dim_ONE = 1, Dim_TWO = 2, Dim_THREE = 3, Dim_FOUR = 4
     };
 
-    template<AllocType allocType>
-    VertexBuffer<allocType>::VertexBuffer(unsigned short count, unsigned int* buf):
-        OpenGLBase<allocType>(count, buf)
-    {
-        GL_CALL(glGenBuffers(this->count, this->id));
-    }
+    enum Normalized : bool{
+        Norm_FALSE = false, Norm_TRUE = true
+    };
 
-    template<AllocType allocType>
-    VertexBuffer<allocType>::~VertexBuffer(){
-        GL_CALL(glDeleteBuffers(this->count, this->id));
-    }
+    struct LayoutElement{
+        Dimensions dimension;
+        Normalized normalized;
+    };
 
-    template<AllocType allocType>
-    inline void VertexBuffer<allocType>::bind(unsigned short index) const{
-        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, this->id[index]));
-    }
+    class HERMYGL_EXPORT VertexBuffer : public OpenGLBase{
+    private:
+        const LayoutElement *layout;
+        unsigned int layoutCount;
+        friend class VertexArray;
+    public:
+        VertexBuffer();
+        ~VertexBuffer();
+        void bind() const;
+        void unbind() const;
+        template<typename T>
+        void feedData(
+            const T* data,
+            unsigned int count,
+            const LayoutElement* layout,
+            unsigned int layoutCount,
+            unsigned int usage);
+    };
 
-    template<AllocType allocType>
-    inline void VertexBuffer<allocType>::unbind() const{
-        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    }
+    #define feedData_PARAMS(T)          \
+        const T* data,                  \
+        unsigned int count,             \
+        const LayoutElement* layout,    \
+        unsigned int layoutCount,       \
+        unsigned int usage
 
-    template<AllocType allocType>
-    template<typename T>
-    void VertexBuffer<allocType>::feedData(const T* data, unsigned int dataCount, unsigned int usage, unsigned short index){
-        bind(index);
-        GL_CALL(glBufferData(GL_ARRAY_BUFFER, dataCount*sizeof(T), data, usage));
-    }
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<char>(feedData_PARAMS(char));
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<short>(feedData_PARAMS(short));
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<int>(feedData_PARAMS(int));
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<long>(feedData_PARAMS(long));
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<float>(feedData_PARAMS(float));
+    #ifdef INCORPORATE_DOUBLE
+    extern template HERMYGL_EXPORT void VertexBuffer::feedData<double>(feedData_PARAMS(double));
+    #endif
+
+    #undef feedData_PARAMS
 
 }
 

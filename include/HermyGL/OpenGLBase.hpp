@@ -9,6 +9,10 @@
 #define HGL_DATA_ALLOC_STACK 0
 #define HGL_DATA_ALLOC_HEAP 1
 
+#if defined(GL_VERSION_4_0) && GL_VERSION_4_0 == 1
+    #define INCORPORATE_DOUBLE
+#endif
+
 namespace hgl{
 
     /**
@@ -28,59 +32,27 @@ namespace hgl{
             std::is_same<T, int>()              ? GL_INT :
             std::is_same<T, unsigned int>()     ? GL_UNSIGNED_INT :
             std::is_same<T, float>()            ? GL_FLOAT :
-            #if defined(GL_VERSION_4_0) && GL_VERSION_4_0 == 1
+            #ifdef INCORPORATE_DOUBLE
             std::is_same<T, double>()           ? GL_DOUBLE :
             #endif
             0
         );
     }
 
-    enum AllocType{
-        stack = 0, heap
-    };
-
-    template<AllocType allocType = AllocType::heap>
     class HERMYGL_EXPORT OpenGLBase{
     protected:
-        unsigned short count;
-        unsigned int *id;
+        unsigned int id;
     public:
-        OpenGLBase(unsigned short count, unsigned int* buf = nullptr);
+        OpenGLBase() = default;
         virtual ~OpenGLBase();
         OpenGLBase(const OpenGLBase& va) = delete;
         OpenGLBase(const OpenGLBase&& va) = delete;
         void operator= (const OpenGLBase& va) = delete;
         void operator= (const OpenGLBase&& va) = delete;
-        virtual void bind(unsigned short index = 0) const = 0;
+        virtual void bind() const = 0;
         virtual void unbind() const = 0;
-        const unsigned int& operator[] (unsigned int index) const;
-        const unsigned int* getId() const;
+        const unsigned int& getId() const;
     };
-
-    template<AllocType allocType>
-    OpenGLBase<allocType>::OpenGLBase(unsigned short count, unsigned int* buf):
-        count(count)
-    {
-        if(buf == nullptr){
-            if(allocType == heap)
-                id = new unsigned int[count];
-            else throw 0;
-        }
-        else id = buf;
-    }
-
-    template<AllocType allocType>
-    OpenGLBase<allocType>::~OpenGLBase(){
-        if(allocType == AllocType::heap) delete[] id;
-    }
-
-    template<AllocType allocType>
-    inline const unsigned int& OpenGLBase<allocType>::operator[] (unsigned int index) const
-    { return id[index]; }
-
-    template<AllocType allocType>
-    inline const unsigned int* OpenGLBase<allocType>::getId() const
-    { return id; }
 
 }
 

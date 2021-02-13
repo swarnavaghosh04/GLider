@@ -1,11 +1,9 @@
-#define HGL_DEBUG
-
 #include "HermyGL/HermyGL.hpp"
 #include "HermyGL/VertexArray.hpp"
 #include "HermyGL/VertexBuffer.hpp"
 
 inline void printError(const char* message, const hgl::error& e){
-    SDL_Log("%s: [%d] %s (%d)\n", message, e.code, e.message, (int)(e.message != hgl::noError));
+    SDL_Log("%s: [%d] %s\n", message, e.code, e.message);
 }
 
 int main(int argc, const char* argv[]){
@@ -16,17 +14,9 @@ int main(int argc, const char* argv[]){
     printError("Initialization", err);
 
     {
-        SDL_Log(
-            "Dimension:     %u\n"
-            "LayoutElement: %u\n",
-            sizeof(hgl::LayoutElement::Dimension),
-            sizeof(hgl::LayoutElement)
-        );
 
-        hgl::Window window = {err, "Test Window", 500, 400, 0, 0};
+        hgl::Window window = {err, "Test Window", 1000, 800, 0, 0};
         printError("Window Creation", err);
-
-        unsigned int storage[2];
 
         const float data[4*4] = {
             2,3,4,5,
@@ -34,16 +24,16 @@ int main(int argc, const char* argv[]){
             3,2,3,4,
             2,3,4,1
         };
+        const hgl::LayoutElement dataLayout[2] = {
+            {hgl::Dim_THREE, hgl::Norm_FALSE},
+            {hgl::Dim_ONE, hgl::Norm_FALSE}
+        };
 
-        hgl::VertexArray<hgl::stack> va(1, storage);
-        hgl::VertexBuffer<hgl::stack> vb(1);
+        hgl::VertexArray va;
+        hgl::VertexBuffer vb;
 
-        vb.feedData<float>(data, 4*4, GL_STATIC_DRAW, 0);
-        
-        hgl::LayoutElement lay[2] = {{hgl::LayoutElement::TWO, false}, {hgl::LayoutElement::TWO, false}};
-        hgl::Layout layout = {lay, 2};
-
-        va.readBufferData<float>(vb, 0, layout, 0, 0);
+        vb.feedData<float>(data, 4*4, dataLayout, 2, GL_STATIC_DRAW);
+        va.readBufferData<float>(vb, 0);
 
         bool keepRunning = true;
         SDL_Event e;
