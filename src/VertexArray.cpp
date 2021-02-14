@@ -9,56 +9,69 @@ namespace hgl{
         GL_CALL(glDeleteVertexArrays(1, &(this->id)));
     }
 
-    inline void VertexArray::bind() const{
+    void VertexArray::bind() const{
         GL_CALL(glBindVertexArray(this->id));
     }
 
-    inline void VertexArray::unbind() const{
+    void VertexArray::unbind() const{
         GL_CALL(glBindVertexArray(0));
     }
 
     template<typename T>
     void VertexArray::readBufferData(
-        const VertexBuffer&     vb,
-        unsigned int            startingAttribIndex
+        const OpenGLBuffer<VertexBuffer>&   vb,
+        const LayoutElement*                layout,
+        unsigned int                        layoutCount,
+        unsigned int                        startingAttribIndex
     ){
         bind();
         vb.bind();
 
-        unsigned int stride = 0;
-        for(unsigned int i = 0; i < vb.layoutCount; i++)
-            stride += (unsigned int)(vb.layout[i].dimension);
+        int stride = 0;
+        for(int i = 0; i < layoutCount; i++)
+            stride += (int)(layout[i].dimension);
         stride *= sizeof(T);
 
         unsigned long long offset = 0;
-        for(unsigned int i = 0; i < vb.layoutCount; i++){
+        for(unsigned int i = 0; i < layoutCount; i++){
             GL_CALL(glEnableVertexAttribArray(startingAttribIndex));
-            glVertexAttribPointer(
+            GL_CALL(glVertexAttribPointer(
                 startingAttribIndex,
-                vb.layout[i].dimension,
+                (int)(layout[i].dimension),
                 primitiveTypeToGLType<T>(),
-                vb.layout[i].normalized ? GL_TRUE:GL_FALSE,
+                layout[i].normalized ? GL_TRUE:GL_FALSE,
                 stride,
-                (const void*)offset);
-            offset += (vb.layout[i].dimension)*sizeof(T);
+                (const void*)offset)
+            );
+            offset += (layout[i].dimension)*sizeof(T);
+            GL_CALL(glDisableVertexAttribArray(startingAttribIndex));
             startingAttribIndex++;
         }
 
     }
 
-    #define readBufferData_PARAMS\
-        const VertexBuffer&     vb,                     \
-        unsigned int            startingAttribIndex = 0
 
-    template void VertexArray::readBufferData<char>(readBufferData_PARAMS);
-    template void VertexArray::readBufferData<short>(readBufferData_PARAMS);
-    template void VertexArray::readBufferData<int>(readBufferData_PARAMS);
-    template void VertexArray::readBufferData<long>(readBufferData_PARAMS);
-    template void VertexArray::readBufferData<float>(readBufferData_PARAMS);
+    #define TEMP_INST(T)\
+        template void VertexArray::readBufferData<T>(\
+            const OpenGLBuffer<VertexBuffer>&   vb,\
+            const LayoutElement*                layout,\
+            unsigned int                        layoutCount,\
+            unsigned int                        startingAttribIndex = 0\
+        )
+
+    TEMP_INST(char);
+    TEMP_INST(unsigned char);
+    TEMP_INST(short);
+    TEMP_INST(unsigned short);
+    TEMP_INST(int);
+    TEMP_INST(unsigned int);
+    TEMP_INST(long);
+    TEMP_INST(unsigned long);
+    TEMP_INST(float);
     #ifdef INCORPORATE_DOUBLE
-    template void VertexArray::readBufferData<double>(readBufferData_PARAMS);
+    TEMP_INST(double);
     #endif
 
-    #undef readBufferData_PARAMS
+    #undef TEMP_INST
 
 }

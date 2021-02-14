@@ -1,8 +1,6 @@
 #ifndef HGL_OPENGL_BASE__H_
 #define HGL_OPENGL_BASE__H_
 
-#define HGL_DEBUG
-
 #include "HermyGL/HermyGL_core.hpp"
 #include "HermyGL/GLErrorHandling.hpp"
 
@@ -55,7 +53,5 @@ namespace hgl{
     };
 
 }
-
-
 
 #endif

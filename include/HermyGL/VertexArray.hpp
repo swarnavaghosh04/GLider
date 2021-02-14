@@ -2,9 +2,23 @@
 #define HGL_VERTEXARRAY__H_
 
 #include "HermyGL/OpenGLBase.hpp"
-#include "HermyGL/VertexBuffer.hpp"
+#include "HermyGL/OpenGLBuffer.hpp"
+//#include "HermyGL/VertexBuffer.hpp"
 
 namespace hgl{
+
+    enum Dimensions : unsigned char{
+        Dim_ONE = 1, Dim_TWO = 2, Dim_THREE = 3, Dim_FOUR = 4
+    };
+
+    enum Normalized : bool{
+        Norm_FALSE = false, Norm_TRUE = true
+    };
+
+    struct LayoutElement{
+        Dimensions dimension;
+        Normalized normalized;
+    };
 
     class HERMYGL_EXPORT VertexArray : public OpenGLBase{
     public:
@@ -14,25 +28,35 @@ namespace hgl{
         void unbind() const;
         template<typename T>
         void readBufferData(
-            const VertexBuffer&     vb,
-            unsigned int            startingAttribIndex = 0
+            const OpenGLBuffer<VertexBuffer>&   vb,
+            const LayoutElement*                layout,
+            unsigned int                        layoutCount,
+            unsigned int                        startingAttribIndex = 0
         );
     };
 
-    #define readBufferData_PARAMS\
-        const VertexBuffer&     vb,                     \
-        unsigned int            startingAttribIndex = 0
+    #define TEMP_INST(T)\
+        extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
+            const OpenGLBuffer<VertexBuffer>&   vb,\
+            const LayoutElement*                layout,\
+            unsigned int                        layoutCount,\
+            unsigned int                        startingAttribIndex = 0\
+        )
 
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<char>(readBufferData_PARAMS);
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<short>(readBufferData_PARAMS);
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<int>(readBufferData_PARAMS);
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<long>(readBufferData_PARAMS);
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<float>(readBufferData_PARAMS);
+    TEMP_INST(char);
+    TEMP_INST(unsigned char);
+    TEMP_INST(short);
+    TEMP_INST(unsigned short);
+    TEMP_INST(int);
+    TEMP_INST(unsigned int);
+    TEMP_INST(long);
+    TEMP_INST(unsigned long);
+    TEMP_INST(float);
     #ifdef INCORPORATE_DOUBLE
-    extern template HERMYGL_EXPORT void VertexArray::readBufferData<double>(readBufferData_PARAMS);
+    TEMP_INST(double);
     #endif
 
-    #undef readBufferData_PARAMS
+    #undef TEMP_INST
 
 }
 

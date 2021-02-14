@@ -4,12 +4,13 @@ int hgl::numErrors = 0;
 
 void hgl::checkErrors(){
     
-    unsigned int error = glGetError();
     hgl::numErrors = 0;
+    unsigned int error = glGetError();
 
-    if(error != GL_NO_ERROR){
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "[OpenGL Error] (%u)\n", error);
-        numErrors++;
+    while(error != GL_NO_ERROR){
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[OpenGL Error] (%u)\n", error);
+        hgl::numErrors++;
+        error = glGetError();
         return;
     }
 
