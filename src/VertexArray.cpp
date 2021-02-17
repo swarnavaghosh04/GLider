@@ -44,12 +44,10 @@ namespace hgl{
                 (const void*)offset)
             );
             offset += (layout[i].dimension)*sizeof(T);
-            GL_CALL(glDisableVertexAttribArray(startingAttribIndex));
             startingAttribIndex++;
         }
 
     }
-
 
     #define TEMP_INST(T)\
         template void VertexArray::readBufferData<T>(\
@@ -59,19 +57,12 @@ namespace hgl{
             unsigned int                        startingAttribIndex = 0\
         )
 
-    TEMP_INST(char);
-    TEMP_INST(unsigned char);
-    TEMP_INST(short);
-    TEMP_INST(unsigned short);
-    TEMP_INST(int);
-    TEMP_INST(unsigned int);
-    TEMP_INST(long);
-    TEMP_INST(unsigned long);
-    TEMP_INST(float);
-    #ifdef INCORPORATE_DOUBLE
-    TEMP_INST(double);
-    #endif
+    __HGL_InstantiateTemplateTypes(TEMP_INST);
 
     #undef TEMP_INST
+
+    void draw(){
+        
+    }
 
 }

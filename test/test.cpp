@@ -51,7 +51,7 @@ int main(int argc, const char* argv[]){
         vb.feedData<float>(vertexBufData, 4*4, GL_STATIC_DRAW);
         ib.feedData<unsigned char>(indexBufData, 6*6, GL_STATIC_DRAW);
 
-        va.readBufferData<float>(vb, dataLayout, 2, 0);
+        va.readBufferData<float>(vb, dataLayout, 1, 0);
 
         bool keepRunning = true;
         SDL_Event e;

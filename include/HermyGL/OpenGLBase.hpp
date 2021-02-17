@@ -7,7 +7,7 @@
 #define HGL_DATA_ALLOC_STACK 0
 #define HGL_DATA_ALLOC_HEAP 1
 
-#if defined(GL_VERSION_4_0) && GL_VERSION_4_0 == 1
+#if GL_VERSION_4_0
     #define INCORPORATE_DOUBLE
 #endif
 
@@ -20,6 +20,7 @@ namespace hgl{
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
     */
+
     template<typename T>
     constexpr unsigned int primitiveTypeToGLType(){
         return (
@@ -37,6 +38,23 @@ namespace hgl{
         );
     }
 
+    #ifdef INCORPORATE_DOUBLE
+        #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)\
+            declarationMacro(double, ## __VA_ARGS__);
+    #else
+        #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)
+    #endif
+
+    #define __HGL_InstantiateTemplateTypes(declarationMacro, ...)\
+        declarationMacro(char, ## __VA_ARGS__);\
+        declarationMacro(unsigned char, ## __VA_ARGS__);\
+        declarationMacro(short, ## __VA_ARGS__);\
+        declarationMacro(unsigned short, ## __VA_ARGS__);\
+        declarationMacro(int, ## __VA_ARGS__);\
+        declarationMacro(unsigned int, ## __VA_ARGS__);\
+        declarationMacro(float, ## __VA_ARGS__);\
+        __HGL_InstantiateTemplateDouble(declarationMacro, ##__VA_ARGS__)
+        
     class HERMYGL_EXPORT OpenGLBase{
     protected:
         unsigned int id;

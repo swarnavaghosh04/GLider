@@ -33,44 +33,46 @@ namespace hgl{
         GL_CALL(glBufferData(target, dataCount*sizeof(T), data, usage));
     }
 
-    #define OpenGLBuffer_feedData_TEMP_INST(target,T)\
+    #define OpenGLBuffer_feedData_TEMP_INST(T,target)\
         template void OpenGLBuffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
             unsigned int usage)
 
-    #ifdef INCORPORATE_DOUBLE
-        #define OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)\
-            OpenGLBuffer_feedData_TEMP_INST(target,double)
-    #else
-        #define OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)
-    #endif
-    
     #define OpenGLBuffer_TEMP_INST(target)\
         template class OpenGLBuffer<target>;\
-        OpenGLBuffer_feedData_TEMP_INST(target, char);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned char);\
-        OpenGLBuffer_feedData_TEMP_INST(target, short);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned short);\
-        OpenGLBuffer_feedData_TEMP_INST(target, int);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned int);\
-        OpenGLBuffer_feedData_TEMP_INST(target, long);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned long);\
-        OpenGLBuffer_feedData_TEMP_INST(target, float);\
-        OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)
+        __HGL_InstantiateTemplateTypes(OpenGLBuffer_feedData_TEMP_INST, target);
 
-    OpenGLBuffer_TEMP_INST(BufferTarget::VertexBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::CopyReadBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::CopyWriteBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::IndexBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::PixelPackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::PixelUnpackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::TextureBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::TransformFeedbackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::UniformBuffer);
+    OpenGLBuffer_TEMP_INST(VertexBuffer);
+    OpenGLBuffer_TEMP_INST(IndexBuffer);
+    #if GL_VERSION_2_1
+    OpenGLBuffer_TEMP_INST(PixelPackBuffer);
+    OpenGLBuffer_TEMP_INST(PixelUnpackBuffer);
+    #endif
+    #if GL_VERSION_3_0
+    OpenGLBuffer_TEMP_INST(CopyWriteBuffer);
+    OpenGLBuffer_TEMP_INST(TransformFeedbackBuffer);
+    #endif
+    #if GL_VERSION_3_1
+    OpenGLBuffer_TEMP_INST(CopyReadBuffer);
+    OpenGLBuffer_TEMP_INST(TextureBuffer);
+    OpenGLBuffer_TEMP_INST(UniformBuffer);
+    #endif
+    #ifdef GL_VERSION_4_0
+    OpenGLBuffer_TEMP_INST(DrawIndirectBuffer);
+    #endif
+    #if GL_VERSION_4_2
+    OpenGLBuffer_TEMP_INST(AtomicCounterBuffer);
+    #endif
+    #if GL_VERSION_4_3
+    OpenGLBuffer_TEMP_INST(DispatchIndirectBuffer);
+    OpenGLBuffer_TEMP_INST(ShaderStorageBuffer);
+    #endif
+    #if GL_VERSION_4_4
+    OpenGLBuffer_TEMP_INST(QueryBuffer);
+    #endif
 
     #undef OpenGLBuffer_TEMP_INST
-    #undef OpenGLBuffer_feedData_TEMP_INST_DOUBLE
     #undef OpenGLBuffer_feedData_TEMP_INST
 
 }

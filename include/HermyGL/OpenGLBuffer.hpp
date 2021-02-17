@@ -7,14 +7,40 @@ namespace hgl{
 
     enum BufferTarget : unsigned int{
         VertexBuffer            = GL_ARRAY_BUFFER,
-        CopyReadBuffer          = GL_COPY_READ_BUFFER,
-        CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
-        IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER,
+        IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER
+        #if GL_VERSION_2_1
+        ,
         PixelPackBuffer         = GL_PIXEL_PACK_BUFFER,
-        PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER,
+        PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER
+        #endif
+        #if GL_VERSION_3_0
+        ,
+        CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
+        TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER
+        #endif
+        #if GL_VERSION_3_1
+        ,
+        CopyReadBuffer          = GL_COPY_READ_BUFFER,
         TextureBuffer           = GL_TEXTURE_BUFFER,
-        TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
         UniformBuffer           = GL_UNIFORM_BUFFER
+        #endif
+        #ifdef GL_VERSION_4_0
+        ,
+        DrawIndirectBuffer      = GL_DRAW_INDIRECT_BUFFER
+        #endif
+        #if GL_VERSION_4_2
+        ,
+        AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER
+        #endif
+        #if GL_VERSION_4_3
+        ,
+        DispatchIndirectBuffer  = GL_DISPATCH_INDIRECT_BUFFER,
+        ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER
+        #endif
+        #if GL_VERSION_4_4
+        ,
+        QueryBuffer             = GL_QUERY_BUFFER
+        #endif
     };
 
     template<BufferTarget target>
@@ -31,44 +57,46 @@ namespace hgl{
             unsigned int usage);
     };
 
-    #define OpenGLBuffer_feedData_TEMP_INST(target,T)\
+    #define OpenGLBuffer_feedData_TEMP_INST(T, target)\
         extern template void HERMYGL_EXPORT OpenGLBuffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
             unsigned int usage)
-
-    #ifdef INCORPORATE_DOUBLE
-        #define OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)\
-            OpenGLBuffer_feedData_TEMP_INST(target,double)
-    #else
-        #define OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)
-    #endif
     
     #define OpenGLBuffer_TEMP_INST(target)\
         extern template class HERMYGL_EXPORT OpenGLBuffer<target>;\
-        OpenGLBuffer_feedData_TEMP_INST(target, char);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned char);\
-        OpenGLBuffer_feedData_TEMP_INST(target, short);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned short);\
-        OpenGLBuffer_feedData_TEMP_INST(target, int);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned int);\
-        OpenGLBuffer_feedData_TEMP_INST(target, long);\
-        OpenGLBuffer_feedData_TEMP_INST(target, unsigned long);\
-        OpenGLBuffer_feedData_TEMP_INST(target, float);\
-        OpenGLBuffer_feedData_TEMP_INST_DOUBLE(target)
-
-    OpenGLBuffer_TEMP_INST(BufferTarget::VertexBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::CopyReadBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::CopyWriteBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::IndexBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::PixelPackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::PixelUnpackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::TextureBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::TransformFeedbackBuffer);
-    OpenGLBuffer_TEMP_INST(BufferTarget::UniformBuffer);
+        __HGL_InstantiateTemplateTypes(OpenGLBuffer_feedData_TEMP_INST, target);
+    
+    OpenGLBuffer_TEMP_INST(VertexBuffer);
+    OpenGLBuffer_TEMP_INST(IndexBuffer);
+    #if GL_VERSION_2_1
+    OpenGLBuffer_TEMP_INST(PixelPackBuffer);
+    OpenGLBuffer_TEMP_INST(PixelUnpackBuffer);
+    #endif
+    #if GL_VERSION_3_0
+    OpenGLBuffer_TEMP_INST(CopyWriteBuffer);
+    OpenGLBuffer_TEMP_INST(TransformFeedbackBuffer);
+    #endif
+    #if GL_VERSION_3_1
+    OpenGLBuffer_TEMP_INST(CopyReadBuffer);
+    OpenGLBuffer_TEMP_INST(TextureBuffer);
+    OpenGLBuffer_TEMP_INST(UniformBuffer);
+    #endif
+    #ifdef GL_VERSION_4_0
+    OpenGLBuffer_TEMP_INST(DrawIndirectBuffer);
+    #endif
+    #if GL_VERSION_4_2
+    OpenGLBuffer_TEMP_INST(AtomicCounterBuffer);
+    #endif
+    #if GL_VERSION_4_3
+    OpenGLBuffer_TEMP_INST(DispatchIndirectBuffer);
+    OpenGLBuffer_TEMP_INST(ShaderStorageBuffer);
+    #endif
+    #if GL_VERSION_4_4
+    OpenGLBuffer_TEMP_INST(QueryBuffer);
+    #endif
 
     #undef OpenGLBuffer_TEMP_INST
-    #undef OpenGLBuffer_feedData_TEMP_INST_DOUBLE
     #undef OpenGLBuffer_feedData_TEMP_INST
 
 }
