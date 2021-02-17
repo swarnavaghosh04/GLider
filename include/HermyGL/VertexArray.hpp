@@ -3,7 +3,6 @@
 
 #include "HermyGL/OpenGLBase.hpp"
 #include "HermyGL/OpenGLBuffer.hpp"
-//#include "HermyGL/VertexBuffer.hpp"
 
 namespace hgl{
 
@@ -28,24 +27,21 @@ namespace hgl{
         DrawLines           = GL_LINES,
         DrawTriangleStrip   = GL_TRIANGLE_STRIP,
         DrawTriangleFan     = GL_TRIANGLE_FAN,
-        DrawTriangles       = GL_TRIANGLES
+        DrawTriangles       = GL_TRIANGLES,
         #if !GL_VERSION_3_0
-        ,
         DrawQuadStrip       = GL_QUAD_STRIP,
         DrawQuads           = GL_QUADS,
-        DrawPolygon         = GL_POLYGON
+        DrawPolygon         = GL_POLYGON,
         #endif
         #endif
         #if GL_VERSION_3_2
-        ,
         DrawLineStripAdjacency      = GL_LINE_STRIP_ADJACENCY,
         DrawLinesAdjacency          = GL_LINES_ADJACENCY,
         DrawTriangleStripAdjacency  = GL_TRIANGLE_STRIP_ADJACENCY,
-        DrawTrianglesAdjacency      = GL_TRIANGLES_ADJACENCY
+        DrawTrianglesAdjacency      = GL_TRIANGLES_ADJACENCY,
         #endif
         #if GL_VERSION_4_0
-        ,
-        DrawPatches                 = GL_PATCHES
+        DrawPatches                 = GL_PATCHES,
         #endif
 
     };
@@ -63,8 +59,6 @@ namespace hgl{
             unsigned int                        layoutCount,
             unsigned int                        startingAttribIndex = 0
         );
-        template<DrawType drawType>
-        void draw();
     };
 
     #define TEMP_INST(T)\
@@ -76,34 +70,6 @@ namespace hgl{
         )
 
     __HGL_InstantiateTemplateTypes(TEMP_INST);
-
-    #undef TEMP_INST
-    #define TEMP_INST(drawType)\
-        extern template void HERMYGL_EXPORT VertexArray::draw<drawType>()
-
-    #if GL_VERSION_2_0
-    TEMP_INST(DrawPoints);
-    TEMP_INST(DrawLineStrip);
-    TEMP_INST(DrawLineLoop);
-    TEMP_INST(DrawLines);
-    TEMP_INST(DrawTriangleStrip);
-    TEMP_INST(DrawTriangleFan);
-    TEMP_INST(DrawTriangles);
-    #if !GL_VERSION_3_0
-    TEMP_INST(DrawQuadStrip);
-    TEMP_INST(DrawQuads);
-    TEMP_INST(DrawPolygon);
-    #endif
-    #endif
-    #if GL_VERSION_3_2
-    TEMP_INST(DrawLineStripAdjacency);
-    TEMP_INST(DrawLinesAdjacency);
-    TEMP_INST(DrawTriangleStripAdjacency);
-    TEMP_INST(DrawTrianglesAdjacency);
-    #endif
-    #if GL_VERSION_4_0
-    TEMP_INST(DrawPatches);
-    #endif
 
     #undef TEMP_INST
 

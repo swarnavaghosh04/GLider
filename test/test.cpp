@@ -48,8 +48,8 @@ int main(int argc, const char* argv[]){
         vb.bind();
         ib.bind();
 
-        vb.feedData<float>(vertexBufData, 4*4, GL_STATIC_DRAW);
-        ib.feedData<unsigned char>(indexBufData, 6*6, GL_STATIC_DRAW);
+        vb.feedData<float>(vertexBufData, 4*4, hgl::UseStaticDraw);
+        ib.feedData<unsigned char>(indexBufData, 6*6, hgl::UseStaticDraw);
 
         va.readBufferData<float>(vb, dataLayout, 1, 0);
 

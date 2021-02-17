@@ -7,40 +7,45 @@ namespace hgl{
 
     enum BufferTarget : unsigned int{
         VertexBuffer            = GL_ARRAY_BUFFER,
-        IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER
+        IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER,
         #if GL_VERSION_2_1
-        ,
         PixelPackBuffer         = GL_PIXEL_PACK_BUFFER,
-        PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER
+        PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER,
         #endif
         #if GL_VERSION_3_0
-        ,
         CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
-        TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER
+        TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
         #endif
         #if GL_VERSION_3_1
-        ,
         CopyReadBuffer          = GL_COPY_READ_BUFFER,
         TextureBuffer           = GL_TEXTURE_BUFFER,
-        UniformBuffer           = GL_UNIFORM_BUFFER
+        UniformBuffer           = GL_UNIFORM_BUFFER,
         #endif
         #ifdef GL_VERSION_4_0
-        ,
-        DrawIndirectBuffer      = GL_DRAW_INDIRECT_BUFFER
+        DrawIndirectBuffer      = GL_DRAW_INDIRECT_BUFFER,
         #endif
         #if GL_VERSION_4_2
-        ,
-        AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER
+        AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
         #endif
         #if GL_VERSION_4_3
-        ,
         DispatchIndirectBuffer  = GL_DISPATCH_INDIRECT_BUFFER,
-        ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER
+        ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
         #endif
         #if GL_VERSION_4_4
-        ,
-        QueryBuffer             = GL_QUERY_BUFFER
+        QueryBuffer             = GL_QUERY_BUFFER,
         #endif
+    };
+
+    enum BufferUsage : unsigned int{
+        UseStreamDraw      = GL_STREAM_DRAW,
+        UseStreamRead      = GL_STREAM_READ,
+        UseStreamCopy      = GL_STREAM_COPY,
+        UseStaticDraw      = GL_STATIC_DRAW,
+        UseStaticRead      = GL_STATIC_READ,
+        UseStaticCopy      = GL_STATIC_COPY,
+        UseDynamicDraw     = GL_DYNAMIC_DRAW,
+        UseDynamicRead     = GL_DYNAMIC_READ,
+        UseDynamicCopy     = GL_DYNAMIC_COPY,
     };
 
     template<BufferTarget target>
@@ -54,14 +59,14 @@ namespace hgl{
         void feedData(
             const T* data,
             unsigned int dataCount,
-            unsigned int usage);
+            BufferUsage usage);
     };
 
     #define OpenGLBuffer_feedData_TEMP_INST(T, target)\
         extern template void HERMYGL_EXPORT OpenGLBuffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
-            unsigned int usage)
+            BufferUsage usage)
     
     #define OpenGLBuffer_TEMP_INST(target)\
         extern template class HERMYGL_EXPORT OpenGLBuffer<target>;\
