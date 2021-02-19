@@ -46,13 +46,13 @@ namespace hgl{
     #endif
 
     #define __HGL_InstantiateTemplateTypes(declarationMacro, ...)\
-        declarationMacro(char, ## __VA_ARGS__);\
-        declarationMacro(unsigned char, ## __VA_ARGS__);\
-        declarationMacro(short, ## __VA_ARGS__);\
-        declarationMacro(unsigned short, ## __VA_ARGS__);\
-        declarationMacro(int, ## __VA_ARGS__);\
-        declarationMacro(unsigned int, ## __VA_ARGS__);\
-        declarationMacro(float, ## __VA_ARGS__);\
+        declarationMacro(char              ,## __VA_ARGS__);\
+        declarationMacro(unsigned char     ,## __VA_ARGS__);\
+        declarationMacro(short             ,## __VA_ARGS__);\
+        declarationMacro(unsigned short    ,## __VA_ARGS__);\
+        declarationMacro(int               ,## __VA_ARGS__);\
+        declarationMacro(unsigned int      ,## __VA_ARGS__);\
+        declarationMacro(float             ,## __VA_ARGS__);\
         __HGL_InstantiateTemplateDouble(declarationMacro, ##__VA_ARGS__)
         
     class HERMYGL_EXPORT OpenGLBase{
