@@ -28,7 +28,7 @@ public:
 
 namespace hgl{
 
-    HERMYGL_EXPORT error initialize();
+    HERMYGL_EXPORT void initialize();
     HERMYGL_EXPORT void quit();
 
 }

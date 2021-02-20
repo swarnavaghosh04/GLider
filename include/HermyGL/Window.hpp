@@ -15,10 +15,10 @@ namespace hgl{
         
     public:
 
-        Window(error &ret, const char* title, int width, int height, Uint32 windowFlags, Uint32 rendererFlags);
+        Window(const char* title, int width, int height, Uint32 windowFlags = 0, Uint32 rendererFlags = 0);
         ~Window();
 
-        inline const SDL_Window* getWindow() const {return window;}
+        const SDL_Window* getWindow() const {return window;}
     };
     
 }

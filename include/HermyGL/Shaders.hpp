@@ -22,6 +22,14 @@ namespace hgl{
         #endif
     };
 
+    class HERMYGL_EXPORT Shaders : public OpenGLBase{
+    public:
+        Shaders();
+        ~Shaders();
+        void bind() const;
+        void unbind() const;
+    };
+
 }
 
 #endif

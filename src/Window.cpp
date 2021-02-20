@@ -1,6 +1,6 @@
 #include "HermyGL/Window.hpp"
 
-hgl::Window::Window(hgl::error &ret, const char* title, int width, int height, Uint32 windowFlags, Uint32 rendererFlags){
+hgl::Window::Window(const char* title, int width, int height, Uint32 windowFlags, Uint32 rendererFlags){
 
     window = SDL_CreateWindow(
         title,
@@ -8,34 +8,37 @@ hgl::Window::Window(hgl::error &ret, const char* title, int width, int height, U
         width, height,
         windowFlags | SDL_WINDOW_OPENGL);
 
-    if(window == NULL){
-        ret = {-1, SDL_GetError()};
-        return;
-    }
+    if(window == NULL)
+        throw std::runtime_error(SDL_GetError());
 
     renderer = SDL_CreateRenderer(window, -1, rendererFlags);
+
     if(renderer == NULL){
-        ret = {-2, SDL_GetError()};
-        return;
+        SDL_DestroyWindow(window);
+        throw std::runtime_error(SDL_GetError());
     }
     
     glContext = SDL_GL_CreateContext(window);
+
     if(glContext == NULL){
-        ret = {-3, SDL_GetError()};
-        return;
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        throw std::runtime_error(SDL_GetError());
     }
 
     if(SDL_GL_SetSwapInterval(0) != 0){
-        ret = {-4, SDL_GetError()};
-        return;
+        SDL_GL_DeleteContext(glContext);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        throw std::runtime_error(SDL_GetError());
     }
 
     if(!gladLoadGL()) {
-        ret = {-5, "Glad OpenGL Load Error!"};
-        return;
+        SDL_GL_DeleteContext(glContext);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        throw std::runtime_error("GLAD Unable to load OpenGL");
     }
-
-    ret = {0, hgl::noError};
 
 }
 
