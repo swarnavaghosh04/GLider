@@ -61,8 +61,8 @@ namespace hgl{
 
     #undef TEMP_INST
 
-    void draw(){
-        
+    void VertexArray::draw(DrawType mode, int first, int count) const{
+        GL_CALL(glDrawArrays((unsigned int)mode, first, count));
     }
 
 }

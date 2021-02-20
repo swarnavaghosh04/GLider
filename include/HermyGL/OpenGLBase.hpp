@@ -22,7 +22,6 @@ namespace hgl{
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
     */
-
     template<typename T>
     constexpr unsigned int primitiveTypeToGLType(){
         return (
@@ -39,6 +38,33 @@ namespace hgl{
             0
         );
     }
+
+    enum DrawType : unsigned int{
+        #if GL_VERSION_2_0
+        DrawPoints          = GL_POINTS,
+        DrawLineStrip       = GL_LINE_STRIP,
+        DrawLineLoop        = GL_LINE_LOOP,
+        DrawLines           = GL_LINES,
+        DrawTriangleStrip   = GL_TRIANGLE_STRIP,
+        DrawTriangleFan     = GL_TRIANGLE_FAN,
+        DrawTriangles       = GL_TRIANGLES,
+        #if !GL_VERSION_3_0
+        DrawQuadStrip       = GL_QUAD_STRIP,
+        DrawQuads           = GL_QUADS,
+        DrawPolygon         = GL_POLYGON,
+        #endif
+        #endif
+        #if GL_VERSION_3_2
+        DrawLineStripAdjacency      = GL_LINE_STRIP_ADJACENCY,
+        DrawLinesAdjacency          = GL_LINES_ADJACENCY,
+        DrawTriangleStripAdjacency  = GL_TRIANGLE_STRIP_ADJACENCY,
+        DrawTrianglesAdjacency      = GL_TRIANGLES_ADJACENCY,
+        #endif
+        #if GL_VERSION_4_0
+        DrawPatches                 = GL_PATCHES,
+        #endif
+
+    };
 
     #ifdef INCORPORATE_DOUBLE
         #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)\
@@ -71,6 +97,12 @@ namespace hgl{
         virtual void unbind() const = 0;
         const unsigned int& getId() const;
     };
+
+    enum Dimensions : unsigned char{
+        Dim_ONE = 1, Dim_TWO = 2, Dim_THREE = 3, Dim_FOUR = 4
+    };
+
+    void HERMYGL_EXPORT clear(unsigned int mask);
 
 }
 

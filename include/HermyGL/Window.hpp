@@ -18,7 +18,7 @@ namespace hgl{
         Window(const char* title, int width, int height, Uint32 windowFlags = 0, Uint32 rendererFlags = 0);
         ~Window();
 
-        const SDL_Window* getWindow() const {return window;}
+        inline SDL_Window* getWindow() const {return window;}
     };
     
 }

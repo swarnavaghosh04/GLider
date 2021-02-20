@@ -104,5 +104,7 @@ namespace hgl{
     #undef OpenGLBuffer_TEMP_INST
     #undef OpenGLBuffer_feedData_TEMP_INST
 
+    void HERMYGL_EXPORT draw(const OpenGLBuffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
+
 }
 #endif

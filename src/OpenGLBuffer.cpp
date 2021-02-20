@@ -75,5 +75,8 @@ namespace hgl{
     #undef OpenGLBuffer_TEMP_INST
     #undef OpenGLBuffer_feedData_TEMP_INST
 
+    void draw(const OpenGLBuffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index){
+        GL_CALL(glDrawElements(mode, count, type, index));
+    }
 
 }
