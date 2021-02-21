@@ -66,6 +66,10 @@ namespace hgl{
 
     };
 
+    enum Dimensions : unsigned char{
+        D1 = 1, D2 = 2, D3 = 3, D4 = 4
+    };
+
     #ifdef INCORPORATE_DOUBLE
         #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)\
             declarationMacro(double, ## __VA_ARGS__);
@@ -96,10 +100,6 @@ namespace hgl{
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         const unsigned int& getId() const;
-    };
-
-    enum Dimensions : unsigned char{
-        Dim_ONE = 1, Dim_TWO = 2, Dim_THREE = 3, Dim_FOUR = 4
     };
 
     void HERMYGL_EXPORT clear(unsigned int mask);

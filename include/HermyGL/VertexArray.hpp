@@ -6,15 +6,6 @@
 
 namespace hgl{
 
-    enum Normalized : bool{
-        Norm_FALSE = false, Norm_TRUE = true
-    };
-
-    struct LayoutElement{
-        Dimensions dimension;
-        Normalized normalized;
-    };
-
     class HERMYGL_EXPORT VertexArray : public OpenGLBase{
     public:
         VertexArray();
@@ -23,7 +14,7 @@ namespace hgl{
         void unbind() const;
         template<typename T>
         void readBufferData(
-            const OpenGLBuffer<VertexBuffer>&   vb,
+            const Buffer<VertexBuffer>&   vb,
             const LayoutElement*                layout,
             unsigned int                        layoutCount,
             unsigned int                        startingAttribIndex = 0
@@ -33,7 +24,7 @@ namespace hgl{
 
     #define TEMP_INST(T)\
         extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
-            const OpenGLBuffer<VertexBuffer>&   vb,\
+            const Buffer<VertexBuffer>&   vb,\
             const LayoutElement*                layout,\
             unsigned int                        layoutCount,\
             unsigned int                        startingAttribIndex = 0\

@@ -3,28 +3,28 @@
 namespace hgl{
 
     template<BufferTarget target>
-    OpenGLBuffer<target>::OpenGLBuffer(){
+    Buffer<target>::Buffer(){
         GL_CALL(glGenBuffers(1, &(this->id)));
     }
 
     template<BufferTarget target>
-    OpenGLBuffer<target>::~OpenGLBuffer(){
+    Buffer<target>::~Buffer(){
         GL_CALL(glDeleteBuffers(1, &(this->id)));
     }
 
     template<BufferTarget target>
-    void OpenGLBuffer<target>::bind() const{
+    void Buffer<target>::bind() const{
         GL_CALL(glBindBuffer((unsigned int)target, this->id));
     }
 
     template<BufferTarget target>
-    void OpenGLBuffer<target>::unbind() const{
+    void Buffer<target>::unbind() const{
         GL_CALL(glBindBuffer((unsigned int)target, 0));
     }
 
     template<BufferTarget target>
     template<typename T>
-    void OpenGLBuffer<target>::feedData(
+    void Buffer<target>::feedData(
         const T* data,
         unsigned int dataCount,
         BufferUsage usage
@@ -34,13 +34,13 @@ namespace hgl{
     }
 
     #define OpenGLBuffer_feedData_TEMP_INST(T,target)\
-        template void OpenGLBuffer<target>::feedData<T>(\
+        template void Buffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
             BufferUsage usage)
 
     #define OpenGLBuffer_TEMP_INST(target)\
-        template class OpenGLBuffer<target>;\
+        template class Buffer<target>;\
         __HGL_InstantiateTemplateTypes(OpenGLBuffer_feedData_TEMP_INST, target);
 
     OpenGLBuffer_TEMP_INST(VertexBuffer);
@@ -75,7 +75,7 @@ namespace hgl{
     #undef OpenGLBuffer_TEMP_INST
     #undef OpenGLBuffer_feedData_TEMP_INST
 
-    void draw(const OpenGLBuffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index){
+    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index){
         GL_CALL(glDrawElements(mode, count, type, index));
     }
 

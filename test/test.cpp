@@ -1,20 +1,31 @@
 #include "HermyGL/HermyGL.hpp"
 #include "HermyGL/VertexArray.hpp"
 #include "HermyGL/OpenGLBuffer.hpp"
+#include <vector>
 
 const char* const vertexShader = R"CODE(
     #version 330 core
     layout(location=0) in vec2 position;
+    layout(location=1) in vec3 color;
+
+    out vec3 vertexColor;
+
     void main(){
+        vertexColor = color;
         gl_Position = vec4(position, 0.f, 1.f);
     }
 )CODE";
 
 const char* const fragmentShader = R"CODE(
     #version 330 core
+
+    uniform float u_mul;
+
+    in vec3 vertexColor;
     out vec4 FragColor;
+
     void main(){
-        FragColor = vec4(0.3f, 0.3f, 0.6f, 1.f);
+        FragColor = vec4(u_mul*vertexColor, 1.f);
     }
 )CODE";
 
@@ -26,7 +37,7 @@ int main(int argc, const char* argv[]){
 
         {
 
-            hgl::Window window{"Test Window", 1000, 800, 0, 0};
+            hgl::Window window{"Test Window", 1000, 800, SDL_WINDOW_RESIZABLE, 0};
 
             // const float vertexBufData[8*3] = {
             //      .5f,  .5f,  .5f,   // 0
@@ -39,7 +50,7 @@ int main(int argc, const char* argv[]){
             //      .5f, -.5f, -.5f    // 7
             // };
             // const hgl::LayoutElement dataLayout[1] = {
-            //     {hgl::Dim_THREE, hgl::Norm_FALSE}
+            //     {hgl::D3, hgl::Norm_FALSE}
             // };
 
             // const unsigned char indexBufData[6*6] = {
@@ -51,25 +62,34 @@ int main(int argc, const char* argv[]){
             //     2, 1, 6, 1, 6, 5
             // };
 
-            const float data[2*4] = {
-                -.5, -.5,
-                -.5,  .5,
-                 .5, -.5,
-                 .5,  .5
+            hgl::VertexBufferData<float> vertices = {
+                (const float[5*4]){
+                    -.5, -.5, 1.f, 0.f, 0.f,
+                    -.5,  .5, 0.f, 1.f, 0.f,
+                     .5, -.5, 0.f, 0.f, 1.f,
+                     .5,  .5, .5f, .5f, .5f
+                },
+                5*4,
+                (const hgl::LayoutElement[2]){
+                    {hgl::D2, hgl::Norm_FALSE},
+                    {hgl::D3, hgl::Norm_FALSE}
+                },
+                2
             };
-            const hgl::LayoutElement dataLayout[1] = {
-                {hgl::Dim_TWO, hgl::Norm_FALSE}
+
+            hgl::BufferData<unsigned char> indices = {
+                (const unsigned char[6]){0,1,2,1,2,3},
+                6
             };
-            const unsigned char indeces[6] = {0,1,2,1,2,3};
 
             hgl::VertexArray va;
-            hgl::OpenGLBuffer<hgl::VertexBuffer> vb;
-            hgl::OpenGLBuffer<hgl::IndexBuffer> ib;
+            hgl::Buffer<hgl::VertexBuffer> vb;
+            hgl::Buffer<hgl::IndexBuffer> ib;
             hgl::Shaders shaders;
 
-            vb.feedData<float>(data, 2*4, hgl::UseStaticDraw);
-            ib.feedData<unsigned char>(indeces, 6, hgl::UseStaticDraw);
-            va.readBufferData<float>(vb, dataLayout, 1);
+            vb.feedData<float>(vertices.data, vertices.dataCount, hgl::UseStaticDraw);
+            ib.feedData<unsigned char>(indices.data, indices.dataCount, hgl::UseStaticDraw);
+            va.readBufferData<float>(vb, vertices.layout, vertices.layoutCount);
 
             ib.bind();
 
@@ -79,6 +99,13 @@ int main(int argc, const char* argv[]){
             shaders.link();
             shaders.validate();
 
+            
+            SDL_Log("Hello\n");
+
+            float u_mul = 0;
+            float du_mul = 0.0005;
+            shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
+
             shaders.bind();
 
             bool keepRunning = true;
@@ -87,6 +114,17 @@ int main(int argc, const char* argv[]){
             while(keepRunning){
 
                 hgl::clear(GL_COLOR_BUFFER_BIT);
+
+                u_mul += du_mul;
+                shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
+
+                if(u_mul >= 1){
+                    u_mul = 1;
+                    du_mul *= du_mul<=0?1:-1;
+                }else if(u_mul <= 0){
+                    u_mul = 0;
+                    du_mul *= du_mul>=0?1:-1;
+                }
 
                 hgl::draw(ib, hgl::DrawTriangles, 6, GL_UNSIGNED_BYTE);
 
@@ -107,6 +145,8 @@ int main(int argc, const char* argv[]){
     }
     catch(const std::runtime_error& ex){
         SDL_Log(ex.what());
+    }catch(...){
+        SDL_Log("Error Occured\n");
     }
 
     return 0;

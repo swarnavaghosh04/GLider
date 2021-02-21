@@ -40,17 +40,20 @@ namespace hgl{
         void validate() const;
         unsigned int getUniformLocation(const char* name);
         template<typename T>
-        void setUniform(const char* name, Dimensions dimension, T ...);
+        void setUniform(const char* name, Dimensions dimension, ...);
     };
 
-    extern template void HERMYGL_EXPORT Shaders::setUniform<int>(const char* name, Dimensions dimension, int ...);
-    extern template void HERMYGL_EXPORT Shaders::setUniform<unsigned int>(const char* name, Dimensions dimension, unsigned int ...);
-    extern template void HERMYGL_EXPORT Shaders::setUniform<float>(const char* name, Dimensions dimension, float ...);
+    #define TEMP_INST(T)\
+    extern template void HERMYGL_EXPORT Shaders::setUniform<T>(const char* name, Dimensions dimension, ...);
+
+    TEMP_INST(int);
+    TEMP_INST(unsigned int);
+    TEMP_INST(float);
     #ifdef INCORPORATE_DOUBLE
-    extern template void HERMYGL_EXPORT Shaders::setUniform<double>(const char* name, Dimensions dimension, double ...);
+    TEMP_INST(double);
     #endif
 
-    
+    #undef TEMP_INST
 
 }
 

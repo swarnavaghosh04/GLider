@@ -47,12 +47,21 @@ namespace hgl{
         UseDynamicRead     = GL_DYNAMIC_READ,
         UseDynamicCopy     = GL_DYNAMIC_COPY,
     };
+    
+    enum Normalized : bool{
+        Norm_FALSE = false, Norm_TRUE = true
+    };
+
+    struct LayoutElement{
+        Dimensions dimension;
+        Normalized normalized;
+    };
 
     template<BufferTarget target>
-    class OpenGLBuffer : public OpenGLBase{
+    class HERMYGL_EXPORT Buffer : public OpenGLBase{
     public:
-        OpenGLBuffer();
-        ~OpenGLBuffer();
+        Buffer();
+        ~Buffer();
         void bind() const;
         void unbind() const;
         template<typename T>
@@ -62,14 +71,28 @@ namespace hgl{
             BufferUsage usage);
     };
 
+    template<typename T>
+    struct BufferData{
+        const T* data;
+        unsigned int dataCount;
+    };
+
+    template<typename T>
+    struct VertexBufferData{
+        const T* data;
+        unsigned int dataCount;
+        const LayoutElement* layout;
+        unsigned int layoutCount;
+    };
+
     #define OpenGLBuffer_feedData_TEMP_INST(T, target)\
-        extern template void HERMYGL_EXPORT OpenGLBuffer<target>::feedData<T>(\
+        extern template void HERMYGL_EXPORT Buffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
             BufferUsage usage)
     
     #define OpenGLBuffer_TEMP_INST(target)\
-        extern template class HERMYGL_EXPORT OpenGLBuffer<target>;\
+        extern template class HERMYGL_EXPORT Buffer<target>;\
         __HGL_InstantiateTemplateTypes(OpenGLBuffer_feedData_TEMP_INST, target);
     
     OpenGLBuffer_TEMP_INST(VertexBuffer);
@@ -104,7 +127,7 @@ namespace hgl{
     #undef OpenGLBuffer_TEMP_INST
     #undef OpenGLBuffer_feedData_TEMP_INST
 
-    void HERMYGL_EXPORT draw(const OpenGLBuffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
+    void HERMYGL_EXPORT draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
 
 }
 #endif

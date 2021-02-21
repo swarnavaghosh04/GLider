@@ -19,7 +19,7 @@ namespace hgl{
 
     template<typename T>
     void VertexArray::readBufferData(
-        const OpenGLBuffer<VertexBuffer>&   vb,
+        const Buffer<VertexBuffer>&   vb,
         const LayoutElement*                layout,
         unsigned int                        layoutCount,
         unsigned int                        startingAttribIndex
@@ -51,7 +51,7 @@ namespace hgl{
 
     #define TEMP_INST(T)\
         template void VertexArray::readBufferData<T>(\
-            const OpenGLBuffer<VertexBuffer>&   vb,\
+            const Buffer<VertexBuffer>&   vb,\
             const LayoutElement*                layout,\
             unsigned int                        layoutCount,\
             unsigned int                        startingAttribIndex = 0\
