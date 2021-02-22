@@ -6,7 +6,18 @@ namespace hgl{
         GL_CALL(glClear(mask);)
     }
 
-    inline const unsigned int& OpenGLBase::getId() const
+    OpenGLBase::OpenGLBase(OpenGLBase&& other) noexcept(true):
+        id(other.id)
+    {
+        other.id = 0;
+    }
+
+    OpenGLBase& OpenGLBase::operator= (OpenGLBase&& other) noexcept(true){
+        std::swap(id, other.id);
+        return *this;
+    }
+
+    inline const unsigned int OpenGLBase::getId() const
     { return id; }
 
     OpenGLBase::~OpenGLBase(){}

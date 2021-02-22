@@ -2,6 +2,7 @@
 #include "HermyGL/VertexArray.hpp"
 #include "HermyGL/OpenGLBuffer.hpp"
 #include <vector>
+#include <chrono>
 
 const char* const vertexShader = R"CODE(
     #version 330 core
@@ -29,7 +30,15 @@ const char* const fragmentShader = R"CODE(
     }
 )CODE";
 
+void test(){
+
+    
+
+}
+
 int main(int argc, const char* argv[]){
+
+    test();
 
     try{
 
@@ -38,6 +47,10 @@ int main(int argc, const char* argv[]){
         {
 
             hgl::Window window{"Test Window", 1000, 800, SDL_WINDOW_RESIZABLE, 0};
+
+            unsigned int frame=0;
+            float fps=30, fDur;
+            auto frameStart = std::chrono::high_resolution_clock::now();
 
             // const float vertexBufData[8*3] = {
             //      .5f,  .5f,  .5f,   // 0
@@ -62,24 +75,39 @@ int main(int argc, const char* argv[]){
             //     2, 1, 6, 1, 6, 5
             // };
 
-            hgl::VertexBufferData<float> vertices = {
-                (const float[5*4]){
-                    -.5, -.5, 1.f, 0.f, 0.f,
-                    -.5,  .5, 0.f, 1.f, 0.f,
-                     .5, -.5, 0.f, 0.f, 1.f,
-                     .5,  .5, .5f, .5f, .5f
-                },
-                5*4,
-                (const hgl::LayoutElement[2]){
-                    {hgl::D2, hgl::Norm_FALSE},
-                    {hgl::D3, hgl::Norm_FALSE}
-                },
-                2
+            // hgl::VertexBufferData<float> vertices = {
+            //     (const float[5*4]){
+            //         -.5, -.5, 1.f, 0.f, 0.f,
+            //         -.5,  .5, 0.f, 1.f, 0.f,
+            //          .5, -.5, 0.f, 0.f, 1.f,
+            //          .5,  .5, .5f, .5f, .5f
+            //     },
+            //     5*4,
+            //     (const hgl::LayoutElement[2]){
+            //         {hgl::D2, hgl::Norm_FALSE},
+            //         {hgl::D3, hgl::Norm_FALSE}
+            //     },
+            //     2
+            // };
+
+            // hgl::BufferData<unsigned char> indices = {
+            //     (const unsigned char[6]){0,1,2,1,2,3},
+            //     6
+            // };
+
+            std::vector<float> vertices{
+                -.5, -.5, 1.f, 0.f, 0.f,
+                -.5,  .5, 0.f, 1.f, 0.f,
+                 .5, -.5, 0.f, 0.f, 1.f,
+                 .5,  .5, .5f, .5f, .5f
             };
 
-            hgl::BufferData<unsigned char> indices = {
-                (const unsigned char[6]){0,1,2,1,2,3},
-                6
+            std::vector<hgl::LayoutElement> layout{
+                {hgl::D2, hgl::Norm_FALSE},
+                {hgl::D3, hgl::Norm_FALSE},
+            };
+            std::vector<unsigned char> indices{
+                0,1,2,1,2,3
             };
 
             hgl::VertexArray va;
@@ -87,9 +115,9 @@ int main(int argc, const char* argv[]){
             hgl::Buffer<hgl::IndexBuffer> ib;
             hgl::Shaders shaders;
 
-            vb.feedData<float>(vertices.data, vertices.dataCount, hgl::UseStaticDraw);
-            ib.feedData<unsigned char>(indices.data, indices.dataCount, hgl::UseStaticDraw);
-            va.readBufferData<float>(vb, vertices.layout, vertices.layoutCount);
+            vb.feedData<float>(vertices, hgl::UseStaticDraw);
+            ib.feedData<unsigned char>(indices, hgl::UseStaticDraw);
+            va.readBufferData<float>(vb, layout);
 
             ib.bind();
 
@@ -99,11 +127,8 @@ int main(int argc, const char* argv[]){
             shaders.link();
             shaders.validate();
 
-            
-            SDL_Log("Hello\n");
-
             float u_mul = 0;
-            float du_mul = 0.0005;
+            float du_mul_dt = 1.f;
             shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
 
             shaders.bind();
@@ -115,15 +140,15 @@ int main(int argc, const char* argv[]){
 
                 hgl::clear(GL_COLOR_BUFFER_BIT);
 
-                u_mul += du_mul;
+                u_mul += du_mul_dt/fps;
                 shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
 
                 if(u_mul >= 1){
                     u_mul = 1;
-                    du_mul *= du_mul<=0?1:-1;
+                    du_mul_dt *= du_mul_dt<0?1:-1;
                 }else if(u_mul <= 0){
                     u_mul = 0;
-                    du_mul *= du_mul>=0?1:-1;
+                    du_mul_dt *= du_mul_dt>0?1:-1;
                 }
 
                 hgl::draw(ib, hgl::DrawTriangles, 6, GL_UNSIGNED_BYTE);
@@ -135,6 +160,17 @@ int main(int argc, const char* argv[]){
                         keepRunning = false;
                         break;
                     }
+                }
+
+                // Compute Frame Rate ===================
+                frame++;
+                fDur = 
+                    std::chrono::duration_cast<std::chrono::duration<float, std::ratio<1>>>
+                    (std::chrono::high_resolution_clock::now() - frameStart).count();
+                fps = frame/fDur;
+                if(fDur >= .5f){
+                    frame = 0;
+                    frameStart = std::chrono::high_resolution_clock::now();
                 }
             
             }

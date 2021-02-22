@@ -19,10 +19,10 @@ namespace hgl{
 
     template<typename T>
     void VertexArray::readBufferData(
-        const Buffer<VertexBuffer>&   vb,
-        const LayoutElement*                layout,
-        unsigned int                        layoutCount,
-        unsigned int                        startingAttribIndex
+        const Buffer<VertexBuffer>& vb,
+        const LayoutElement*        layout,
+        unsigned int                layoutCount,
+        unsigned int                startingAttribIndex
     ){
         bind();
         vb.bind();
@@ -49,13 +49,27 @@ namespace hgl{
 
     }
 
+    template<typename T>
+    void VertexArray::readBufferData(
+        const Buffer<VertexBuffer>&         vb,
+        const std::vector<LayoutElement>&   layout,
+        unsigned int                        startingAttribIndex
+    ){
+        readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
+    }
+
     #define TEMP_INST(T)\
         template void VertexArray::readBufferData<T>(\
-            const Buffer<VertexBuffer>&   vb,\
-            const LayoutElement*                layout,\
-            unsigned int                        layoutCount,\
+            const Buffer<VertexBuffer>& vb,\
+            const LayoutElement*        layout,\
+            unsigned int                layoutCount,\
+            unsigned int                startingAttribIndex = 0\
+        );\
+        template void VertexArray::readBufferData<T>(\
+            const Buffer<VertexBuffer>&         vb,\
+            const std::vector<LayoutElement>&   layout,\
             unsigned int                        startingAttribIndex = 0\
-        )
+        );
 
     __HGL_InstantiateTemplateTypes(TEMP_INST);
 

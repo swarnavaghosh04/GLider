@@ -93,13 +93,13 @@ namespace hgl{
     public:
         OpenGLBase() = default;
         virtual ~OpenGLBase();
-        OpenGLBase(const OpenGLBase& va) = delete;
-        OpenGLBase(const OpenGLBase&& va) = delete;
-        void operator= (const OpenGLBase& va) = delete;
-        void operator= (const OpenGLBase&& va) = delete;
+        OpenGLBase(const OpenGLBase&) = delete;
+        OpenGLBase(OpenGLBase&& other) noexcept(true);
+        OpenGLBase& operator= (const OpenGLBase&) = delete;
+        OpenGLBase& operator= (OpenGLBase&& other) noexcept(true);
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
-        const unsigned int& getId() const;
+        const unsigned int getId() const;
     };
 
     void HERMYGL_EXPORT clear(unsigned int mask);

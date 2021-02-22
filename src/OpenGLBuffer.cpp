@@ -33,11 +33,24 @@ namespace hgl{
         GL_CALL(glBufferData(target, dataCount*sizeof(T), data, usage));
     }
 
+    template<BufferTarget target>
+    template<typename T>
+    void Buffer<target>::feedData(
+        const std::vector<T>& data,
+        BufferUsage usage
+    ){
+        bind();
+        GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
+    }
+
     #define OpenGLBuffer_feedData_TEMP_INST(T,target)\
         template void Buffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
-            BufferUsage usage)
+            BufferUsage usage);\
+        template void Buffer<target>::feedData<T>(\
+            const std::vector<T>& data,\
+            BufferUsage usage);
 
     #define OpenGLBuffer_TEMP_INST(target)\
         template class Buffer<target>;\

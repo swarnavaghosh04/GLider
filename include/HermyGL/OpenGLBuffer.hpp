@@ -1,6 +1,7 @@
 #ifndef HGL_OPENGL_BUFFER__H_
 #define HGL_OPENGL_BUFFER__H_
 
+#include <vector>
 #include "HermyGL/OpenGLBase.hpp"
 
 namespace hgl{
@@ -69,6 +70,11 @@ namespace hgl{
             const T* data,
             unsigned int dataCount,
             BufferUsage usage);
+        template<typename T>
+        void feedData(
+            const std::vector<T>& data,
+            BufferUsage usage
+        );
     };
 
     template<typename T>
@@ -89,7 +95,10 @@ namespace hgl{
         extern template void HERMYGL_EXPORT Buffer<target>::feedData<T>(\
             const T* data,\
             unsigned int dataCount,\
-            BufferUsage usage)
+            BufferUsage usage);\
+        extern template void HERMYGL_EXPORT Buffer<target>::feedData<T>(\
+            const std::vector<T>& data,\
+            BufferUsage usage);
     
     #define OpenGLBuffer_TEMP_INST(target)\
         extern template class HERMYGL_EXPORT Buffer<target>;\

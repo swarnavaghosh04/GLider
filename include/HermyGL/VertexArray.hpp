@@ -14,9 +14,15 @@ namespace hgl{
         void unbind() const;
         template<typename T>
         void readBufferData(
-            const Buffer<VertexBuffer>&   vb,
-            const LayoutElement*                layout,
-            unsigned int                        layoutCount,
+            const Buffer<VertexBuffer>& vb,
+            const LayoutElement*        layout,
+            unsigned int                layoutCount,
+            unsigned int                startingAttribIndex = 0
+        );
+        template<typename T>
+        void readBufferData(
+            const Buffer<VertexBuffer>&         vb,
+            const std::vector<LayoutElement>&   layout,
             unsigned int                        startingAttribIndex = 0
         );
         void draw(DrawType mode, int first, int count) const;
@@ -24,11 +30,16 @@ namespace hgl{
 
     #define TEMP_INST(T)\
         extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
-            const Buffer<VertexBuffer>&   vb,\
-            const LayoutElement*                layout,\
-            unsigned int                        layoutCount,\
+            const Buffer<VertexBuffer>&     vb,\
+            const LayoutElement*            layout,\
+            unsigned int                    layoutCount,\
+            unsigned int                    startingAttribIndex = 0\
+        );\
+        extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
+            const Buffer<VertexBuffer>&         vb,\
+            const std::vector<LayoutElement>&   layout,\
             unsigned int                        startingAttribIndex = 0\
-        )
+        );
 
     __HGL_InstantiateTemplateTypes(TEMP_INST);
 
