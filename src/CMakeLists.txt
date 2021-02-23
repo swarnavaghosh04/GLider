@@ -1,7 +1,7 @@
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 
-add_library(HermyGL SHARED)
+add_library(HermyGL STATIC)
 
 set_property(TARGET HermyGL PROPERTY VERSION ${CMAKE_PROJECT_VERSION})
 set_property(TARGET HermyGL PROPERTY SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})

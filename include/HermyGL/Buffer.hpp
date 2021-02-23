@@ -1,5 +1,5 @@
-#ifndef HGL_OPENGL_BUFFER__H_
-#define HGL_OPENGL_BUFFER__H_
+#ifndef HGL_BUFFER__H_
+#define HGL_BUFFER__H_
 
 #include <vector>
 #include "HermyGL/OpenGLBase.hpp"
@@ -59,7 +59,7 @@ namespace hgl{
     };
 
     template<BufferTarget target>
-    class HERMYGL_EXPORT Buffer : public OpenGLBase{
+    class Buffer : public OpenGLBase{
     public:
         Buffer();
         ~Buffer();
@@ -91,52 +91,10 @@ namespace hgl{
         unsigned int layoutCount;
     };
 
-    #define OpenGLBuffer_feedData_TEMP_INST(T, target)\
-        extern template void HERMYGL_EXPORT Buffer<target>::feedData<T>(\
-            const T* data,\
-            unsigned int dataCount,\
-            BufferUsage usage);\
-        extern template void HERMYGL_EXPORT Buffer<target>::feedData<T>(\
-            const std::vector<T>& data,\
-            BufferUsage usage);
-    
-    #define OpenGLBuffer_TEMP_INST(target)\
-        extern template class HERMYGL_EXPORT Buffer<target>;\
-        __HGL_InstantiateTemplateTypes(OpenGLBuffer_feedData_TEMP_INST, target);
-    
-    OpenGLBuffer_TEMP_INST(VertexBuffer);
-    OpenGLBuffer_TEMP_INST(IndexBuffer);
-    #if GL_VERSION_2_1
-    OpenGLBuffer_TEMP_INST(PixelPackBuffer);
-    OpenGLBuffer_TEMP_INST(PixelUnpackBuffer);
-    #endif
-    #if GL_VERSION_3_0
-    OpenGLBuffer_TEMP_INST(CopyWriteBuffer);
-    OpenGLBuffer_TEMP_INST(TransformFeedbackBuffer);
-    #endif
-    #if GL_VERSION_3_1
-    OpenGLBuffer_TEMP_INST(CopyReadBuffer);
-    OpenGLBuffer_TEMP_INST(TextureBuffer);
-    OpenGLBuffer_TEMP_INST(UniformBuffer);
-    #endif
-    #ifdef GL_VERSION_4_0
-    OpenGLBuffer_TEMP_INST(DrawIndirectBuffer);
-    #endif
-    #if GL_VERSION_4_2
-    OpenGLBuffer_TEMP_INST(AtomicCounterBuffer);
-    #endif
-    #if GL_VERSION_4_3
-    OpenGLBuffer_TEMP_INST(DispatchIndirectBuffer);
-    OpenGLBuffer_TEMP_INST(ShaderStorageBuffer);
-    #endif
-    #if GL_VERSION_4_4
-    OpenGLBuffer_TEMP_INST(QueryBuffer);
-    #endif
-
-    #undef OpenGLBuffer_TEMP_INST
-    #undef OpenGLBuffer_feedData_TEMP_INST
-
-    void HERMYGL_EXPORT draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
+    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
 
 }
+
+#include "HermyGL/Buffer.inl"
+
 #endif

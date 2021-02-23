@@ -25,7 +25,7 @@ namespace hgl{
         #endif
     };
 
-    class HERMYGL_EXPORT Shaders : public OpenGLBase{
+    class Shaders : public OpenGLBase{
     private:
         std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
@@ -39,22 +39,12 @@ namespace hgl{
         void link();
         void validate() const;
         unsigned int getUniformLocation(const char* name);
-        template<typename T>
-        void setUniform(const char* name, Dimensions dimension, ...);
+        template<int L, typename T, glm::qualifier Q>
+        void setUniform(const char* name, const glm::vec<L,T,Q>& v);
     };
 
-    #define TEMP_INST(T)\
-    extern template void HERMYGL_EXPORT Shaders::setUniform<T>(const char* name, Dimensions dimension, ...);
-
-    TEMP_INST(int);
-    TEMP_INST(unsigned int);
-    TEMP_INST(float);
-    #ifdef INCORPORATE_DOUBLE
-    TEMP_INST(double);
-    #endif
-
-    #undef TEMP_INST
-
 }
+
+#include "HermyGL/Shaders.inl"
 
 #endif

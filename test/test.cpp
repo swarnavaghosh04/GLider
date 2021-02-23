@@ -1,6 +1,4 @@
 #include "HermyGL/HermyGL.hpp"
-#include "HermyGL/VertexArray.hpp"
-#include "HermyGL/OpenGLBuffer.hpp"
 #include <vector>
 #include <chrono>
 
@@ -129,7 +127,7 @@ int main(int argc, const char* argv[]){
 
             float u_mul = 0;
             float du_mul_dt = 1.f;
-            shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
+            shaders.setUniform("u_mul", glm::vec1(u_mul));
 
             shaders.bind();
 
@@ -141,7 +139,7 @@ int main(int argc, const char* argv[]){
                 hgl::clear(GL_COLOR_BUFFER_BIT);
 
                 u_mul += du_mul_dt/fps;
-                shaders.setUniform<float>("u_mul", hgl::D1, u_mul);
+                shaders.setUniform("u_mul", glm::vec1(u_mul));
 
                 if(u_mul >= 1){
                     u_mul = 1;

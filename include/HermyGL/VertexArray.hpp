@@ -2,11 +2,11 @@
 #define HGL_VERTEXARRAY__H_
 
 #include "HermyGL/OpenGLBase.hpp"
-#include "HermyGL/OpenGLBuffer.hpp"
+#include "HermyGL/Buffer.hpp"
 
 namespace hgl{
 
-    class HERMYGL_EXPORT VertexArray : public OpenGLBase{
+    class VertexArray : public OpenGLBase{
     public:
         VertexArray();
         ~VertexArray();
@@ -28,23 +28,8 @@ namespace hgl{
         void draw(DrawType mode, int first, int count) const;
     };
 
-    #define TEMP_INST(T)\
-        extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
-            const Buffer<VertexBuffer>&     vb,\
-            const LayoutElement*            layout,\
-            unsigned int                    layoutCount,\
-            unsigned int                    startingAttribIndex = 0\
-        );\
-        extern template void HERMYGL_EXPORT VertexArray::readBufferData<T>(\
-            const Buffer<VertexBuffer>&         vb,\
-            const std::vector<LayoutElement>&   layout,\
-            unsigned int                        startingAttribIndex = 0\
-        );
-
-    __HGL_InstantiateTemplateTypes(TEMP_INST);
-
-    #undef TEMP_INST
-
 }
+
+#include "HermyGL/VertexArray.inl"
 
 #endif

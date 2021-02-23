@@ -1,8 +1,7 @@
 #ifndef HGL_OPENGL_BASE__H_
 #define HGL_OPENGL_BASE__H_
 
-
-
+#include <glm/glm.hpp>
 #include "HermyGL/HermyGL_core.hpp"
 #include "HermyGL/GLErrorHandling.hpp"
 
