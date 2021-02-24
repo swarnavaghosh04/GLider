@@ -30,15 +30,6 @@ namespace hgl{
         else if(std::is_same<T, float>()) glProgramUniform##n##f(this->id, getUniformLocation(name), __VA_ARGS__);\
         SET_PROGRAM_UNIFORM_DOUBLE(n, __VA_ARGS__)
 
-
-    template<typename T>
-    void extractVaArgs(T* output, unsigned int count, va_list v){
-        if(std::is_same<T,float>())
-            for(int i = 0; i < count; i++) output[i] = (float)va_arg(v, double);
-        else
-            for(int i = 0; i < count; i++) output[i] = (T)va_arg(v, T);
-    }
-
     template<int L, typename T, glm::qualifier Q>
     void Shaders::setUniform(const char* name, const glm::vec<L,T,Q>& v){
 

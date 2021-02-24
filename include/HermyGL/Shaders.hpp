@@ -25,7 +25,7 @@ namespace hgl{
         #endif
     };
 
-    class Shaders : public OpenGLBase{
+    class HERMYGL_EXPORT Shaders : public RuntimeOpenGLBase{
     private:
         std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:

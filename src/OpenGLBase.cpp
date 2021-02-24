@@ -2,23 +2,18 @@
 
 namespace hgl{
 
-    void clear(unsigned int mask){
-        GL_CALL(glClear(mask);)
-    }
+    //RuntimeOpenGLBase::RuntimeOpenGLBase(){}
+    RuntimeOpenGLBase::~RuntimeOpenGLBase(){}
 
-    OpenGLBase::OpenGLBase(OpenGLBase&& other) noexcept(true):
+    RuntimeOpenGLBase::RuntimeOpenGLBase(RuntimeOpenGLBase&& other) noexcept(true):
         id(other.id)
     {
         other.id = 0;
     }
 
-    OpenGLBase& OpenGLBase::operator= (OpenGLBase&& other) noexcept(true){
+    RuntimeOpenGLBase& RuntimeOpenGLBase::operator= (RuntimeOpenGLBase&& other) noexcept(true){
         std::swap(id, other.id);
         return *this;
     }
 
-    inline const unsigned int OpenGLBase::getId() const
-    { return id; }
-
-    OpenGLBase::~OpenGLBase(){}
 }

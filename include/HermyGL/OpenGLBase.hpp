@@ -69,40 +69,42 @@ namespace hgl{
         D1 = 1, D2 = 2, D3 = 3, D4 = 4
     };
 
-    #ifdef INCORPORATE_DOUBLE
-        #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)\
-            declarationMacro(double, ## __VA_ARGS__);
-    #else
-        #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)
-    #endif
+    // #ifdef INCORPORATE_DOUBLE
+    //     #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)\
+    //         declarationMacro(double, ## __VA_ARGS__);
+    // #else
+    //     #define __HGL_InstantiateTemplateDouble(declarationMacro, ...)
+    // #endif
 
-    #define __HGL_InstantiateTemplateTypes(declarationMacro, ...)\
-        declarationMacro(char              ,## __VA_ARGS__);\
-        declarationMacro(unsigned char     ,## __VA_ARGS__);\
-        declarationMacro(short             ,## __VA_ARGS__);\
-        declarationMacro(unsigned short    ,## __VA_ARGS__);\
-        declarationMacro(int               ,## __VA_ARGS__);\
-        declarationMacro(unsigned int      ,## __VA_ARGS__);\
-        declarationMacro(float             ,## __VA_ARGS__);\
-        __HGL_InstantiateTemplateDouble(declarationMacro, ##__VA_ARGS__)
+    // #define __HGL_InstantiateTemplateTypes(declarationMacro, ...)\
+    //     declarationMacro(char              ,## __VA_ARGS__);\
+    //     declarationMacro(unsigned char     ,## __VA_ARGS__);\
+    //     declarationMacro(short             ,## __VA_ARGS__);\
+    //     declarationMacro(unsigned short    ,## __VA_ARGS__);\
+    //     declarationMacro(int               ,## __VA_ARGS__);\
+    //     declarationMacro(unsigned int      ,## __VA_ARGS__);\
+    //     declarationMacro(float             ,## __VA_ARGS__);\
+    //     __HGL_InstantiateTemplateDouble(declarationMacro, ##__VA_ARGS__)
         
-    class HERMYGL_EXPORT OpenGLBase{
+    class HERMYGL_EXPORT RuntimeOpenGLBase{
     protected:
         unsigned int id;
     public:
-        OpenGLBase() = default;
-        virtual ~OpenGLBase();
-        OpenGLBase(const OpenGLBase&) = delete;
-        OpenGLBase(OpenGLBase&& other) noexcept(true);
-        OpenGLBase& operator= (const OpenGLBase&) = delete;
-        OpenGLBase& operator= (OpenGLBase&& other) noexcept(true);
+        RuntimeOpenGLBase() = default;
+        virtual ~RuntimeOpenGLBase();
+        RuntimeOpenGLBase(const RuntimeOpenGLBase&) = delete;
+        RuntimeOpenGLBase(RuntimeOpenGLBase&& other) noexcept(true);
+        RuntimeOpenGLBase& operator= (const RuntimeOpenGLBase&) = delete;
+        RuntimeOpenGLBase& operator= (RuntimeOpenGLBase&& other) noexcept(true);
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         const unsigned int getId() const;
     };
 
-    void HERMYGL_EXPORT clear(unsigned int mask);
+    void clear(unsigned int mask);
 
 }
+
+#include "HermyGL/OpenGLBase.inl"
 
 #endif

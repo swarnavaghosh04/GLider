@@ -14,7 +14,7 @@ namespace hgl{
     }
 
     template<typename T>
-    void VertexArray::readBufferData(
+    inline void VertexArray::readBufferData(
         const Buffer<VertexBuffer>& vb,
         const LayoutElement*        layout,
         unsigned int                layoutCount,
@@ -46,7 +46,7 @@ namespace hgl{
     }
 
     template<typename T>
-    void VertexArray::readBufferData(
+    inline void VertexArray::readBufferData(
         const Buffer<VertexBuffer>&         vb,
         const std::vector<LayoutElement>&   layout,
         unsigned int                        startingAttribIndex

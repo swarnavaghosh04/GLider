@@ -59,7 +59,9 @@ namespace hgl{
     };
 
     template<BufferTarget target>
-    class Buffer : public OpenGLBase{
+    class Buffer : public RuntimeOpenGLBase{
+    // private:
+    //     unsigned int id;
     public:
         Buffer();
         ~Buffer();
@@ -75,20 +77,6 @@ namespace hgl{
             const std::vector<T>& data,
             BufferUsage usage
         );
-    };
-
-    template<typename T>
-    struct BufferData{
-        const T* data;
-        unsigned int dataCount;
-    };
-
-    template<typename T>
-    struct VertexBufferData{
-        const T* data;
-        unsigned int dataCount;
-        const LayoutElement* layout;
-        unsigned int layoutCount;
     };
 
     void draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);

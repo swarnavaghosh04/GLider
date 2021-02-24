@@ -27,7 +27,7 @@ namespace hgl{
 
     template<BufferTarget target>
     template<typename T>
-    void Buffer<target>::feedData(
+    inline void Buffer<target>::feedData(
         const T* data,
         unsigned int dataCount,
         BufferUsage usage
@@ -38,7 +38,7 @@ namespace hgl{
 
     template<BufferTarget target>
     template<typename T>
-    void Buffer<target>::feedData(
+    inline void Buffer<target>::feedData(
         const std::vector<T>& data,
         BufferUsage usage
     ){
