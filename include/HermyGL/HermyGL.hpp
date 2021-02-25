@@ -26,6 +26,7 @@ public:
 #include "HermyGL/VertexArray.hpp"
 #include "HermyGL/Buffer.hpp"
 #include "HermyGL/Shaders.hpp"
+#include "HermyGL/FrameRate.hpp"
 
 namespace hgl{
 

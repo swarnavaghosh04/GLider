@@ -220,10 +220,7 @@ int main(int argc, const char* argv[]){
 
             // Setup Motion Variables ==========================
 
-            // Variables for computing fps. They are used at the end of each frame to compute the fps.
-            std::chrono::high_resolution_clock::time_point frameStart = std::chrono::high_resolution_clock::now();
-            unsigned int frame=0;
-            float fps=30, fDur;
+            hgl::FrameRate fps;
 
             GL_CALL(glDepthRange(0.01, 1));
 
@@ -380,30 +377,17 @@ int main(int argc, const char* argv[]){
 
                 } // while(SDL_PollEvent(&event))
 
-                // Compute Frame Rate ===================
-                frame++;
-                fDur = 
-                    std::chrono::duration_cast<std::chrono::duration<float, std::ratio<1>>>
-                    (std::chrono::high_resolution_clock::now() - frameStart).count();
-                fps = frame/fDur;
-                if(fDur >= .5f){
-                    frame = 0;
-                    frameStart = std::chrono::high_resolution_clock::now();
-                }
+
+                fps.compute();
 
                 // Compute Rotation Rate ===============
-                cube.rotationState.rotFactor = (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps;
+                cube.rotationState.rotFactor = (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps();
                 cube.observerPosition.rotFactor = cube.rotationState.rotFactor;
 
                 printf(
-                    //"observerPosition: %5.2f, %5.2f, %5.2f\n"
-                    "fps: %5.0f\b\b\b\b\b\b\b\b\b\b"
-                    // "\033[1A"
-                    ,
-                    // cube.observerPosition.x.actual,
-                    // cube.observerPosition.y.actual,
-                    // cube.observerPosition.z.actual,
-                    fps
+                    "fps: %5.0f\n"
+                    "\033[1A",
+                    fps()
                 );
                 
             } // while(keepRunning)
