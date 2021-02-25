@@ -1,6 +1,6 @@
 #include "HermyGL/HermyGL.hpp"
+#include <cmath>
 #include <vector>
-#include <chrono>
 
 #define MY_WINDOW_WIDTH     900
 #define MY_WINDOW_HEIGHT    900
@@ -21,7 +21,7 @@ this many seconds after a key is pressed once. */
 #define ROTATION_CONVERGENCE_TIME      1.f
 
 // Macors ======================================================================
-#define PI2 (2.f*3.14159f)
+#define PI2 (2.f*(float)M_PI)
 
 #define check2ModiferKeys(modToCheck, mod1, mod2) (modToCheck == mod1 | modToCheck == mod2)
 #define shiftModifiersActive(key) check2ModiferKeys(key, KMOD_LSHIFT, KMOD_RSHIFT)
@@ -34,19 +34,19 @@ struct MotionVar{
 
     float desired;
     float actual;
-    const Bounds* pBounds;
+    const Bounds& pBounds;
 
-    MotionVar(float val, const Bounds* pBounds):
+    MotionVar(float val, const Bounds& pBounds = {0,0}):
         desired{val},
         actual{val},
         pBounds{pBounds}
     {}
 
-    inline float distanceBetweenBounds(){return (pBounds->max)-(pBounds->min);}
+    inline float distanceBetweenBounds(){return (pBounds.max)-(pBounds.min);}
 
     void incrementDesired(){
         desired += 1;
-        if(desired >= pBounds->max){
+        if(pBounds.max != 0 && desired >= pBounds.max){
             desired -=  distanceBetweenBounds();
             actual -= distanceBetweenBounds();
         }
@@ -54,7 +54,7 @@ struct MotionVar{
 
     void decrementDesired(){
         desired -= 1;
-        if(desired <= pBounds->min){
+        if(pBounds.min != 0 && desired <= pBounds.min){
             desired += distanceBetweenBounds();
             actual += distanceBetweenBounds();
         }
@@ -65,15 +65,30 @@ struct MotionVar{
 struct MotionVector3D{
 
     MotionVar x,y,z;
-    const MotionVar::Bounds* pBounds;
+    const MotionVar::Bounds& pBounds;
     float rotFactor = 0;
 
-    MotionVector3D(float x, float y, float z, const MotionVar::Bounds* pBounds):
+    MotionVector3D(float x, float y, float z, const MotionVar::Bounds& pBounds = {0,0}):
         pBounds{pBounds},
         x{x, pBounds},
         y{y, pBounds},
         z{z, pBounds}
     {}
+
+    MotionVector3D(glm::vec3 v, const MotionVar::Bounds& pBounds = {0,0}):
+        pBounds{pBounds},
+        x{v.x, pBounds},
+        y{v.y, pBounds},
+        z{v.z, pBounds}
+    {}
+
+    glm::vec3 getActual() const {return glm::vec3(x.actual, y.actual, z.actual);}
+    glm::vec3 getDesired() const {return glm::vec3(x.desired, y.desired, z.desired);}
+    void reset(float x=0, float y=0, float z=0) {
+        this->x.desired = x;
+        this->y.desired = y;
+        this->z.desired = z;
+    }
 
     void computeMotion(){
 
@@ -157,12 +172,12 @@ struct Cube{
 
     Cube():
         verBufLayout{{hgl::D3, hgl::Norm_FALSE}},
-        translationBounds{-5.f, 5.f},
+        translationBounds{-50.f, 50.f},
         rotationBounds{-KEYHITS_PER_ROTATION/2, KEYHITS_PER_ROTATION/2},
-        observerPosition{ 0.f, 0.f, 5.f, &translationBounds},
-        observerForwards{ 0.f, 0.f, -1.f, &translationBounds},
-        observerUpwards{ 0.f, 1.f, 0.f, &translationBounds},
-        rotationState{ 0.f,  0.f, 0.f, &rotationBounds}
+        observerPosition{ 0.f, 0.f, 5.f, translationBounds},
+        observerForwards{ 0.f, 0.f, -1.f, translationBounds},
+        observerUpwards{ 0.f, 1.f, 0.f, translationBounds},
+        rotationState{ 0.f,  0.f, 0.f, rotationBounds}
     {
         SDL_Log("Cube Init\n");
         vertexBuffer.feedData<float>(vertexBufData, sizeof(vertexBufData)/sizeof(float), hgl::UseStaticDraw);
@@ -222,7 +237,7 @@ int main(int argc, const char* argv[]){
 
             hgl::FrameRate fps;
 
-            GL_CALL(glDepthRange(0.01, 1));
+            GL_CALL(glDepthRange(0.01, 1000));
 
             bool keepRunning = true;
             SDL_Event event;
@@ -239,21 +254,9 @@ int main(int argc, const char* argv[]){
                 mvp =
                     projection *
                     glm::lookAt(
-                        glm::vec3(                              // eye
-                            cube.observerPosition.x.actual,
-                            cube.observerPosition.y.actual,
-                            cube.observerPosition.z.actual
-                        ),
-                        glm::vec3(                              // center
-                            cube.observerPosition.x.actual + cube.observerForwards.x.actual,
-                            cube.observerPosition.y.actual + cube.observerForwards.y.actual,
-                            cube.observerPosition.z.actual + cube.observerForwards.z.actual
-                        ),
-                        glm::vec3(                              // up
-                            cube.observerUpwards.x.actual,
-                            cube.observerUpwards.y.actual,
-                            cube.observerUpwards.z.actual
-                        )
+                        cube.observerPosition.getActual(),
+                        cube.observerPosition.getActual() + cube.observerForwards.getActual(),
+                        cube.observerUpwards.getActual()
                     ) *
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(1.f, 0.f, 0.f) ) *
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(0.f, 1.f, 0.f) ) *
@@ -362,13 +365,9 @@ int main(int argc, const char* argv[]){
                             break;
                         case SDLK_SPACE:
                             if(shiftModifiersActive(event.key.keysym.mod)){
-                                cube.observerPosition.x.desired = 0;
-                                cube.observerPosition.y.desired = 0;
-                                cube.observerPosition.z.desired = 5;
+                                cube.observerPosition.reset(0,0,5);
                             }else{
-                                cube.rotationState.x.desired = 0;
-                                cube.rotationState.y.desired = 0;
-                                cube.rotationState.z.desired = 0;
+                                cube.rotationState.reset();
                             }
                             break;
                         }
