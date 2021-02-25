@@ -5,11 +5,19 @@
 
 namespace hgl{
 
-    inline void clear(unsigned int mask){
-        GL_CALL(glClear(mask | GL_DEPTH_BUFFER_BIT));
+    inline void clear(BufferBit mask){
+        GL_CALL(glClear(mask | BufferBit::DepthBufferBit));
     }
 
-    inline const unsigned int RuntimeOpenGLBase::getId() const
+    inline void enable(Capability cap){
+        GL_CALL(glEnable(cap));
+    }
+
+    inline void disable(Capability cap){
+        GL_CALL(glDisable(cap));
+    }
+
+    inline const unsigned int OpenGLBase::getId() const
     { return id; }
 
 }

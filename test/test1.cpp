@@ -136,7 +136,7 @@ int main(int argc, const char* argv[]){
 
             while(keepRunning){
 
-                hgl::clear(GL_COLOR_BUFFER_BIT);
+                hgl::clear(hgl::ColorBufferBit);
 
                 u_mul += du_mul_dt/fps;
                 shaders.setUniform("u_mul", glm::vec1(u_mul));
@@ -176,8 +176,9 @@ int main(int argc, const char* argv[]){
         }
 
         hgl::quit();
-    }
-    catch(const std::runtime_error& ex){
+
+    }catch(const std::exception& ex){
+        SDL_Log("%s occured!\n", typeid(ex).name());
         SDL_Log(ex.what());
     }catch(...){
         SDL_Log("Error Occured\n");

@@ -10,7 +10,7 @@ namespace hgl{
         GL_CALL(glDeleteProgram(this->id));
     }
 
-    void Shaders::compileString(ShaderTypes shaderType, const char* sourceCode){
+    void Shaders::compileString(ShaderType shaderType, const char* sourceCode){
 
         GL_CALL(unsigned int shader = glCreateShader((unsigned int)shaderType));
         GL_CALL(glShaderSource(shader, 1, &sourceCode, NULL));
@@ -30,7 +30,7 @@ namespace hgl{
 
     }
 
-    void Shaders::compileFile(ShaderTypes shaderType, const char* sourceFilePath){
+    void Shaders::compileFile(ShaderType shaderType, const char* sourceFilePath){
 
         if(
             std::ifstream sourceFile(sourceFilePath, std::ios_base::in);

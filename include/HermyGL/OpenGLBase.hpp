@@ -2,6 +2,7 @@
 #define HGL_OPENGL_BASE__H_
 
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "HermyGL/HermyGL_core.hpp"
 #include "HermyGL/GLErrorHandling.hpp"
 
@@ -38,6 +39,11 @@ namespace hgl{
         );
     }
 
+    
+    enum Dimension : unsigned char{
+        D1 = 1, D2 = 2, D3 = 3, D4 = 4
+    };
+
     enum DrawType : unsigned int{
         #if GL_VERSION_2_0
         DrawPoints          = GL_POINTS,
@@ -65,8 +71,98 @@ namespace hgl{
 
     };
 
-    enum Dimensions : unsigned char{
-        D1 = 1, D2 = 2, D3 = 3, D4 = 4
+    enum BufferBit : unsigned int{
+        ColorBufferBit      = GL_COLOR_BUFFER_BIT,
+        DepthBufferBit      = GL_DEPTH_BUFFER_BIT,
+        StencilBufferBit    = GL_STENCIL_BUFFER_BIT,
+        #if GL_VERSION_2_1 && !GL_VERSION_3_0
+        AccumBufferBit      = GL_ACCUM_BUFFER_BIT,
+        #endif
+    };
+
+    enum Capability : unsigned int{
+        #if GL_VERSION_1_1
+        PolygonOffsetFill = GL_POLYGON_OFFSET_FILL,
+        PolygonOffsetLine = GL_POLYGON_OFFSET_LINE,
+        PolygonOffsetPoint = GL_POLYGON_OFFSET_POINT,
+        ColorLogicOp = GL_COLOR_LOGIC_OP,
+        IndexLogicOp = GL_INDEX_LOGIC_OP,
+        #endif
+        #if GL_VERSION_1_2
+        RescaleNormal = GL_RESCALE_NORMAL,
+        Texture3D = GL_TEXTURE_3D,
+        #endif
+        #if GL_VERSION_1_3
+        MultiSample = GL_MULTISAMPLE,
+        SampleAlphaToCoverage = GL_SAMPLE_ALPHA_TO_COVERAGE,
+        SampleAlphToOne = GL_SAMPLE_ALPHA_TO_ONE,
+        SampleCoverage = GL_SAMPLE_COVERAGE,
+        TextureCubeMap = GL_TEXTURE_CUBE_MAP,
+        #endif
+        #if GL_VERSION_1_3 | GL_ARB_multitexture
+        Texture1D = GL_TEXTURE_1D,
+        Texture2D = GL_TEXTURE_2D,
+        TextureGenS = GL_TEXTURE_GEN_S,
+        TextureGenT = GL_TEXTURE_GEN_T,
+        TextureGenR = GL_TEXTURE_GEN_R,
+        TextureGenQ = GL_TEXTURE_GEN_Q,
+        #endif
+        #if GL_VERSION_2_0
+        PointSprite = GL_POINT_SPRITE,
+        VertexProgramPointSize = GL_VERTEX_PROGRAM_POINT_SIZE,
+        VertexProgramTwoSided = GL_VERTEX_PROGRAM_TWO_SIDE,
+        #endif
+        #if GL_ARB_imaging
+        ColorTable = GL_COLOR_TABLE,
+        Convolution1D = GL_CONVOLUTION_1D,
+        Convolution2D = GL_CONVOLUTION_2D,
+        Histogram = GL_HISTOGRAM,
+        MinMax = GL_MINMAX,
+        PostColorMatrixColorTable = GL_POST_COLOR_MATRIX_COLOR_TABLE,
+        PostConvolutionColorTable = GL_POST_CONVOLUTION_COLOR_TABLE,
+        Separable2D = GL_SEPARABLE_2D,
+        #endif
+        #if GL_VERSION_2_1
+        AlphaTest = GL_ALPHA_TEST,
+        AutoNormal = GL_AUTO_NORMAL,
+        Blend = GL_BLEND,
+        ClipPlane0 = GL_CLIP_PLANE0,
+        ColorMaterial = GL_COLOR_MATERIAL,
+        ColorSum = GL_COLOR_SUM,
+        CullFase = GL_CULL_FACE,
+        DepthTest = GL_DEPTH_TEST,
+        Dither = GL_DITHER,
+        Fog = GL_FOG,
+        Light0 = GL_LIGHT0,
+        Lighting = GL_LIGHTING,
+        LineSmooth = GL_LINE_SMOOTH,
+        LineStipple = GL_LINE_STIPPLE,
+        Map1Color4 = GL_MAP1_COLOR_4,
+        Map1Index = GL_MAP1_INDEX,
+        Map1Normal = GL_MAP1_NORMAL,
+        Map1TextureCoord1 = GL_MAP1_TEXTURE_COORD_1,
+        Map1TextureCoord2 = GL_MAP1_TEXTURE_COORD_2,
+        Map1TextureCoord3 = GL_MAP1_TEXTURE_COORD_3,
+        Map1TextureCoord4 = GL_MAP1_TEXTURE_COORD_4,
+        Map1Vertex3 = GL_MAP1_VERTEX_3,
+        Map1Vertex4 = GL_MAP1_VERTEX_4,
+        Map2Color4 = GL_MAP2_COLOR_4,
+        Map2Index = GL_MAP2_INDEX,
+        Map2Normal = GL_MAP2_NORMAL,
+        Map2TextureCoord1 = GL_MAP2_TEXTURE_COORD_1,
+        Map2TextureCoord2 = GL_MAP2_TEXTURE_COORD_2,
+        Map2TextureCoord3 = GL_MAP2_TEXTURE_COORD_3,
+        Map2TextureCoord4 = GL_MAP2_TEXTURE_COORD_4,
+        Map2Vertex3 = GL_MAP2_VERTEX_3,
+        Map2Vertex4 = GL_MAP2_VERTEX_4,
+        Normalize = GL_NORMALIZE,
+        PointSmooth = GL_POINT_SMOOTH,
+        PolygonSmooth = GL_POLYGON_SMOOTH,
+        PolygonStipple = GL_POLYGON_STIPPLE,
+        ScissorTest = GL_SCISSOR_TEST,
+        StencilTest = GL_STENCIL_TEST,
+        #endif
+
     };
 
     // #ifdef INCORPORATE_DOUBLE
@@ -86,22 +182,24 @@ namespace hgl{
     //     declarationMacro(float             ,## __VA_ARGS__);\
     //     __HGL_InstantiateTemplateDouble(declarationMacro, ##__VA_ARGS__)
         
-    class HERMYGL_EXPORT RuntimeOpenGLBase{
+    class HERMYGL_EXPORT OpenGLBase{
     protected:
         unsigned int id;
     public:
-        RuntimeOpenGLBase() = default;
-        virtual ~RuntimeOpenGLBase();
-        RuntimeOpenGLBase(const RuntimeOpenGLBase&) = delete;
-        RuntimeOpenGLBase(RuntimeOpenGLBase&& other) noexcept(true);
-        RuntimeOpenGLBase& operator= (const RuntimeOpenGLBase&) = delete;
-        RuntimeOpenGLBase& operator= (RuntimeOpenGLBase&& other) noexcept(true);
+        OpenGLBase() = default;
+        virtual ~OpenGLBase();
+        OpenGLBase(const OpenGLBase&) = delete;
+        OpenGLBase(OpenGLBase&& other) noexcept(true);
+        OpenGLBase& operator= (const OpenGLBase&) = delete;
+        OpenGLBase& operator= (OpenGLBase&& other) noexcept(true);
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         const unsigned int getId() const;
     };
 
-    void clear(unsigned int mask);
+    void clear(hgl::BufferBit mask);
+    void enable(hgl::Capability cap);
+    void disable(hgl::Capability cap);
 
 }
 

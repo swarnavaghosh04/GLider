@@ -54,14 +54,12 @@ namespace hgl{
     };
 
     struct LayoutElement{
-        Dimensions dimension;
+        Dimension dimension;
         Normalized normalized;
     };
 
     template<BufferTarget target>
-    class Buffer : public RuntimeOpenGLBase{
-    // private:
-    //     unsigned int id;
+    class Buffer : public OpenGLBase{
     public:
         Buffer();
         ~Buffer();

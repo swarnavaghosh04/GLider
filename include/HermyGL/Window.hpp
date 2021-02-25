@@ -2,6 +2,7 @@
 #define HGL_WINDOW__H_
 
 #include "HermyGL/HermyGL_core.hpp"
+#include "HermyGL/OpenGLBase.hpp"
 
 namespace hgl{
 

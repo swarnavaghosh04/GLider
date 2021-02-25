@@ -6,7 +6,7 @@
 
 namespace hgl{
 
-    class HERMYGL_EXPORT VertexArray : public RuntimeOpenGLBase{
+    class HERMYGL_EXPORT VertexArray : public OpenGLBase{
     public:
         VertexArray();
         ~VertexArray();

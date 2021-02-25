@@ -5,30 +5,30 @@
 
 namespace hgl{
 
-    HERMYGL_EXPORT extern int numErrors;
-    HERMYGL_EXPORT void checkErrors();
-
-    #ifdef HGL_DEBUG
-    #define GL_CALL(x)\
-        x;\
-        checkErrors();\
-        if(numErrors!=0){\
-            SDL_LogError(\
-                SDL_LOG_CATEGORY_APPLICATION,\
-                "    (%u) %s:%i:%s()\n",\
-                numErrors--,\
-                __FILE__,\
-                __LINE__,\
-                __FUNCTION__);\
-            SDL_LogError(\
-                SDL_LOG_CATEGORY_APPLICATION,\
-                "    %s\n",\
-                #x);\
-        }
-    #else
-    #define GL_CALL(x) x
-    #endif
+    extern int HERMYGL_EXPORT numErrors;
+    void HERMYGL_EXPORT checkErrors();
 
 }
+
+#ifdef HGL_DEBUG
+#define GL_CALL(x)\
+    x;\
+    hgl::checkErrors();\
+    if(hgl::numErrors!=0){\
+        SDL_LogError(\
+            SDL_LOG_CATEGORY_APPLICATION,\
+            "    (%u) %s:%i:%s()\n",\
+            hgl::numErrors--,\
+            __FILE__,\
+            __LINE__,\
+            __FUNCTION__);\
+        SDL_LogError(\
+            SDL_LOG_CATEGORY_APPLICATION,\
+            "    %s\n",\
+            #x);\
+    }
+#else
+#define GL_CALL(x) x
+#endif
 
 #endif

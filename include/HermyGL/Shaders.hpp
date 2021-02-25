@@ -8,7 +8,7 @@
 
 namespace hgl{
 
-    enum ShaderTypes : unsigned int{
+    enum ShaderType : unsigned int{
         #if GL_VERSION_2_0
         VertexShader            = GL_VERTEX_SHADER,
         FragmentShader          = GL_FRAGMENT_SHADER,
@@ -25,7 +25,7 @@ namespace hgl{
         #endif
     };
 
-    class HERMYGL_EXPORT Shaders : public RuntimeOpenGLBase{
+    class HERMYGL_EXPORT Shaders : public OpenGLBase{
     private:
         std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
@@ -34,13 +34,15 @@ namespace hgl{
         void bind() const;
         void unbind() const;
         void use() const;
-        void compileString(ShaderTypes shaderType, const char* sourceCode);
-        void compileFile(ShaderTypes shaderType, const char* sourceFilePath);
+        void compileString(ShaderType shaderType, const char* sourceCode);
+        void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();
         void validate() const;
         unsigned int getUniformLocation(const char* name);
         template<int L, typename T, glm::qualifier Q>
         void setUniform(const char* name, const glm::vec<L,T,Q>& v);
+        template<int R, int C, typename T, glm::qualifier Q>
+        void setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose);
     };
 
 }
