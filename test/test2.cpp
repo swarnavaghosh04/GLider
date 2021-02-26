@@ -318,7 +318,7 @@ int main(int argc, const char* argv[]){
                 /* Poll for and process events */
                 while(SDL_PollEvent(&event)){
                     
-                    #define shiftModifiersActived(key) key == KMOD_LSHIFT | key == KMOD_RSHIFT
+                    #define shiftModifiersActived (event.key.keysym.mod & ( KMOD_LSHIFT | KMOD_LSHIFT ) )
 
                     switch(event.type){
                     case SDL_QUIT:
@@ -327,43 +327,43 @@ int main(int argc, const char* argv[]){
                     case SDL_KEYDOWN:
                         switch(event.key.keysym.sym){
                         case SDLK_LEFT:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.x.decrementDesired();
                             else
                                 cube.rotationState.y.decrementDesired();
                             break;
                         case SDLK_RIGHT:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.x.incrementDesired();
                             else
                                 cube.rotationState.y.incrementDesired();
                             break;
                         case SDLK_UP:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.y.incrementDesired();
                             else
                                 cube.rotationState.x.decrementDesired();
                             break;
                         case SDLK_DOWN:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.y.decrementDesired();
                             else
                                 cube.rotationState.x.incrementDesired();
                             break;
                         case SDLK_PERIOD:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.z.incrementDesired();
                             else
                                 cube.rotationState.z.decrementDesired();
                             break;
                         case SDLK_COMMA:
-                            if(shiftModifiersActived(event.key.keysym.mod))
+                            if(shiftModifiersActived)
                                 cube.observerPosition.z.decrementDesired();
                             else
                                 cube.rotationState.z.incrementDesired();
                             break;
                         case SDLK_SPACE:
-                            if(shiftModifiersActived(event.key.keysym.mod)){
+                            if(shiftModifiersActived){
                                 cube.observerPosition.reset(0,0,5);
                             }else{
                                 cube.rotationState.reset();
