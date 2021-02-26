@@ -6,7 +6,7 @@
 namespace hgl{
     class FrameRate{
     private:
-        typedef std::chrono::high_resolution_clock Clock;
+        typedef std::chrono::steady_clock Clock;
         Clock::time_point frameStart = Clock::now();
         unsigned int frame=0;
         float fps=60, fDur=1/fps;

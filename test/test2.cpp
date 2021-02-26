@@ -2,8 +2,8 @@
 #include <cmath>
 #include <vector>
 
-#define MY_WINDOW_WIDTH     900
-#define MY_WINDOW_HEIGHT    900
+#define MY_WINDOW_WIDTH     700
+#define MY_WINDOW_HEIGHT    700
 
 // Rotations Characteristics ==================================================
 
@@ -22,9 +22,6 @@ this many seconds after a key is pressed once. */
 
 // Macors ======================================================================
 #define PI2 (2.f*(float)M_PI)
-
-#define check2ModiferKeys(modToCheck, mod1, mod2) (modToCheck == mod1 | modToCheck == mod2)
-#define shiftModifiersActive(key) check2ModiferKeys(key, KMOD_LSHIFT, KMOD_RSHIFT)
 
 // Structures For Data Organization ============================================
 
@@ -320,6 +317,8 @@ int main(int argc, const char* argv[]){
 
                 /* Poll for and process events */
                 while(SDL_PollEvent(&event)){
+                    
+                    #define shiftModifiersActived(key) key == KMOD_LSHIFT | key == KMOD_RSHIFT
 
                     switch(event.type){
                     case SDL_QUIT:
@@ -328,43 +327,43 @@ int main(int argc, const char* argv[]){
                     case SDL_KEYDOWN:
                         switch(event.key.keysym.sym){
                         case SDLK_LEFT:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.x.decrementDesired();
                             else
                                 cube.rotationState.y.decrementDesired();
                             break;
                         case SDLK_RIGHT:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.x.incrementDesired();
                             else
                                 cube.rotationState.y.incrementDesired();
                             break;
                         case SDLK_UP:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.y.incrementDesired();
                             else
                                 cube.rotationState.x.decrementDesired();
                             break;
                         case SDLK_DOWN:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.y.decrementDesired();
                             else
                                 cube.rotationState.x.incrementDesired();
                             break;
                         case SDLK_PERIOD:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.z.incrementDesired();
                             else
                                 cube.rotationState.z.decrementDesired();
                             break;
                         case SDLK_COMMA:
-                            if(shiftModifiersActive(event.key.keysym.mod))
+                            if(shiftModifiersActived(event.key.keysym.mod))
                                 cube.observerPosition.z.decrementDesired();
                             else
                                 cube.rotationState.z.incrementDesired();
                             break;
                         case SDLK_SPACE:
-                            if(shiftModifiersActive(event.key.keysym.mod)){
+                            if(shiftModifiersActived(event.key.keysym.mod)){
                                 cube.observerPosition.reset(0,0,5);
                             }else{
                                 cube.rotationState.reset();
@@ -373,6 +372,8 @@ int main(int argc, const char* argv[]){
                         }
                         break;
                     }
+
+                    #undef shiftModifiersActived
 
                 } // while(SDL_PollEvent(&event))
 
