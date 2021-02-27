@@ -218,7 +218,11 @@ int main(int argc, const char* argv[]){
 
         {
 
-            hgl::Window window{"Cube", MY_WINDOW_WIDTH, MY_WINDOW_HEIGHT};
+            hgl::OpenGLWindow window{"Cube1", 400, 400};
+            {
+                hgl::OpenGLWindow window2{"Cube", MY_WINDOW_WIDTH, MY_WINDOW_HEIGHT};
+                window = std::move(window2);
+            }
 
             Cube cube;
 
@@ -307,7 +311,7 @@ int main(int argc, const char* argv[]){
                     6*5);
 
                 /* Swap front and back buffers */
-                SDL_GL_SwapWindow(window.getWindow());
+                SDL_GL_SwapWindow(window());
 
                 /* Poll for and process events */
                 while(SDL_PollEvent(&event)){
