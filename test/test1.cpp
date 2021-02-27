@@ -125,9 +125,9 @@ int main(int argc, const char* argv[]){
             shaders.link();
             shaders.validate();
 
-            float u_mul = 0;
+            glm::vec1 u_mul{0};
             float du_mul_dt = 1.f;
-            shaders.setUniform("u_mul", glm::vec1(u_mul));
+            shaders.setUniform("u_mul", u_mul);
 
             shaders.bind();
 
@@ -139,17 +139,17 @@ int main(int argc, const char* argv[]){
                 hgl::clear(hgl::ColorBufferBit);
 
                 u_mul += du_mul_dt/fps;
-                shaders.setUniform("u_mul", glm::vec1(u_mul));
+                shaders.setUniform("u_mul", u_mul);
 
-                if(u_mul >= 1){
-                    u_mul = 1;
+                if(u_mul.x >= 1){
+                    u_mul.x = 1;
                     du_mul_dt *= du_mul_dt<0?1:-1;
-                }else if(u_mul <= 0){
-                    u_mul = 0;
+                }else if(u_mul.x <= 0){
+                    u_mul.x = 0;
                     du_mul_dt *= du_mul_dt>0?1:-1;
                 }
 
-                hgl::draw(ib, hgl::DrawTriangles, 6, GL_UNSIGNED_BYTE);
+                hgl::draw<unsigned char>(ib, hgl::DrawTriangles, 6);
 
                 SDL_GL_SwapWindow(window.getWindow());
 

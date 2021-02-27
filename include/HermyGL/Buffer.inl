@@ -46,8 +46,29 @@ namespace hgl{
         GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
     }
 
-    inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index){
-        GL_CALL(glDrawElements(mode, count, type, index));
+    template<BufferTarget target>
+    template<typename T>
+    inline void Buffer<target>::feedData(
+        const BufferData<T>& data,
+        BufferUsage usage
+    ){
+        bind();
+        GL_CALL(glBufferData(target, data.count*sizeof(T), data.data, usage));
+    }
+
+    template<BufferTarget target>
+    template<typename T>
+    inline void Buffer<target>::draw(
+        DrawType mode, unsigned int count, int offset
+    ){
+        static_assert((target == IndexBuffer), "Invalid draw call!");
+        bind();
+        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), (void*)(offset*sizeof(T))));
+    }
+
+    template<typename T>
+    inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset){
+        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), (void*)(offset*sizeof(T))));
     }
 
 }

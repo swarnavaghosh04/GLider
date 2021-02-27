@@ -2,6 +2,8 @@
 
 void hgl::initialize(){
 
+    static_assert(GL_VERSION_3_0, "OpenGL version should be atleast 3.0");
+
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
         throw std::runtime_error(SDL_GetError());
 

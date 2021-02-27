@@ -9,7 +9,7 @@ namespace hgl{
         frame++;
         fDur = 
             (std::chrono::duration_cast<Dur>(Clock::now() - frameStart)).count();
-        if(fDur >= .5f){        // update every half second
+        if(fDur >= .25f){        // update every quarter second
             fps = frame/fDur;
             frame = 0;
             frameStart = Clock::now();

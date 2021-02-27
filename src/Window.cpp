@@ -42,7 +42,7 @@ namespace hgl{
             throw std::runtime_error("GLAD Unable to load OpenGL");
         }
 
-        enable(MultiSample);
+        enable(Multisample);
         enable(DepthTest);
 
     }

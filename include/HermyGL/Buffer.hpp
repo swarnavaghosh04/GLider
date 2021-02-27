@@ -58,6 +58,12 @@ namespace hgl{
         Normalized normalized;
     };
 
+    template<typename T>
+    struct BufferData{
+        unsigned int count;
+        const T* const data;
+    };
+
     template<BufferTarget target>
     class Buffer : public OpenGLBase{
     public:
@@ -75,9 +81,17 @@ namespace hgl{
             const std::vector<T>& data,
             BufferUsage usage
         );
+        template<typename T>
+        void feedData(
+            const BufferData<T>& data,
+            BufferUsage usage
+        );
+        template<typename T>
+        void draw(DrawType mode, unsigned int count, int offset = 0);
     };
 
-    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, int count, unsigned int type, const void* index = 0);
+    template<typename T>
+    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0);
 
 }
 

@@ -131,25 +131,31 @@ struct Cube{
     )CODE";
 
     // If you change the size here, change the size in the constructor as well
-    static constexpr float vertexBufData[8*3] = {
-         .5f,  .5f,  .5f,   // 0
-        -.5f,  .5f,  .5f,   // 1
-        -.5f, -.5f,  .5f,   // 2
-         .5f, -.5f,  .5f,   // 3
-         .5f,  .5f, -.5f,   // 4
-        -.5f,  .5f, -.5f,   // 5
-        -.5f, -.5f, -.5f,   // 6
-         .5f, -.5f, -.5f    // 7
+    static constexpr hgl::BufferData<float> vertexBufData = {
+        8*3,
+        (const float[]){
+             .5f,  .5f,  .5f,   // 0
+            -.5f,  .5f,  .5f,   // 1
+            -.5f, -.5f,  .5f,   // 2
+             .5f, -.5f,  .5f,   // 3
+             .5f,  .5f, -.5f,   // 4
+            -.5f,  .5f, -.5f,   // 5
+            -.5f, -.5f, -.5f,   // 6
+             .5f, -.5f, -.5f    // 7
+        }
     };
 
     // If you change the size here, change the size in the constructor as well
-    static constexpr unsigned char indexBufData[6*6] = {
-        0, 1, 3, 1, 3, 2,
-        1, 0, 5, 0, 5, 4,
-        6, 5, 7, 5, 7, 4,
-        2, 3, 6, 3, 6, 7,
-        0, 3, 4, 3, 4, 7,
-        2, 1, 6, 1, 6, 5
+    static constexpr hgl::BufferData<unsigned char> indexBufData = {
+        6*6,
+        (const unsigned char []){
+            0, 1, 3, 1, 3, 2,
+            1, 0, 5, 0, 5, 4,
+            6, 5, 7, 5, 7, 4,
+            2, 3, 6, 3, 6, 7,
+            0, 3, 4, 3, 4, 7,
+            2, 1, 6, 1, 6, 5
+        }
     };
 
     hgl::VertexArray                vertexArray;
@@ -177,8 +183,8 @@ struct Cube{
         rotationState{ 0.f,  0.f, 0.f, rotationBounds}
     {
         SDL_Log("Cube Init\n");
-        vertexBuffer.feedData<float>(vertexBufData, sizeof(vertexBufData)/sizeof(float), hgl::UseStaticDraw);
-        indexBuffer.feedData<unsigned char>(indexBufData, sizeof(indexBufData)/sizeof(unsigned char), hgl::UseStaticDraw);
+        vertexBuffer.feedData<float>(vertexBufData, hgl::UseStaticDraw);
+        indexBuffer.feedData<unsigned char>(indexBufData, hgl::UseStaticDraw);
         vertexArray.readBufferData<float>(vertexBuffer, verBufLayout, sizeof(verBufLayout)/sizeof(hgl::LayoutElement));
         shaders.compileString(hgl::VertexShader, vertexShader);
         shaders.compileString(hgl::FragmentShader, fragmentShader);
@@ -191,8 +197,8 @@ struct Cube{
 
 };
 
-constexpr float Cube::vertexBufData[];
-constexpr unsigned char Cube::indexBufData[];
+constexpr hgl::BufferData<float> Cube::vertexBufData;
+constexpr hgl::BufferData<unsigned char> Cube::indexBufData;
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
@@ -265,52 +271,40 @@ int main(int argc, const char* argv[]){
                 hgl::clear(hgl::ColorBufferBit);
 
                 cube.shaders.setUniform("u_color", glm::vec4(1.0, 0.0, 0.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*0*sizeof(unsigned char)));
+                    6*0);
 
                 cube.shaders.setUniform("u_color", glm::vec4(0.0, 1.0, 0.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*1*sizeof(unsigned char)));
+                    6*1);
                 
                 cube.shaders.setUniform("u_color", glm::vec4(1.0, 0.0, 0.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*2*sizeof(unsigned char)));
+                    6*2);
                 
                 cube.shaders.setUniform("u_color", glm::vec4(0.0, 1.0, 0.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*3*sizeof(unsigned char)));
+                    6*3);
                 
                 cube.shaders.setUniform("u_color", glm::vec4(0.0, 0.0, 1.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*4*sizeof(unsigned char)));
+                    6*4);
 
                 cube.shaders.setUniform("u_color", glm::vec4(0.0, 0.0, 1.0, 1.0));
-                hgl::draw(
-                    cube.indexBuffer,
+                cube.indexBuffer.draw<unsigned char>(
                     hgl::DrawTriangles,
                     6,
-                    hgl::primitiveTypeToGLType<unsigned char>(),
-                    (void*)(6*5*sizeof(unsigned char)));
+                    6*5);
 
                 /* Swap front and back buffers */
                 SDL_GL_SwapWindow(window.getWindow());
@@ -318,7 +312,7 @@ int main(int argc, const char* argv[]){
                 /* Poll for and process events */
                 while(SDL_PollEvent(&event)){
                     
-                    #define shiftModifiersActived (event.key.keysym.mod & ( KMOD_LSHIFT | KMOD_LSHIFT ) )
+                    #define shiftModifiersActived ( event.key.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
 
                     switch(event.type){
                     case SDL_QUIT:
