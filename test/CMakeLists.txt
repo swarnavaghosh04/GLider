@@ -1,5 +1,5 @@
-add_executable(test2)
+add_executable(cube)
 
-target_sources(test2 PRIVATE test2.cpp)
+target_sources(cube PRIVATE cube.cpp)
 
-target_link_libraries(test2 PRIVATE HermyGL)
+target_link_libraries(cube PRIVATE HermyGL)

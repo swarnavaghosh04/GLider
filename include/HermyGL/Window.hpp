@@ -7,7 +7,7 @@
 namespace hgl{
 
     class HERMYGL_EXPORT Window{
-    private:
+    protected:
         SDL_Window *window;
     public:
         Window(const char* title, int width, int height, unsigned int windowFlags = 0);
@@ -16,47 +16,44 @@ namespace hgl{
         Window(Window&& other);
         Window& operator=(const Window&) = delete;
         Window& operator=(Window&& other);
-        SDL_Window* operator()() const { return window; }
+        const SDL_Window* operator()() const { return window; }
+        SDL_Window* operator()() { return window; }
     };
 
     class HERMYGL_EXPORT Renderer{
-    private:
+    protected:
         SDL_Renderer *renderer;
     public:
-        Renderer(const Window& window, unsigned int rendererFlags = 0);
+        Renderer(Window& window, unsigned int rendererFlags = 0);
         ~Renderer();
         Renderer(const Renderer&) = delete;
         Renderer(Renderer&& other);
         Renderer& operator=(const Renderer&) = delete;
         Renderer& operator=(Renderer&& other);
-        SDL_Renderer* operator()() const {return renderer;}
+        const SDL_Renderer* operator()() const {return renderer;}
+        SDL_Renderer* operator()() {return renderer;}
     };
 
     class HERMYGL_EXPORT OpenGLContext{
-    private:
+    protected:
         SDL_GLContext glContext;
     public:
-        OpenGLContext(const Window& window);
+        OpenGLContext(Window& window);
         ~OpenGLContext();
         OpenGLContext(const OpenGLContext&) = delete;
         OpenGLContext(OpenGLContext&& other);
         OpenGLContext& operator=(const OpenGLContext&) = delete;
         OpenGLContext& operator=(OpenGLContext&& other);
-        SDL_GLContext operator()() const {return glContext;}
+        const SDL_GLContext& operator()() const {return glContext;}
+        SDL_GLContext& operator()() {return glContext;}
     };
 
-    class HERMYGL_EXPORT OpenGLWindow{
-    private:
-        Window window;
+    class HERMYGL_EXPORT OpenGLWindow : public Window{
+    protected:
         Renderer renderer;
         OpenGLContext glContext;
     public:
         OpenGLWindow(const char* title, int width, int height, unsigned int windowFlags = 0, unsigned int rendererFlags = 0);
-        // OpenGLWindow(const OpenGLWindow&) = delete;
-        // OpenGLWindow(OpenGLWindow&& other);
-        // OpenGLWindow& operator=(const OpenGLWindow&) = delete;
-        // OpenGLWindow& operator=(OpenGLWindow&& other);
-        SDL_Window* operator()() const { return window(); }
     };
     
 }
