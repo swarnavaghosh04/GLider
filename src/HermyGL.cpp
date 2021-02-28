@@ -1,6 +1,6 @@
 #include "HermyGL/HermyGL.hpp"
 
-void hgl::initialize(){
+void hgl::initialize() noexcept(false){
 
     static_assert(GL_VERSION_3_0, "OpenGL version should be atleast 3.0");
 
@@ -25,7 +25,7 @@ void hgl::initialize(){
 
 }
 
-void hgl::quit(){
+void hgl::quit() noexcept(true){
     SDL_Quit();
 }
 

@@ -30,8 +30,8 @@ public:
 
 namespace hgl{
 
-    HERMYGL_EXPORT void initialize();
-    HERMYGL_EXPORT void quit();
+    HERMYGL_EXPORT void initialize() noexcept(false);
+    HERMYGL_EXPORT void quit() noexcept(true);
 
 }
 

@@ -11,13 +11,13 @@ namespace hgl{
         SDL_Window *window;
     public:
         Window(const char* title, int width, int height, unsigned int windowFlags = 0);
-        ~Window();
+        ~Window() noexcept(true);
         Window(const Window&) = delete;
-        Window(Window&& other);
+        Window(Window&& other) noexcept(true);
         Window& operator=(const Window&) = delete;
-        Window& operator=(Window&& other);
-        const SDL_Window* operator()() const { return window; }
-        SDL_Window* operator()() { return window; }
+        Window& operator=(Window&& other) noexcept(true);
+        const SDL_Window* get() const noexcept(true) { return window; }
+        SDL_Window* get() noexcept(true) { return window; }
     };
 
     class HERMYGL_EXPORT Renderer{
@@ -25,13 +25,13 @@ namespace hgl{
         SDL_Renderer *renderer;
     public:
         Renderer(Window& window, unsigned int rendererFlags = 0);
-        ~Renderer();
+        ~Renderer() noexcept(true);
         Renderer(const Renderer&) = delete;
-        Renderer(Renderer&& other);
+        Renderer(Renderer&& other) noexcept(true);
         Renderer& operator=(const Renderer&) = delete;
-        Renderer& operator=(Renderer&& other);
-        const SDL_Renderer* operator()() const {return renderer;}
-        SDL_Renderer* operator()() {return renderer;}
+        Renderer& operator=(Renderer&& other) noexcept(true);
+        const SDL_Renderer* get() const noexcept(true) {return renderer;}
+        SDL_Renderer* get() noexcept(true) {return renderer;}
     };
 
     class HERMYGL_EXPORT OpenGLContext{
@@ -39,13 +39,13 @@ namespace hgl{
         SDL_GLContext glContext;
     public:
         OpenGLContext(Window& window);
-        ~OpenGLContext();
+        ~OpenGLContext() noexcept(true);
         OpenGLContext(const OpenGLContext&) = delete;
-        OpenGLContext(OpenGLContext&& other);
+        OpenGLContext(OpenGLContext&& other) noexcept(true);
         OpenGLContext& operator=(const OpenGLContext&) = delete;
-        OpenGLContext& operator=(OpenGLContext&& other);
-        const SDL_GLContext& operator()() const {return glContext;}
-        SDL_GLContext& operator()() {return glContext;}
+        OpenGLContext& operator=(OpenGLContext&& other) noexcept(true);
+        const SDL_GLContext& get() const noexcept(true) {return glContext;}
+        SDL_GLContext& get() noexcept(true) {return glContext;}
     };
 
     class HERMYGL_EXPORT OpenGLWindow : public Window{
@@ -53,7 +53,11 @@ namespace hgl{
         Renderer renderer;
         OpenGLContext glContext;
     public:
-        OpenGLWindow(const char* title, int width, int height, unsigned int windowFlags = 0, unsigned int rendererFlags = 0);
+        OpenGLWindow(
+            const char* title,
+            int width, int height,
+            unsigned int windowFlags = 0,
+            unsigned int rendererFlags = 0);
     };
     
 }

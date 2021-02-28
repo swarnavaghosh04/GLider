@@ -6,22 +6,22 @@
 namespace hgl{
 
     template<BufferTarget target>
-    Buffer<target>::Buffer(){
+    Buffer<target>::Buffer() noexcept(true){
         GL_CALL(glGenBuffers(1, &(this->id)));
     }
 
     template<BufferTarget target>
-    Buffer<target>::~Buffer(){
+    Buffer<target>::~Buffer() noexcept(true){
         GL_CALL(glDeleteBuffers(1, &(this->id)));
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::bind() const{
+    inline void Buffer<target>::bind() const noexcept(true){
         GL_CALL(glBindBuffer((unsigned int)target, this->id));
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::unbind() const{
+    inline void Buffer<target>::unbind() const noexcept(true){
         GL_CALL(glBindBuffer((unsigned int)target, 0));
     }
 
@@ -60,15 +60,15 @@ namespace hgl{
     template<typename T>
     inline void Buffer<target>::draw(
         DrawType mode, unsigned int count, int offset
-    ){
+    ) noexcept(true) {
         static_assert((target == IndexBuffer), "Invalid draw call!");
         bind();
-        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), (void*)(offset*sizeof(T))));
+        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
     }
 
     template<typename T>
-    inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset){
-        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), (void*)(offset*sizeof(T))));
+    inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset) noexcept(true){
+        GL_CALL(glDrawElements(mode, count, primitiveTypeToGLType<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
     }
 
 }

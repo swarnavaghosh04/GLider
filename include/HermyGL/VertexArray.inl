@@ -5,11 +5,11 @@
 
 namespace hgl{
 
-    inline void VertexArray::bind() const{
+    inline void VertexArray::bind() const noexcept(true){
         GL_CALL(glBindVertexArray(this->id));
     }
 
-    inline void VertexArray::unbind() const{
+    inline void VertexArray::unbind() const noexcept(true){
         GL_CALL(glBindVertexArray(0));
     }
 

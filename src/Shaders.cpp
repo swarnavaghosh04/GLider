@@ -2,11 +2,11 @@
 
 namespace hgl{
 
-    Shaders::Shaders(){
+    Shaders::Shaders() noexcept(true){
         GL_CALL(this->id = glCreateProgram());
     }
 
-    Shaders::~Shaders(){
+    Shaders::~Shaders() noexcept(true){
         GL_CALL(glDeleteProgram(this->id));
     }
 

@@ -2,11 +2,8 @@
 
 namespace hgl{
 
-    //OpenGLBase::OpenGLBase(){}
-    OpenGLBase::~OpenGLBase(){}
-
-    OpenGLBase::OpenGLBase(OpenGLBase&& other) noexcept(true):
-        id(other.id)
+    OpenGLBase::OpenGLBase(OpenGLBase&& other) noexcept(true)
+        : id(other.id)
     {
         other.id = 0;
     }

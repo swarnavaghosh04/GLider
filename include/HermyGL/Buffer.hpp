@@ -67,10 +67,10 @@ namespace hgl{
     template<BufferTarget target>
     class Buffer : public OpenGLBase{
     public:
-        Buffer();
-        ~Buffer();
-        void bind() const;
-        void unbind() const;
+        Buffer() noexcept(true);
+        ~Buffer() noexcept(true);
+        void bind() const noexcept(true);
+        void unbind() const noexcept(true);
         template<typename T>
         void feedData(
             const T* data,
@@ -87,11 +87,11 @@ namespace hgl{
             BufferUsage usage
         );
         template<typename T>
-        void draw(DrawType mode, unsigned int count, int offset = 0);
+        void draw(DrawType mode, unsigned int count, int offset = 0) noexcept(true);
     };
 
     template<typename T>
-    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0);
+    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0) noexcept(true);
 
 }
 
