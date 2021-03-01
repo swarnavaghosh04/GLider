@@ -112,11 +112,50 @@ struct Cube{
         #version 330 core
 
         uniform mat4 u_mat;
+        uniform vec3 theta;
 
         layout(location=0) in vec3 position;
 
+        vec4 quat_mult(vec4 a, vec4 b){
+            return vec4(
+                ((a.w*b.x) + (a.x*b.w) + (a.y*b.z) - (a.z*b.y)), // x
+                ((a.w*b.y) - (a.x*b.z) + (a.y*b.w) + (a.z*b.x)), // y
+                ((a.w*b.z) + (a.x*b.y) - (a.y*b.x) + (a.z*b.w)), // z
+                ((a.w*b.w) - (a.x*b.x) - (a.y*b.y) - (a.z*b.z))  // w
+            );
+        }
+
+        vec4 quat_conj(vec4 q){
+            return vec4(-q.x, -q.y, -q.z, q.w);
+        }
+
+        vec4 quat_rot(float angle, vec3 axis, vec4 q){
+            float half_angle = angle/2;
+            vec4 qr = vec4(
+                axis.x * sin(half_angle),
+                axis.y * sin(half_angle),
+                axis.z * sin(half_angle),
+                cos(half_angle)
+            );
+            return quat_mult(qr, quat_mult(q, quat_conj(qr)));
+        }
+
         void main(){
-            gl_Position = u_mat*vec4(position, 1.f);
+            gl_Position = 
+                u_mat*
+                quat_rot(
+                    theta.x,
+                    vec3(1.f, 0.f, 0.f),
+                    quat_rot(
+                        theta.y,
+                        vec3(0.f, 1.f, 0.f),
+                        quat_rot(
+                            theta.z,
+                            vec3(0.f, 0.f, 1.f),
+                            vec4(position, 1.f)
+                        )
+                    )
+                );
         }
     )CODE";
 
@@ -258,12 +297,17 @@ int main(int argc, const char* argv[]){
                         cube.observerPosition.getActual(),
                         cube.observerPosition.getActual() + cube.observerForwards.getActual(),
                         cube.observerUpwards.getActual()
-                    ) *
+                    ); /*
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(1.f, 0.f, 0.f) ) *
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(0.f, 1.f, 0.f) ) *
-                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0)), glm::vec3(0.f, 0.f, 1.f) );
+                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0)), glm::vec3(0.f, 0.f, 1.f) );*/
 
                 cube.shaders.setUniform("u_mat", mvp, false);
+                cube.shaders.setUniform("theta", glm::vec3(
+                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)),
+                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)),
+                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0))
+                ));
 
                 /* Render here */
                 hgl::clear(hgl::ColorBufferBit);
@@ -310,7 +354,7 @@ int main(int argc, const char* argv[]){
                 /* Poll for and process events */
                 while(SDL_PollEvent(&event)){
                     
-                    #define shiftModifiersActived ( event.key.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
+                    #define shiftModifiersActived event.key.keysym.mod & KMOD_SHIFT
 
                     switch(event.type){
                     case SDL_QUIT:
