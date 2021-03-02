@@ -6,7 +6,7 @@
 namespace hgl{
 
     extern int HERMYGL_EXPORT numErrors;
-    void HERMYGL_EXPORT checkErrors() noexcept(true);
+    void HERMYGL_EXPORT checkErrors() noexcept;
 
 }
 

@@ -1,6 +1,7 @@
 #include "HermyGL/HermyGL.hpp"
 #include <cmath>
 #include <vector>
+#include <array>
 
 #define MY_WINDOW_WIDTH     700
 #define MY_WINDOW_HEIGHT    700
@@ -141,21 +142,14 @@ struct Cube{
         }
 
         void main(){
-            gl_Position = 
-                u_mat*
-                quat_rot(
-                    theta.x,
-                    vec3(1.f, 0.f, 0.f),
-                    quat_rot(
-                        theta.y,
-                        vec3(0.f, 1.f, 0.f),
-                        quat_rot(
-                            theta.z,
-                            vec3(0.f, 0.f, 1.f),
-                            vec4(position, 1.f)
-                        )
-                    )
-                );
+
+            vec4 pos = vec4(position, 1.f);
+
+            pos = quat_rot(theta.z, vec3(0.f, 0.f, 1.f), pos);
+            pos = quat_rot(theta.y, vec3(0.f, 1.f, 0.f), pos);
+            pos = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);
+
+            gl_Position = u_mat * pos;
         }
     )CODE";
 
@@ -170,31 +164,25 @@ struct Cube{
     )CODE";
 
     // If you change the size here, change the size in the constructor as well
-    static constexpr hgl::BufferData<float> vertexBufData = {
-        8*3,
-        (const float[]){
-             .5f,  .5f,  .5f,   // 0
-            -.5f,  .5f,  .5f,   // 1
-            -.5f, -.5f,  .5f,   // 2
-             .5f, -.5f,  .5f,   // 3
-             .5f,  .5f, -.5f,   // 4
-            -.5f,  .5f, -.5f,   // 5
-            -.5f, -.5f, -.5f,   // 6
-             .5f, -.5f, -.5f    // 7
-        }
+    static constexpr std::array<float,3*8> vertexBufData = {
+         .5,  .5,  .5,   // 0
+        -.5,  .5,  .5,   // 1
+        -.5, -.5,  .5,   // 2
+         .5, -.5,  .5,   // 3
+         .5,  .5, -.5,   // 4
+        -.5,  .5, -.5,   // 5
+        -.5, -.5, -.5,   // 6
+         .5, -.5, -.5    // 7
     };
 
     // If you change the size here, change the size in the constructor as well
-    static constexpr hgl::BufferData<unsigned char> indexBufData = {
-        6*6,
-        (const unsigned char []){
-            0, 1, 3, 1, 3, 2,
-            1, 0, 5, 0, 5, 4,
-            6, 5, 7, 5, 7, 4,
-            2, 3, 6, 3, 6, 7,
-            0, 3, 4, 3, 4, 7,
-            2, 1, 6, 1, 6, 5
-        }
+    static constexpr std::array<unsigned char, 6*6> indexBufData = {
+        0, 1, 3, 1, 3, 2,
+        1, 0, 5, 0, 5, 4,
+        6, 5, 7, 5, 7, 4,
+        2, 3, 6, 3, 6, 7,
+        0, 3, 4, 3, 4, 7,
+        2, 1, 6, 1, 6, 5
     };
 
     hgl::VertexArray                vertexArray;
@@ -202,7 +190,6 @@ struct Cube{
     hgl::Buffer<hgl::VertexBuffer>  vertexBuffer;
     hgl::Buffer<hgl::IndexBuffer>   indexBuffer;
     hgl::Shaders                    shaders;
-
 
     const MotionVar::Bounds translationBounds;
     const MotionVar::Bounds rotationBounds;
@@ -236,13 +223,44 @@ struct Cube{
 
 };
 
-constexpr hgl::BufferData<float> Cube::vertexBufData;
-constexpr hgl::BufferData<unsigned char> Cube::indexBufData;
+constexpr std::array<float,3*8> Cube::vertexBufData;
+constexpr std::array<unsigned char, 6*6> Cube::indexBufData;
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
 void test(){
 
+    #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
+
+    printSize(hgl::VertexArray);
+    printSize(hgl::Buffer<hgl::VertexBuffer>);
+    printSize(unsigned int);
+
+    #undef printSize
+
+}
+
+void drawEverything(Cube& cube){
+
+    int drawCounter = 0;
+
+    auto draw_square_with_color = [&](const glm::vec4& v){
+
+        cube.shaders.setUniform("u_color", v);
+        cube.indexBuffer.draw<unsigned char>(
+            hgl::DrawTriangles,
+            6,
+            6*(drawCounter++));
+
+    };
+
+    draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
+    draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
+    draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
+    draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
+    draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
+    draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
+    
 }
 
 int main(int argc, const char* argv[]){
@@ -312,41 +330,7 @@ int main(int argc, const char* argv[]){
                 /* Render here */
                 hgl::clear(hgl::ColorBufferBit);
 
-                cube.shaders.setUniform("u_color", glm::vec4(1.0, 0.0, 0.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*0);
-
-                cube.shaders.setUniform("u_color", glm::vec4(0.0, 1.0, 0.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*1);
-                
-                cube.shaders.setUniform("u_color", glm::vec4(1.0, 0.0, 0.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*2);
-                
-                cube.shaders.setUniform("u_color", glm::vec4(0.0, 1.0, 0.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*3);
-                
-                cube.shaders.setUniform("u_color", glm::vec4(0.0, 0.0, 1.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*4);
-
-                cube.shaders.setUniform("u_color", glm::vec4(0.0, 0.0, 1.0, 1.0));
-                cube.indexBuffer.draw<unsigned char>(
-                    hgl::DrawTriangles,
-                    6,
-                    6*5);
+                drawEverything(cube);
 
                 /* Swap front and back buffers */
                 SDL_GL_SwapWindow(window.get());

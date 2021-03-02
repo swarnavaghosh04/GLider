@@ -5,15 +5,15 @@
 
 namespace hgl{
 
-    inline void Shaders::bind() const noexcept(true){
+    inline void Shaders::bind() const noexcept{
         GL_CALL(glUseProgram(this->id));
     }
 
-    inline void Shaders::use() const noexcept(true){
+    inline void Shaders::use() const noexcept{
         bind();
     }
 
-    inline void Shaders::unbind() const noexcept(true){
+    inline void Shaders::unbind() const noexcept{
         GL_CALL(glUseProgram(0));
     }
 

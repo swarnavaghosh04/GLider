@@ -2,6 +2,7 @@
 #define HGL_BUFFER__H_
 
 #include <vector>
+#include <array>
 #include "HermyGL/OpenGLBase.hpp"
 
 namespace hgl{
@@ -9,14 +10,10 @@ namespace hgl{
     enum BufferTarget : unsigned int{
         VertexBuffer            = GL_ARRAY_BUFFER,
         IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER,
-        #if GL_VERSION_2_1
         PixelPackBuffer         = GL_PIXEL_PACK_BUFFER,
         PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER,
-        #endif
-        #if GL_VERSION_3_0
         CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
         TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-        #endif
         #if GL_VERSION_3_1
         CopyReadBuffer          = GL_COPY_READ_BUFFER,
         TextureBuffer           = GL_TEXTURE_BUFFER,
@@ -58,19 +55,13 @@ namespace hgl{
         Normalized normalized;
     };
 
-    template<typename T>
-    struct BufferData{
-        unsigned int count;
-        const T* const data;
-    };
-
     template<BufferTarget target>
     class Buffer : public OpenGLBase{
     public:
-        Buffer() noexcept(true);
-        ~Buffer() noexcept(true);
-        void bind() const noexcept(true);
-        void unbind() const noexcept(true);
+        Buffer() noexcept;
+        ~Buffer() noexcept;
+        void bind() const noexcept;
+        void unbind() const noexcept;
         template<typename T>
         void feedData(
             const T* data,
@@ -81,17 +72,17 @@ namespace hgl{
             const std::vector<T>& data,
             BufferUsage usage
         );
-        template<typename T>
+        template<typename T, std::size_t N>
         void feedData(
-            const BufferData<T>& data,
+            const std::array<T,N>& data,
             BufferUsage usage
         );
         template<typename T>
-        void draw(DrawType mode, unsigned int count, int offset = 0) noexcept(true);
+        void draw(DrawType mode, unsigned int count, int offset = 0) noexcept;
     };
 
     template<typename T>
-    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0) noexcept(true);
+    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0) noexcept;
 
 }
 

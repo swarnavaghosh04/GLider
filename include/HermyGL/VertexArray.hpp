@@ -8,10 +8,10 @@ namespace hgl{
 
     class HERMYGL_EXPORT VertexArray : public OpenGLBase{
     public:
-        VertexArray() noexcept(true);
-        ~VertexArray() noexcept(true);
-        void bind() const noexcept(true);
-        void unbind() const noexcept(true);
+        VertexArray() noexcept;
+        ~VertexArray() noexcept;
+        void bind() const noexcept;
+        void unbind() const noexcept;
         template<typename T>
         void readBufferData(
             const Buffer<VertexBuffer>& vb,
@@ -25,7 +25,7 @@ namespace hgl{
             const std::vector<LayoutElement>&   layout,
             unsigned int                        startingAttribIndex = 0
         );
-        void draw(DrawType mode, int first, int count) const noexcept(true);
+        void draw(DrawType mode, int first, int count) const noexcept;
     };
 
 }

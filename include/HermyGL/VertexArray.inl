@@ -5,11 +5,11 @@
 
 namespace hgl{
 
-    inline void VertexArray::bind() const noexcept(true){
+    inline void VertexArray::bind() const noexcept{
         GL_CALL(glBindVertexArray(this->id));
     }
 
-    inline void VertexArray::unbind() const noexcept(true){
+    inline void VertexArray::unbind() const noexcept{
         GL_CALL(glBindVertexArray(0));
     }
 
@@ -34,7 +34,7 @@ namespace hgl{
             GL_CALL(glVertexAttribPointer(
                 startingAttribIndex,
                 (int)(layout[i].dimension),
-                primitiveTypeToGLType<T>(),
+                getOpenGLTypeEnum<T>(),
                 layout[i].normalized ? GL_TRUE:GL_FALSE,
                 stride,
                 (const void*)offset)

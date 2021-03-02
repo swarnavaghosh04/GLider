@@ -16,6 +16,7 @@ file(
     GLOB HermyGL_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/HermyGL/*.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/HermyGL/*.inl"
 )
 
 target_sources(

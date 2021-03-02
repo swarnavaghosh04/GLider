@@ -11,31 +11,31 @@ namespace hgl{
         );
     }
 
-    inline void clear(BufferBit mask) noexcept(true){
+    inline void clear(BufferBit mask) noexcept{
         GL_CALL(glClear(mask | BufferBit::DepthBufferBit));
     }
 
-    inline void enable(Capability_NI cap) noexcept(true){
+    inline void enable(Capability_NI cap) noexcept{
         GL_CALL(glEnable(cap));
     }
 
-    inline void enable(Capability_I cap) noexcept(true){
+    inline void enable(Capability_I cap) noexcept{
         GL_CALL(glEnable(cap));
     }
 
-    inline void enable(Capability_I cap, unsigned int index) noexcept(true){
+    inline void enable(Capability_I cap, unsigned int index) noexcept{
         GL_CALL(glEnablei(cap, index));
     }
 
-    inline void disable(Capability_NI cap) noexcept(true){
+    inline void disable(Capability_NI cap) noexcept{
         GL_CALL(glDisable(cap));
     }
 
-    inline void disable(Capability_I cap) noexcept(true){
+    inline void disable(Capability_I cap) noexcept{
         GL_CALL(glDisable(cap));
     }
 
-    inline void disable(Capability_I cap, unsigned int index) noexcept(true){
+    inline void disable(Capability_I cap, unsigned int index) noexcept{
         GL_CALL(glDisablei(cap, index));
     }
 

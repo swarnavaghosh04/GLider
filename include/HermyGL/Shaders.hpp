@@ -29,11 +29,11 @@ namespace hgl{
     private:
         std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
-        Shaders() noexcept(true);
-        ~Shaders() noexcept(true);
-        void bind() const noexcept(true);
-        void unbind() const noexcept(true);
-        void use() const noexcept(true);
+        Shaders() noexcept;
+        ~Shaders() noexcept;
+        void bind() const noexcept;
+        void unbind() const noexcept;
+        void use() const noexcept;
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();

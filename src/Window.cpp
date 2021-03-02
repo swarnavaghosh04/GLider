@@ -19,14 +19,14 @@ namespace hgl{
         #endif
     }
 
-    Window::~Window() noexcept(true) {
+    Window::~Window() noexcept {
         SDL_DestroyWindow(window);
         #ifdef HGL_DEBUG
         SDL_Log("Window Destroyed\n");
         #endif
     }
 
-    Window::Window(Window&& other) noexcept(true):
+    Window::Window(Window&& other) noexcept:
         window(other.window)
     {
         other.window = nullptr;
@@ -35,7 +35,7 @@ namespace hgl{
         #endif
     }
 
-    Window& Window::operator=(Window&& other) noexcept(true){
+    Window& Window::operator=(Window&& other) noexcept{
         std::swap(window, other.window);
         #ifdef HGL_DEBUG
         SDL_Log("Window Move Assigned\n");
@@ -55,14 +55,14 @@ namespace hgl{
         #endif
     }
 
-    Renderer::~Renderer() noexcept(true){
+    Renderer::~Renderer() noexcept{
         SDL_DestroyRenderer(renderer);
         #ifdef HGL_DEBUG
         SDL_Log("Renderer Destroyed\n");
         #endif
     }
 
-    Renderer::Renderer(Renderer&& other) noexcept(true):
+    Renderer::Renderer(Renderer&& other) noexcept:
         renderer(other.renderer)
     {
         other.renderer = nullptr;
@@ -71,7 +71,7 @@ namespace hgl{
         #endif
     }
 
-    Renderer& Renderer::operator=(Renderer&& other) noexcept(true){
+    Renderer& Renderer::operator=(Renderer&& other) noexcept{
         std::swap(renderer, other.renderer);
         #ifdef HGL_DEBUG
         SDL_Log("Renderer Move Assigned\n");
@@ -89,14 +89,14 @@ namespace hgl{
         #endif
     }
 
-    OpenGLContext::~OpenGLContext() noexcept(true){
+    OpenGLContext::~OpenGLContext() noexcept{
         SDL_GL_DeleteContext(glContext);
         #ifdef HGL_DEBUG
         SDL_Log("OpenGLContext Destroyed\n");
         #endif
     }
 
-    OpenGLContext::OpenGLContext(OpenGLContext&& other) noexcept(true):
+    OpenGLContext::OpenGLContext(OpenGLContext&& other) noexcept:
         glContext(other.glContext)
     {
         other.glContext = NULL;
@@ -105,7 +105,7 @@ namespace hgl{
         #endif
     }
 
-    OpenGLContext& OpenGLContext::operator=(OpenGLContext&& other) noexcept(true){
+    OpenGLContext& OpenGLContext::operator=(OpenGLContext&& other) noexcept{
         std::swap(glContext, other.glContext);
         #ifdef HGL_DEBUG
         SDL_Log("OpenGLContext Move Assigned\n");

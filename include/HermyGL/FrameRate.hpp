@@ -11,12 +11,12 @@ namespace hgl{
         unsigned int frame=0;
         float fps=60, fDur=1/fps;
     public:
-        FrameRate() noexcept(true) = default;
+        FrameRate() noexcept = default;
         FrameRate(const FrameRate&) = delete;
-        FrameRate(FrameRate&& other) noexcept(true) = default;
+        FrameRate(FrameRate&& other) noexcept = default;
         FrameRate& operator= (const FrameRate&) = delete;
-        FrameRate& operator= (FrameRate&& other) noexcept(true) = default;
-        float operator()() const noexcept(true) { return fps; }
+        FrameRate& operator= (FrameRate&& other) noexcept = default;
+        float operator()() const noexcept { return fps; }
         void compute();
     };
 }

@@ -24,7 +24,7 @@ namespace hgl{
     */
 
     template<typename T>
-    constexpr unsigned int primitiveTypeToGLType() noexcept(false){
+    constexpr unsigned int getOpenGLTypeEnum() noexcept(false){
         return (
             std::is_same<T, char>()             ? GL_BYTE :
             std::is_same<T, unsigned char>()    ? GL_UNSIGNED_BYTE :
@@ -122,22 +122,22 @@ namespace hgl{
         OpenGLBase() = default;
         virtual ~OpenGLBase() = default;
         OpenGLBase(const OpenGLBase&) = delete;
-        OpenGLBase(OpenGLBase&& other) noexcept(true);
+        OpenGLBase(OpenGLBase&& other) noexcept;
         OpenGLBase& operator= (const OpenGLBase&) = delete;
-        OpenGLBase& operator= (OpenGLBase&& other) noexcept(true);
-        virtual void bind() const noexcept(true) = 0;
-        virtual void unbind() const noexcept(true) = 0;
-        const unsigned int& getId() const noexcept(true) {return id;}
-        unsigned int& getId() noexcept(true) {return id;}
+        OpenGLBase& operator= (OpenGLBase&& other) noexcept;
+        virtual void bind() const noexcept = 0;
+        virtual void unbind() const noexcept = 0;
+        const unsigned int& getId() const noexcept {return id;}
+        unsigned int& getId() noexcept {return id;}
     };
 
-    void clear(BufferBit mask) noexcept(true);
-    void enable(Capability_NI cap) noexcept(true);
-    void enable(Capability_I cap) noexcept(true);
-    void enable(Capability_I cap, unsigned int index) noexcept(true);
-    void disable(Capability_NI cap) noexcept(true);
-    void disable(Capability_I cap) noexcept(true);
-    void disable(Capability_I cap, unsigned int index) noexcept(true);
+    void clear(BufferBit mask) noexcept;
+    void enable(Capability_NI cap) noexcept;
+    void enable(Capability_I cap) noexcept;
+    void enable(Capability_I cap, unsigned int index) noexcept;
+    void disable(Capability_NI cap) noexcept;
+    void disable(Capability_I cap) noexcept;
+    void disable(Capability_I cap, unsigned int index) noexcept;
 
 }
 

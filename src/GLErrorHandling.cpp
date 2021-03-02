@@ -2,7 +2,7 @@
 
 int hgl::numErrors = 0;
 
-void hgl::checkErrors() noexcept(true){
+void hgl::checkErrors() noexcept{
     
     hgl::numErrors = 0;
     unsigned int error = glGetError();
