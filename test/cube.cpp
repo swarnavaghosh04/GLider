@@ -235,6 +235,7 @@ void test(){
     printSize(hgl::VertexArray);
     printSize(hgl::Buffer<hgl::VertexBuffer>);
     printSize(unsigned int);
+    printSize(hgl::Window);
 
     #undef printSize
 

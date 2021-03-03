@@ -18,7 +18,6 @@ namespace hgl{
     /**
      * @brief Converts privitive datatypes to OpenGL definitions
      * 
-     * 
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
     */

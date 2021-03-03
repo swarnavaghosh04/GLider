@@ -47,7 +47,7 @@ add_subdirectory(test)
 # install library and test for library
 
 install(
-    TARGETS HermyGL cube
+    TARGETS HermyGL cube triangle
     EXPORT HermyGLTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         COMPONENT HermyGL_Runtime
