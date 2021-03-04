@@ -25,6 +25,12 @@ namespace hgl{
             const std::vector<LayoutElement>&   layout,
             unsigned int                        startingAttribIndex = 0
         );
+        template<typename T, std::size_t N>
+        void readBufferData(
+            const Buffer<VertexBuffer>&         vb,
+            const std::array<LayoutElement, N>& layout,
+            unsigned int                        startingAttribIndex = 0
+        );
         void draw(DrawType mode, int first, int count) const noexcept;
     };
 

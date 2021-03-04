@@ -54,6 +54,15 @@ namespace hgl{
         readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
     }
 
+    template<typename T, std::size_t N>
+    inline void VertexArray::readBufferData(
+        const Buffer<VertexBuffer>&         vb,
+        const std::array<LayoutElement, N>& layout,
+        unsigned int                        startingAttribIndex
+    ){
+        readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
+    }
+
 }
 
 #endif

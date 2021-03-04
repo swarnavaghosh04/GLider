@@ -120,7 +120,7 @@ namespace hgl{
         unsigned int rendererFlags)
     :
         Window{title, width, height, windowFlags},
-        renderer{*(Window*)(&(this->window)), rendererFlags},
+        renderer{*(Window*)(&(this->window)), rendererFlags | SDL_WINDOW_OPENGL},
         glContext{*(Window*)(&(this->window))}
     {
         if(!gladLoadGL())
