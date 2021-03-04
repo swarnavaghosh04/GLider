@@ -3,10 +3,13 @@
 const char* vertexShader = R"CODE(
     #version 330 core
 
+    uniform int width;
+    uniform int height;
+
     layout(location = 0) in vec4 pos;
 
     void main(){
-        gl_Position = pos;
+        gl_Position = vec4(2.f*pos.x/width, 2.f*pos.y/height, pos.z, pos.w);
     }
 
 )CODE";
@@ -26,32 +29,22 @@ int main(int argc, const char** argv){
         hgl::initialize();
     }catch(std::exception& e){
         SDL_Log("cannot initialize: %s", e.what());
+        return 1;
     }
 
     try{
 
         std::array<float, 2*3> vertecies = {
-            -.5, -.5,
-            0,  .5,
-            .5, -.5
+            -100, -100,
+               0,  100,
+             100, -100
         };
 
         SDL_DisplayMode dm;
-        if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
-            SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
-            return 1;
-        }
-        
-        SDL_Log("window: %d x %d [%dHz]\n", dm.w, dm.h, dm.refresh_rate);
+        if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+            throw std::runtime_error(SDL_GetError());
 
-        hgl::OpenGLWindow win{"Triangle", 400, 800, /*SDL_WINDOW_FULLSCREEN_DESKTOP*/};
-
-        if (SDL_GetCurrentDisplayMode(0, &dm) != 0) {
-            SDL_Log("SDL_GetCurrentDisplayMode failed: %s", SDL_GetError());
-            return 1;
-        }
-
-        SDL_Log("window: %d x %d [%dHz]\n", dm.w, dm.h, dm.refresh_rate);
+        hgl::OpenGLWindow win{"Triangle", 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP};
 
         hgl::VertexArray va;
         hgl::Buffer<hgl::VertexBuffer> vb;
@@ -65,6 +58,9 @@ int main(int argc, const char** argv){
         shaders.link();
         shaders.validate();
         shaders.use();
+
+        shaders.setUniform("width", glm::vec<1,int>(dm.w));
+        shaders.setUniform("height", glm::vec<1,int>(dm.h));
 
         bool keepRunning = true;
         SDL_Event e;

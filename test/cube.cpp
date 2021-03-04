@@ -163,27 +163,8 @@ struct Cube{
         }
     )CODE";
 
-    // If you change the size here, change the size in the constructor as well
-    static constexpr std::array<float,3*8> vertexBufData = {
-         .5,  .5,  .5,   // 0
-        -.5,  .5,  .5,   // 1
-        -.5, -.5,  .5,   // 2
-         .5, -.5,  .5,   // 3
-         .5,  .5, -.5,   // 4
-        -.5,  .5, -.5,   // 5
-        -.5, -.5, -.5,   // 6
-         .5, -.5, -.5    // 7
-    };
-
-    // If you change the size here, change the size in the constructor as well
-    static constexpr std::array<unsigned char, 6*6> indexBufData = {
-        0, 1, 3, 1, 3, 2,
-        1, 0, 5, 0, 5, 4,
-        6, 5, 7, 5, 7, 4,
-        2, 3, 6, 3, 6, 7,
-        0, 3, 4, 3, 4, 7,
-        2, 1, 6, 1, 6, 5
-    };
+    std::array<float,3*8>            vertexBufData;
+    std::array<unsigned char, 6*6>   indexBufData;
 
     hgl::VertexArray                vertexArray;
     const hgl::LayoutElement        verBufLayout[1];
@@ -199,6 +180,45 @@ struct Cube{
     MotionVector3D observerUpwards;
     MotionVector3D rotationState;
 
+    template <std::size_t N1, std::size_t N2>
+    static void generateVertices(
+        float sideLength,
+        const glm::vec3& center,
+        std::array<float,N1>& vertexOutputBuffer,
+        std::array<unsigned char, N2>& indexOutputBuffer
+    ){
+        float sideLength_half = sideLength/2.f; 
+
+        glm::vec2 a(center.x-sideLength_half, center.x+sideLength_half);
+        glm::vec2 b(center.y-sideLength_half, center.y+sideLength_half);
+        glm::vec2 c(center.z-sideLength_half, center.z+sideLength_half);
+
+        {
+            const float vertices[3*8] = {
+                a.x, b.x, c.x,
+                a.x, b.x, c.y,
+                a.x, b.y, c.y,
+                a.x, b.y, c.x,
+                a.y, b.x, c.x,
+                a.y, b.x, c.y,
+                a.y, b.y, c.y,
+                a.y, b.y, c.x,
+            };
+            memcpy(vertexOutputBuffer.data(), vertices, sizeof(vertices));
+        }
+        {
+            const unsigned char indices[6*6] = {
+                0, 1, 3, 1, 3, 2,
+                1, 0, 5, 0, 5, 4,
+                6, 5, 7, 5, 7, 4,
+                2, 3, 6, 3, 6, 7,
+                0, 3, 4, 3, 4, 7,
+                2, 1, 6, 1, 6, 5
+            };
+            memcpy(indexOutputBuffer.data(), indices, sizeof(indices));
+        }
+    }
+
     Cube():
         verBufLayout{{hgl::D3, hgl::Norm_FALSE}},
         translationBounds{-50.f, 50.f},
@@ -209,6 +229,7 @@ struct Cube{
         rotationState{ 0.f,  0.f, 0.f, rotationBounds}
     {
         SDL_Log("Cube Init\n");
+        generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
         vertexBuffer.feedData<float>(vertexBufData, hgl::UseStaticDraw);
         indexBuffer.feedData<unsigned char>(indexBufData, hgl::UseStaticDraw);
         vertexArray.readBufferData<float>(vertexBuffer, verBufLayout, sizeof(verBufLayout)/sizeof(hgl::LayoutElement));
@@ -223,8 +244,6 @@ struct Cube{
 
 };
 
-constexpr std::array<float,3*8> Cube::vertexBufData;
-constexpr std::array<unsigned char, 6*6> Cube::indexBufData;
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
@@ -232,10 +251,7 @@ void test(){
 
     #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
 
-    printSize(hgl::VertexArray);
-    printSize(hgl::Buffer<hgl::VertexBuffer>);
-    printSize(unsigned int);
-    printSize(hgl::Window);
+    
 
     #undef printSize
 
