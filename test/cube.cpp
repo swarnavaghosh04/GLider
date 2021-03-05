@@ -3,8 +3,8 @@
 #include <vector>
 #include <array>
 
-#define MY_WINDOW_WIDTH     700
-#define MY_WINDOW_HEIGHT    700
+#define MY_WINDOW_WIDTH     800
+#define MY_WINDOW_HEIGHT    400
 
 // Rotations Characteristics ==================================================
 
@@ -112,10 +112,11 @@ struct Cube{
     static constexpr const char* const vertexShader = R"CODE(
         #version 330 core
 
-        uniform mat4 u_mat;
-        uniform vec3 theta;
-
         layout(location=0) in vec3 position;
+
+        uniform mat4 u_mat;
+        /*uniform vec3 theta;
+
 
         vec4 quat_mult(vec4 a, vec4 b){
             return vec4(
@@ -139,17 +140,17 @@ struct Cube{
                 cos(half_angle)
             );
             return quat_mult(qr, quat_mult(q, quat_conj(qr)));
-        }
+        }*/
 
         void main(){
 
-            vec4 pos = vec4(position, 1.f);
+            /*vec4 pos = vec4(position, 1.f);
 
             pos = quat_rot(theta.z, vec3(0.f, 0.f, 1.f), pos);
             pos = quat_rot(theta.y, vec3(0.f, 1.f, 0.f), pos);
-            pos = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);
+            pos = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);*/
 
-            gl_Position = u_mat * pos;
+            gl_Position = u_mat * vec4(position, 1.f);
         }
     )CODE";
 
@@ -332,17 +333,18 @@ int main(int argc, const char* argv[]){
                         cube.observerPosition.getActual(),
                         cube.observerPosition.getActual() + cube.observerForwards.getActual(),
                         cube.observerUpwards.getActual()
-                    ); /*
+                    )*
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(1.f, 0.f, 0.f) ) *
                     glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(0.f, 1.f, 0.f) ) *
-                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0)), glm::vec3(0.f, 0.f, 1.f) );*/
+                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0)), glm::vec3(0.f, 0.f, 1.f) );
 
                 cube.shaders.setUniform("u_mat", mvp, false);
+                /*
                 cube.shaders.setUniform("theta", glm::vec3(
                     (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)),
                     (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)),
                     (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0))
-                ));
+                ));*/
 
                 /* Render here */
                 hgl::clear(hgl::ColorBufferBit);
@@ -401,7 +403,7 @@ int main(int argc, const char* argv[]){
                             break;
                         case SDLK_SPACE:
                             if(shiftModifiersActived){
-                                cube.observerPosition.reset(0,0,5);
+                                cube.observerPosition.reset(0,0,0);
                             }else{
                                 cube.rotationState.reset();
                             }
