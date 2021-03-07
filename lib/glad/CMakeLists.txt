@@ -9,7 +9,7 @@ if(${glad_lib} STREQUAL "glad_lib-NOTFOUND" OR ${glad_include} STREQUAL "glad_in
 
     message(STATUS "glad not found, resorting to provided library")
 
-    add_library(glad STATIC)
+    add_library(glad OBJECT)
 
     file(
         GLOB glad_SOURCES
@@ -36,7 +36,7 @@ else()
     message(STATUS "\tlibrary location: ${glad_lib}")
     message(STATUS "\tbase header:      ${glad_include}/glad/glad.hpp")
 
-    add_library(glad INTERFACE)
+    add_library(glad INTERFACE IMPORTED)
 
     target_link_libraries(glad INTERFACE ${glad_lib})
     target_include_directories(glad INTERFACE ${glad_include})

@@ -22,6 +22,7 @@ file(
 target_sources(
     HermyGL PRIVATE
     ${HermyGL_SOURCES}
+    $<TARGET_OBJECTS:glad>
 )
 
 target_link_libraries(HermyGL PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2)

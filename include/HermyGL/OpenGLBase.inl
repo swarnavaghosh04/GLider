@@ -11,6 +11,7 @@ namespace hgl{
         );
     }
 
+
     inline void clear(BufferBit mask) noexcept{
         GL_CALL(glClear(mask | BufferBit::DepthBufferBit));
     }

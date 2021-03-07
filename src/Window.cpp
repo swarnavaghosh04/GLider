@@ -123,7 +123,7 @@ namespace hgl{
         renderer{*(Window*)(&(this->window)), rendererFlags | SDL_WINDOW_OPENGL},
         glContext{*(Window*)(&(this->window))}
     {
-        if(!gladLoadGL())
+        if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
             throw std::runtime_error("GLAD Unable to load OpenGL");
 
         enable(Multisample);

@@ -9,8 +9,18 @@ namespace hgl{
         GL_CALL(glBindVertexArray(this->id));
     }
 
-    inline void VertexArray::unbind() const noexcept{
+    inline void VertexArray::staticBind(unsigned int anotherID) noexcept{
+        GL_CALL(glBindVertexArray(anotherID));
+    }
+
+    inline void VertexArray::staticUnbind() noexcept{
         GL_CALL(glBindVertexArray(0));
+    }
+
+    inline int VertexArray::staticGetBound() noexcept{
+        int r;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &r);
+        return r;
     }
 
     template<typename T>
@@ -20,8 +30,9 @@ namespace hgl{
         unsigned int                layoutCount,
         unsigned int                startingAttribIndex
     ){
-        bind();
-        vb.bind();
+
+        Binder b1(*this);
+        Binder b2(vb);
 
         int stride = 0;
         for(int i = 0; i < layoutCount; i++)

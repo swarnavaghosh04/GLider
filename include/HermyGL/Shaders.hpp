@@ -32,8 +32,15 @@ namespace hgl{
         Shaders() noexcept;
         ~Shaders() noexcept;
         void bind() const noexcept;
-        void unbind() const noexcept;
-        void use() const noexcept;
+        static void staticBind(unsigned int anotherID) noexcept;
+        virtual void bind(unsigned int anotherID) const noexcept
+        {staticBind(anotherID);}
+        static void staticUnbind() noexcept;
+        virtual void unbind() const noexcept
+        {staticUnbind();}
+        static int staticGetBound() noexcept;
+        virtual int getBound() const noexcept
+        {return staticGetBound();}
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();

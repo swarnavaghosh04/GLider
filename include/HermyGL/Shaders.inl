@@ -9,30 +9,38 @@ namespace hgl{
         GL_CALL(glUseProgram(this->id));
     }
 
-    inline void Shaders::use() const noexcept{
-        bind();
+    inline void Shaders::staticBind(unsigned int anotherID) noexcept{
+        GL_CALL(glUseProgram(anotherID));
     }
 
-    inline void Shaders::unbind() const noexcept{
+    inline void Shaders::staticUnbind() noexcept{
         GL_CALL(glUseProgram(0));
+    }
+
+    inline int Shaders::staticGetBound() noexcept{
+        int r;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &r);
+        return r;
     }
 
     #ifdef INCORPORATE_DOUBLE
         #define SET_PROGRAM_UNIFORM_DOUBLE(n, ...)\
-            else if(std::is_same<T, double>()) glProgramUniform##n##d(this->id, getUniformLocation(name), __VA_ARGS__);
+            else if(std::is_same<T, double>()) glUniform##n##d(getUniformLocation(name), __VA_ARGS__);
     #else
         #define SET_PROGRAM_UNIFORM_DOUBLE(n)
     #endif
 
     #define SET_PROGRAM_UNIFORM(n, ...)\
-        if(std::is_same<T, int>()) glProgramUniform##n##i(this->id, getUniformLocation(name), __VA_ARGS__);\
-        else if(std::is_same<T, unsigned int>()) glProgramUniform##n##ui(this->id, getUniformLocation(name), __VA_ARGS__);\
-        else if(std::is_same<T, float>()) glProgramUniform##n##f(this->id, getUniformLocation(name), __VA_ARGS__);\
+        if(std::is_same<T, int>()) glUniform##n##i(getUniformLocation(name), __VA_ARGS__);\
+        else if(std::is_same<T, unsigned int>()) glUniform##n##ui(getUniformLocation(name), __VA_ARGS__);\
+        else if(std::is_same<T, float>()) glUniform##n##f(getUniformLocation(name), __VA_ARGS__);\
         SET_PROGRAM_UNIFORM_DOUBLE(n, __VA_ARGS__)\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int L, typename T, glm::qualifier Q>
     void Shaders::setUniform(const char* name, const glm::vec<L,T,Q>& v){
+
+        Binder b(*this);
 
         switch(L){
         case 1:
@@ -50,6 +58,8 @@ namespace hgl{
         default:
             throw std::logic_error("Invalid dimension for uniform");
         }
+
+        GL_CALL();
         
     }
 
@@ -58,25 +68,28 @@ namespace hgl{
 
     #ifdef INCORPORATE_DOUBLE
         #define SET_PROGRAM_UNIFORM_MATRIX_N_DOUBLE(n)\
-            else if(std::is_same<T, double>()) glProgramUniformMatrix##n##dv(this->id, getUniformLocation(name), 1, transpose, (double*)&m[0][0]);
+            else if(std::is_same<T, double>()) glUniformMatrix##n##dv(getUniformLocation(name), 1, transpose, (double*)&m[0][0]);
         #define SET_PROGRAM_UNIFORM_MATRIX_RC_DOUBLE(R,C)\
-            else if(std::is_same<T, double>()) glProgramUniformMatrix##R##x##C##dv(this->id, getUniformLocation(name), 1, transpose, (double*)&m[0][0]);
+            else if(std::is_same<T, double>()) glUniformMatrix##R##x##C##dv(getUniformLocation(name), 1, transpose, (double*)&m[0][0]);
     #else
-        #define SET_PROGRAM_UNIFORM_MATRIX__NDOUBLE(n)
+        #define SET_PROGRAM_UNIFORM_MATRIX_N_DOUBLE(n)
+        #define SET_PROGRAM_UNIFORM_MATRIX_RC_DOUBLE(R,C)
     #endif
 
     #define SET_PROGRAM_UNIFORM_MATRIX_N(n)\
-        if(std::is_same<T, float>()) glProgramUniformMatrix##n##fv(this->id, getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
+        if(std::is_same<T, float>()) glUniformMatrix##n##fv(getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
         SET_PROGRAM_UNIFORM_MATRIX_N_DOUBLE(n)\
         else throw std::logic_error("Invalid datatype for uniform");
 
     #define SET_PROGRAM_UNIFORM_MATRIX_RC(R,C)\
-        if(std::is_same<T, float>()) glProgramUniformMatrix##R##x##C##fv(this->id, getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
+        if(std::is_same<T, float>()) glUniformMatrix##R##x##C##fv(getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
         SET_PROGRAM_UNIFORM_MATRIX_RC_DOUBLE(R,C)\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int R, int C, typename T, glm::qualifier Q>
     void Shaders::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
+
+        Binder b(*this);
 
         if(R == C){
             
@@ -126,6 +139,8 @@ namespace hgl{
                 break;
             }
         }
+
+        GL_CALL();
 
     }
 

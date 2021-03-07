@@ -34,6 +34,8 @@ namespace hgl{
         #endif
     };
 
+    constexpr unsigned int getBufferTargetBinding(BufferTarget target);
+
     enum BufferUsage : unsigned int{
         UseStreamDraw      = GL_STREAM_DRAW,
         UseStreamRead      = GL_STREAM_READ,
@@ -60,8 +62,16 @@ namespace hgl{
     public:
         Buffer() noexcept;
         ~Buffer() noexcept;
-        void bind() const noexcept;
-        void unbind() const noexcept;
+        virtual void bind() const noexcept;
+        static void staticBind(unsigned int anotherID) noexcept;
+        virtual void bind(unsigned int anotherID) const noexcept
+        {staticBind(anotherID);}
+        static void staticUnbind() noexcept;
+        virtual void unbind() const noexcept
+        {staticUnbind();}
+        static int staticGetBound() noexcept;
+        virtual int getBound() const noexcept
+        {return staticGetBound();}
         template<typename T>
         void feedData(
             const T* data,

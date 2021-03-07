@@ -118,16 +118,28 @@ namespace hgl{
     protected:
         unsigned int id;
     public:
-        OpenGLBase() = default;
+        OpenGLBase() noexcept = default;
         virtual ~OpenGLBase() = default;
         OpenGLBase(const OpenGLBase&) = delete;
         OpenGLBase(OpenGLBase&& other) noexcept;
         OpenGLBase& operator= (const OpenGLBase&) = delete;
         OpenGLBase& operator= (OpenGLBase&& other) noexcept;
         virtual void bind() const noexcept = 0;
+        virtual void bind(unsigned int) const noexcept = 0;
         virtual void unbind() const noexcept = 0;
+        virtual int getBound() const noexcept = 0;
         const unsigned int& getId() const noexcept {return id;}
         unsigned int& getId() noexcept {return id;}
+    };
+
+    //template<typename T>
+    class Binder{
+    private:
+        const OpenGLBase& base;
+        int prev;
+    public:
+        Binder(const OpenGLBase& base) noexcept;
+        ~Binder() noexcept;
     };
 
     void clear(BufferBit mask) noexcept;

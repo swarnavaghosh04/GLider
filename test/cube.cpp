@@ -3,9 +3,6 @@
 #include <vector>
 #include <array>
 
-#define MY_WINDOW_WIDTH     800
-#define MY_WINDOW_HEIGHT    400
-
 // Rotations Characteristics ==================================================
 
 // Number of Key hits for a 360 Degree rotation about an axis
@@ -23,7 +20,7 @@ this many seconds after a key is pressed once. */
 
 // Macors ======================================================================
 #define PI2 (2.f*(float)M_PI)
-
+#define PI_4 ((float)M_PI/4.f)
 // Structures For Data Organization ============================================
 
 struct MotionVar{
@@ -115,7 +112,7 @@ struct Cube{
         layout(location=0) in vec3 position;
 
         uniform mat4 u_mat;
-        /*uniform vec3 theta;
+        uniform vec3 theta;
 
 
         vec4 quat_mult(vec4 a, vec4 b){
@@ -133,24 +130,26 @@ struct Cube{
 
         vec4 quat_rot(float angle, vec3 axis, vec4 q){
             float half_angle = angle/2;
-            vec4 qr = vec4(
-                axis.x * sin(half_angle),
-                axis.y * sin(half_angle),
-                axis.z * sin(half_angle),
+            float sin_half_angle = sin(half_angle);
+            return vec4(
+                axis.x * sin_half_angle,
+                axis.y * sin_half_angle,
+                axis.z * sin_half_angle,
                 cos(half_angle)
             );
-            return quat_mult(qr, quat_mult(q, quat_conj(qr)));
-        }*/
+        }
 
         void main(){
 
-            /*vec4 pos = vec4(position, 1.f);
+            vec4 pos = vec4(position, 1.f);
 
-            pos = quat_rot(theta.z, vec3(0.f, 0.f, 1.f), pos);
-            pos = quat_rot(theta.y, vec3(0.f, 1.f, 0.f), pos);
-            pos = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);*/
+            vec4 rotx = quat_rot(theta.z, vec3(0.f, 0.f, 1.f), pos);
+            vec4 roty = quat_rot(theta.y, vec3(0.f, 1.f, 0.f), pos);
+            vec4 rotz = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);
 
-            gl_Position = u_mat * vec4(position, 1.f);
+            vec4 rot = quat_mult(rotz,quat_mult(roty,rotx));
+
+            gl_Position = u_mat * quat_mult(rot,quat_mult(pos, quat_conj(rot)));
         }
     )CODE";
 
@@ -167,11 +166,11 @@ struct Cube{
     std::array<float,3*8>            vertexBufData;
     std::array<unsigned char, 6*6>   indexBufData;
 
-    hgl::VertexArray                vertexArray;
-    const hgl::LayoutElement        verBufLayout[1];
-    hgl::Buffer<hgl::VertexBuffer>  vertexBuffer;
-    hgl::Buffer<hgl::IndexBuffer>   indexBuffer;
-    hgl::Shaders                    shaders;
+    hgl::VertexArray                        vertexArray;
+    const std::array<hgl::LayoutElement,1>  verBufLayout;
+    hgl::Buffer<hgl::VertexBuffer>          vertexBuffer;
+    hgl::Buffer<hgl::IndexBuffer>           indexBuffer;
+    hgl::Shaders                            shaders;
 
     const MotionVar::Bounds translationBounds;
     const MotionVar::Bounds rotationBounds;
@@ -233,14 +232,39 @@ struct Cube{
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
         vertexBuffer.feedData<float>(vertexBufData, hgl::UseStaticDraw);
         indexBuffer.feedData<unsigned char>(indexBufData, hgl::UseStaticDraw);
-        vertexArray.readBufferData<float>(vertexBuffer, verBufLayout, sizeof(verBufLayout)/sizeof(hgl::LayoutElement));
+        vertexArray.readBufferData<float>(vertexBuffer, verBufLayout);
         shaders.compileString(hgl::VertexShader, vertexShader);
         shaders.compileString(hgl::FragmentShader, fragmentShader);
         shaders.link();
         shaders.validate();
-        shaders.use();
+        shaders.bind();
         vertexArray.bind();
         indexBuffer.bind();
+    }
+
+    void draw(){
+
+        int drawCounter = 0;
+
+        vertexArray.bind();
+
+        auto draw_square_with_color = [&](const glm::vec4& v){
+
+            shaders.setUniform("u_color", v);
+            indexBuffer.draw<unsigned char>(
+                hgl::DrawTriangles,
+                6,
+                6*(drawCounter++));
+
+        };
+
+        draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
+        draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
+        draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
+        draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
+        draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
+        draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
+        
     }
 
 };
@@ -248,198 +272,218 @@ struct Cube{
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
+// class Oscillator{
+// private:
+//     float value;
+//     float lower, upper;
+//     float frequency;
+// public:
+//     Oscillator(float lower, float upper, float frequency):
+//         lower(lower),
+//         upper(upper),
+//         frequency(frequency*2*(upper-lower)),
+//         value(0)
+//         {}
+//     inline float get(){return value;}
+//     void update(float fps){
+//         if(value > upper){
+//             frequency *= -1;
+//             value = upper;
+//         }else if(value < lower){
+//             frequency *= -1;
+//             value = lower;
+//         }
+//         value += frequency/fps;
+//     }
+// };
+
 void test(){
 
     #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
 
-    
+    printSize(hgl::Binder);
 
     #undef printSize
 
-}
-
-void drawEverything(Cube& cube){
-
-    int drawCounter = 0;
-
-    auto draw_square_with_color = [&](const glm::vec4& v){
-
-        cube.shaders.setUniform("u_color", v);
-        cube.indexBuffer.draw<unsigned char>(
-            hgl::DrawTriangles,
-            6,
-            6*(drawCounter++));
-
-    };
-
-    draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
-    draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
-    draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
-    draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
-    draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
-    draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
-    
 }
 
 int main(int argc, const char* argv[]){
 
     test();
 
-    try{
+    try{ hgl::initialize(3,0); }
+    catch(std::exception& ex){
+        printf("%s occured! Cannot initialize HermyGL\n", typeid(ex).name());
+        printf(ex.what());
+        return 1;
+    }
 
-        hgl::initialize();
+    try{
+        
+        SDL_DisplayMode dm;
+
+        if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+            throw std::runtime_error(SDL_GetError());
+
+        int q = std::min(dm.h, dm.w) * 3.f/4.f;
+        dm.h = dm.w = q;
+
+        hgl::OpenGLWindow window{"Cube", dm.w, dm.h};
+        
+        SDL_Log("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
+
+        Cube cube;
+
+        SDL_Log("Cube Created\n");
 
         {
-
-            hgl::OpenGLWindow window{"Cube", MY_WINDOW_WIDTH, MY_WINDOW_HEIGHT};
-
-            Cube cube;
-
-            SDL_Log("Cube Created\n");
-
-            {
-                int buffers, samples;
-                SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
-                SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &samples );
-                SDL_Log("buf = %d, samples = %d\n", buffers, samples);
-            }
-
-            // Setup MVP =============================
-
-            glm::mat4 mvp, projection = 
-                glm::perspective(70.f, (float)MY_WINDOW_WIDTH/MY_WINDOW_HEIGHT, 0.01f, 1000.f);
-
-            // Setup Motion Variables ==========================
-
-            hgl::FrameRate fps;
-
-            GL_CALL(glDepthRange(0.01, 1000));
-
-            bool keepRunning = true;
-            SDL_Event event;
-
-            /* Loop until the user closes the window */
-            while (keepRunning)
-            {
-
-                // Compute motion ===========
-
-                cube.rotationState.computeMotion();
-                cube.observerPosition.computeMotion();
-
-                mvp =
-                    projection *
-                    glm::lookAt(
-                        cube.observerPosition.getActual(),
-                        cube.observerPosition.getActual() + cube.observerForwards.getActual(),
-                        cube.observerUpwards.getActual()
-                    )*
-                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(1.f, 0.f, 0.f) ) *
-                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)), glm::vec3(0.f, 1.f, 0.f) ) *
-                    glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0)), glm::vec3(0.f, 0.f, 1.f) );
-
-                cube.shaders.setUniform("u_mat", mvp, false);
-                /*
-                cube.shaders.setUniform("theta", glm::vec3(
-                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual+(KEYHITS_PER_ROTATION/8)),
-                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual+(KEYHITS_PER_ROTATION/8)),
-                    (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual+(0))
-                ));*/
-
-                /* Render here */
-                hgl::clear(hgl::ColorBufferBit);
-
-                drawEverything(cube);
-
-                /* Swap front and back buffers */
-                SDL_GL_SwapWindow(window.get());
-
-                /* Poll for and process events */
-                while(SDL_PollEvent(&event)){
-                    
-                    #define shiftModifiersActived event.key.keysym.mod & KMOD_SHIFT
-
-                    switch(event.type){
-                    case SDL_QUIT:
-                        keepRunning = false;
-                        break;
-                    case SDL_KEYDOWN:
-                        switch(event.key.keysym.sym){
-                        case SDLK_LEFT:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.x.decrementDesired();
-                            else
-                                cube.rotationState.y.decrementDesired();
-                            break;
-                        case SDLK_RIGHT:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.x.incrementDesired();
-                            else
-                                cube.rotationState.y.incrementDesired();
-                            break;
-                        case SDLK_UP:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.y.incrementDesired();
-                            else
-                                cube.rotationState.x.decrementDesired();
-                            break;
-                        case SDLK_DOWN:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.y.decrementDesired();
-                            else
-                                cube.rotationState.x.incrementDesired();
-                            break;
-                        case SDLK_PERIOD:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.z.incrementDesired();
-                            else
-                                cube.rotationState.z.decrementDesired();
-                            break;
-                        case SDLK_COMMA:
-                            if(shiftModifiersActived)
-                                cube.observerPosition.z.decrementDesired();
-                            else
-                                cube.rotationState.z.incrementDesired();
-                            break;
-                        case SDLK_SPACE:
-                            if(shiftModifiersActived){
-                                cube.observerPosition.reset(0,0,0);
-                            }else{
-                                cube.rotationState.reset();
-                            }
-                            break;
-                        }
-                        break;
-                    }
-
-                    #undef shiftModifiersActived
-
-                } // while(SDL_PollEvent(&event))
-
-
-                fps.compute();
-
-                // Compute Rotation Rate ===============
-                cube.rotationState.rotFactor = (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps();
-                cube.observerPosition.rotFactor = cube.rotationState.rotFactor;
-
-                printf(
-                    "fps: %5.0f\n"
-                    "\033[1A",
-                    fps()
-                );
-                
-            } // while(keepRunning)
+            int buffers, samples;
+            SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
+            SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &samples );
+            SDL_Log("buf = %d, samples = %d\n", buffers, samples);
         }
 
-        hgl::quit();
+        // Setup MVP =============================
+
+
+        float aspect_ratio = (float)dm.w/(float)dm.h;
+        //Oscillator fov(3.14159/4, 3.14159/2, 1.f/5.f);
+
+        glm::mat4 mvp, projection = 
+            glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);
+
+
+        GL_CALL(glDepthRange(0.01, 1000));
+
+        bool keepRunning = true;
+        SDL_Event event;
+        
+        hgl::FrameRate fps;
+
+        /* Loop until the user closes the window */
+        while (keepRunning)
+        {
+
+            // Compute motion ===========
+
+            cube.rotationState.computeMotion();
+            cube.observerPosition.computeMotion();
+
+            mvp =
+                projection*
+                glm::lookAt(
+                    cube.observerPosition.getActual(),
+                    cube.observerPosition.getActual() + cube.observerForwards.getActual(),
+                    cube.observerUpwards.getActual()
+                );
+                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual)+(PI_4) ) *
+                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4) ) *
+                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0) );
+
+            cube.shaders.setUniform("u_mat", mvp, false);
+            cube.shaders.setUniform("theta", glm::vec3(
+                (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual)+(PI_4),
+                (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4),
+                (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0)
+            ));
+
+            /* Render here */
+            hgl::clear(hgl::ColorBufferBit);
+
+            cube.draw();
+
+            /* Swap front and back buffers */
+            SDL_GL_SwapWindow(window.get());
+
+            /* Poll for and process events */
+            while(SDL_PollEvent(&event)){
+                
+                #define shiftModifiersActived event.key.keysym.mod & KMOD_SHIFT
+
+                switch(event.type){
+                case SDL_QUIT:
+                    keepRunning = false;
+                    break;
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym){
+                    case SDLK_LEFT:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.x.decrementDesired();
+                        else
+                            cube.rotationState.y.decrementDesired();
+                        break;
+                    case SDLK_RIGHT:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.x.incrementDesired();
+                        else
+                            cube.rotationState.y.incrementDesired();
+                        break;
+                    case SDLK_UP:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.y.incrementDesired();
+                        else
+                            cube.rotationState.x.decrementDesired();
+                        break;
+                    case SDLK_DOWN:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.y.decrementDesired();
+                        else
+                            cube.rotationState.x.incrementDesired();
+                        break;
+                    case SDLK_PERIOD:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.z.incrementDesired();
+                        else
+                            cube.rotationState.z.decrementDesired();
+                        break;
+                    case SDLK_COMMA:
+                        if(shiftModifiersActived)
+                            cube.observerPosition.z.decrementDesired();
+                        else
+                            cube.rotationState.z.incrementDesired();
+                        break;
+                    case SDLK_SPACE:
+                        if(shiftModifiersActived){
+                            cube.observerPosition.reset(0,0,5);
+                        }else{
+                            cube.rotationState.reset();
+                        }
+                        break;
+                    case SDLK_ESCAPE:
+                        keepRunning = false;
+                        break;
+                    }
+                    break;
+                }
+
+                #undef shiftModifiersActived
+
+            } // while(SDL_PollEvent(&event))
+
+
+            fps.compute();
+
+            // Compute Rotation Rate ===============
+            cube.observerPosition.rotFactor =
+            cube.rotationState.rotFactor =
+            (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps();
+
+            //fov.update(fps());
+
+            printf(
+                "fps: %5.0f\n"
+                "\033[1A",
+                fps()
+            );
+            
+        } // while(keepRunning)
 
     }catch(const std::exception& ex){
-        SDL_Log("%s occured!\n", typeid(ex).name());
-        SDL_Log(ex.what());
-    }catch(...){
-        SDL_Log("Error Occured\n");
+        printf("%s occured!\n", typeid(ex).name());
+        printf(ex.what());
     }
+
+    hgl::quit();
 
     return 0;
 

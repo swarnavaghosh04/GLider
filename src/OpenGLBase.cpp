@@ -13,4 +13,17 @@ namespace hgl{
         return *this;
     }
 
+    //template<typename T>
+    Binder::Binder(const OpenGLBase& base) noexcept:
+        base(base),
+        prev(base.getBound())
+    {
+        base.bind();
+    }
+
+    //template<typename T>
+    Binder::~Binder() noexcept{
+        base.bind(prev);
+    }
+
 }

@@ -62,7 +62,7 @@ int main(int argc, const char** argv){
         shaders.compileString(hgl::FragmentShader, fragmentShader);
         shaders.link();
         shaders.validate();
-        shaders.use();
+        shaders.bind();
 
         shaders.setUniform("width", glm::vec<1,int>(dm.w));
         shaders.setUniform("height", glm::vec<1,int>(dm.h));

@@ -5,6 +5,50 @@
 
 namespace hgl{
 
+    constexpr unsigned int getBufferTargetBinding(BufferTarget target){
+        switch(target){
+        case VertexBuffer:
+            return GL_ARRAY_BUFFER_BINDING;
+        case IndexBuffer:
+            return GL_ELEMENT_ARRAY_BUFFER_BINDING;
+        case PixelPackBuffer:
+            return GL_PIXEL_PACK_BUFFER_BINDING;
+        case PixelUnpackBuffer:
+            return GL_PIXEL_UNPACK_BUFFER_BINDING;
+        case CopyWriteBuffer:
+            return GL_COPY_WRITE_BUFFER_BINDING;
+        case TransformFeedbackBuffer:
+            return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
+        #if GL_VERSION_3_1
+        case CopyReadBuffer:
+            return GL_COPY_READ_BUFFER_BINDING;
+        case TextureBuffer:
+            return GL_TEXTURE_BUFFER_BINDING;
+        case UniformBuffer:
+            return GL_UNIFORM_BUFFER_BINDING;
+        #endif
+        #ifdef GL_VERSION_4_0
+        case DrawIndirectBuffer:
+            return GL_DRAW_INDIRECT_BUFFER_BINDING;
+        #endif
+        #if GL_VERSION_4_2
+        case AtomicCounterBuffer:
+            return GL_ATOMIC_COUNTER_BUFFER_BINDING;
+        #endif
+        #if GL_VERSION_4_3
+        case DispatchIndirectBuffer:
+            return GL_DISPATCH_INDIRECT_BUFFER_BINDING;
+        case ShaderStorageBuffer:
+            return GL_SHADER_STORAGE_BUFFER_BINDING;
+        #endif
+        #if GL_VERSION_4_4
+        case QueryBuffer:
+            return GL_QUERY_BUFFER_BINDING;
+        #endif
+        }
+        throw std::logic_error("Invalid Buffer Target Binding");
+    }
+
     template<BufferTarget target>
     Buffer<target>::Buffer() noexcept{
         GL_CALL(glGenBuffers(1, &(this->id)));
@@ -21,8 +65,20 @@ namespace hgl{
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::unbind() const noexcept{
+    inline void Buffer<target>::staticBind(unsigned int anotherID) noexcept{
+        GL_CALL(glBindBuffer((unsigned int)target, anotherID));
+    }
+
+    template<BufferTarget target>
+    inline void Buffer<target>::staticUnbind() noexcept{
         GL_CALL(glBindBuffer((unsigned int)target, 0));
+    }
+
+    template<BufferTarget target>
+    inline int Buffer<target>::staticGetBound() noexcept{
+        int r;
+        GL_CALL(glGetIntegerv(getBufferTargetBinding(target), &r));
+        return r;
     }
 
     template<BufferTarget target>
