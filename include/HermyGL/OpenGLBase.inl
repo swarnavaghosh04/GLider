@@ -11,6 +11,52 @@ namespace hgl{
         );
     }
 
+    template<typename T>
+    OpenGLBase<T>::OpenGLBase(OpenGLBase&& other) noexcept
+        : id(other.id)
+    {
+        other.id = 0;
+    }
+
+    template<typename T>
+    OpenGLBase<T>& OpenGLBase<T>::operator= (OpenGLBase<T>&& other) noexcept{
+        std::swap(id, other.id);
+        return *this;
+    }
+    
+    template<typename T>
+    inline void OpenGLBase<T>::bind() const noexcept{
+        ((T*)(this))->bind();
+    }
+    
+    template<typename T>
+    inline void OpenGLBase<T>::bind(unsigned int id) noexcept{
+        T::bind(id);
+    }
+    
+    template<typename T>
+    inline void OpenGLBase<T>::unbind() noexcept{
+        T::unbind();
+    }
+    
+    template<typename T>
+    inline int OpenGLBase<T>::getBound() noexcept{
+        return T::getBound();
+    }
+
+    template<typename T>
+    Binder<T>::Binder(const OpenGLBase<T>& base) noexcept:
+        base(base),
+        prev(base.getBound())
+    {
+        base.bind();
+    }
+
+    template<typename T>
+    Binder<T>::~Binder() noexcept{
+        base.bind(prev);
+    }
+
 
     inline void clear(BufferBit mask) noexcept{
         GL_CALL(glClear(mask | BufferBit::DepthBufferBit));

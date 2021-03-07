@@ -9,15 +9,15 @@ namespace hgl{
         GL_CALL(glBindVertexArray(this->id));
     }
 
-    inline void VertexArray::staticBind(unsigned int anotherID) noexcept{
-        GL_CALL(glBindVertexArray(anotherID));
+    inline void VertexArray::bind(unsigned int id) noexcept{
+        GL_CALL(glBindVertexArray(id));
     }
 
-    inline void VertexArray::staticUnbind() noexcept{
+    inline void VertexArray::unbind() noexcept{
         GL_CALL(glBindVertexArray(0));
     }
 
-    inline int VertexArray::staticGetBound() noexcept{
+    inline int VertexArray::getBound() noexcept{
         int r;
         glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &r);
         return r;

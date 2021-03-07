@@ -301,7 +301,10 @@ void test(){
 
     #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
 
-    printSize(hgl::Binder);
+    printSize(hgl::Binder<hgl::VertexArray>);
+    printSize(hgl::VertexArray);
+    printSize(hgl::Buffer<hgl::VertexBuffer>);
+    printSize(hgl::Shaders);
 
     #undef printSize
 

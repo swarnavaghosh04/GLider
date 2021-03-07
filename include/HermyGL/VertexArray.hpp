@@ -6,21 +6,15 @@
 
 namespace hgl{
 
-    class HERMYGL_EXPORT VertexArray : public OpenGLBase{
+    class VertexArray : public OpenGLBase<VertexArray>{
     public:
         VertexArray() noexcept;
         VertexArray(unsigned int id) noexcept;
         ~VertexArray() noexcept;
-        virtual void bind() const noexcept;
-        static void staticBind(unsigned int anotherID) noexcept;
-        virtual void bind(unsigned int anotherID) const noexcept
-        {staticBind(anotherID);}
-        static void staticUnbind() noexcept;
-        virtual void unbind() const noexcept
-        {staticUnbind();}
-        static int staticGetBound() noexcept;
-        virtual int getBound() const noexcept
-        {return staticGetBound();}
+        void bind() const noexcept;
+        static void bind(unsigned int id) noexcept;
+        static void unbind() noexcept;
+        static int getBound() noexcept;
         template<typename T>
         void readBufferData(
             const Buffer<VertexBuffer>& vb,

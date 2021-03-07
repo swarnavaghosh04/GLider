@@ -49,8 +49,8 @@ namespace hgl{
      * HermyGL. It initlializes all the subsystems for SDL2
      * and sets important attributes
     */
-    HERMYGL_EXPORT void initialize(int major=3, int minor=0);
-    HERMYGL_EXPORT void quit() noexcept;
+    void initialize(int major=3, int minor=0);
+    void quit() noexcept;
 
 }
 

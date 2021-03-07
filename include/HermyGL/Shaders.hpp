@@ -25,22 +25,16 @@ namespace hgl{
         #endif
     };
 
-    class HERMYGL_EXPORT Shaders : public OpenGLBase{
+    class Shaders : public OpenGLBase<Shaders>{
     private:
         std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
         Shaders() noexcept;
         ~Shaders() noexcept;
         void bind() const noexcept;
-        static void staticBind(unsigned int anotherID) noexcept;
-        virtual void bind(unsigned int anotherID) const noexcept
-        {staticBind(anotherID);}
-        static void staticUnbind() noexcept;
-        virtual void unbind() const noexcept
-        {staticUnbind();}
-        static int staticGetBound() noexcept;
-        virtual int getBound() const noexcept
-        {return staticGetBound();}
+        static void bind(unsigned int id) noexcept;
+        static void unbind() noexcept;
+        static int getBound() noexcept;
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();

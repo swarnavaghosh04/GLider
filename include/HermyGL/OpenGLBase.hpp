@@ -6,9 +6,6 @@
 #include "HermyGL/HermyGL_core.hpp"
 #include "HermyGL/GLErrorHandling.hpp"
 
-#define HGL_DATA_ALLOC_STACK 0
-#define HGL_DATA_ALLOC_HEAP 1
-
 #if GL_VERSION_4_0
     #define INCORPORATE_DOUBLE
 #endif
@@ -114,30 +111,31 @@ namespace hgl{
         ScissorTest = GL_SCISSOR_TEST,
     };
 
-    class HERMYGL_EXPORT OpenGLBase{
+    template<typename T>
+    class OpenGLBase{
     protected:
         unsigned int id;
     public:
         OpenGLBase() noexcept = default;
-        virtual ~OpenGLBase() = default;
-        OpenGLBase(const OpenGLBase&) = delete;
-        OpenGLBase(OpenGLBase&& other) noexcept;
-        OpenGLBase& operator= (const OpenGLBase&) = delete;
-        OpenGLBase& operator= (OpenGLBase&& other) noexcept;
-        virtual void bind() const noexcept = 0;
-        virtual void bind(unsigned int) const noexcept = 0;
-        virtual void unbind() const noexcept = 0;
-        virtual int getBound() const noexcept = 0;
+        OpenGLBase(const OpenGLBase<T>&) = delete;
+        OpenGLBase(OpenGLBase<T>&& other) noexcept;
+        OpenGLBase<T>& operator= (const OpenGLBase<T>&) = delete;
+        OpenGLBase<T>& operator= (OpenGLBase<T>&& other) noexcept;
+        void bind() const noexcept;
+        static void bind(unsigned int id) noexcept;
+        static void unbind() noexcept;
+        static int getBound() noexcept;
         const unsigned int& getId() const noexcept {return id;}
         unsigned int& getId() noexcept {return id;}
     };
-    
+
+    template<typename T>
     class Binder{
     private:
-        const OpenGLBase& base;
+        const OpenGLBase<T>& base;
         int prev;
     public:
-        Binder(const OpenGLBase& base) noexcept;
+        Binder(const OpenGLBase<T>& base) noexcept;
         ~Binder() noexcept;
     };
 

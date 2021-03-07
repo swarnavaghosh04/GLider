@@ -9,15 +9,15 @@ namespace hgl{
         GL_CALL(glUseProgram(this->id));
     }
 
-    inline void Shaders::staticBind(unsigned int anotherID) noexcept{
+    inline void Shaders::bind(unsigned int anotherID) noexcept{
         GL_CALL(glUseProgram(anotherID));
     }
 
-    inline void Shaders::staticUnbind() noexcept{
+    inline void Shaders::unbind() noexcept{
         GL_CALL(glUseProgram(0));
     }
 
-    inline int Shaders::staticGetBound() noexcept{
+    inline int Shaders::getBound() noexcept{
         int r;
         glGetIntegerv(GL_CURRENT_PROGRAM, &r);
         return r;

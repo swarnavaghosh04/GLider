@@ -6,11 +6,11 @@ add_library(HermyGL STATIC)
 set_property(TARGET HermyGL PROPERTY VERSION ${CMAKE_PROJECT_VERSION})
 set_property(TARGET HermyGL PROPERTY SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
 
-include(GenerateExportHeader)
-generate_export_header(
-    HermyGL
-    EXPORT_FILE_NAME ${CMAKE_CURRENT_SOURCE_DIR}/../include/HermyGL/HermyGL_export.h
-)
+# include(GenerateExportHeader)
+# generate_export_header(
+#     HermyGL
+#     EXPORT_FILE_NAME ${CMAKE_CURRENT_SOURCE_DIR}/../include/HermyGL/HermyGL_export.h
+# )
 
 file(
     GLOB HermyGL_SOURCES

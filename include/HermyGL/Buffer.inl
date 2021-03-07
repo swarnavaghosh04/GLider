@@ -65,17 +65,17 @@ namespace hgl{
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::staticBind(unsigned int anotherID) noexcept{
-        GL_CALL(glBindBuffer((unsigned int)target, anotherID));
+    inline void Buffer<target>::bind(unsigned int id) noexcept{
+        GL_CALL(glBindBuffer((unsigned int)target, id));
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::staticUnbind() noexcept{
+    inline void Buffer<target>::unbind() noexcept{
         GL_CALL(glBindBuffer((unsigned int)target, 0));
     }
 
     template<BufferTarget target>
-    inline int Buffer<target>::staticGetBound() noexcept{
+    inline int Buffer<target>::getBound() noexcept{
         int r;
         GL_CALL(glGetIntegerv(getBufferTargetBinding(target), &r));
         return r;
@@ -88,7 +88,7 @@ namespace hgl{
         unsigned int dataCount,
         BufferUsage usage
     ){
-        bind();
+        Binder b(*this);
         GL_CALL(glBufferData(target, dataCount*sizeof(T), data, usage));
     }
 
@@ -98,7 +98,7 @@ namespace hgl{
         const std::vector<T>& data,
         BufferUsage usage
     ){
-        bind();
+        Binder b(*this);
         GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
     }
 
@@ -108,7 +108,7 @@ namespace hgl{
         const std::array<T,N>& data,
         BufferUsage usage
     ){
-        bind();
+        Binder b(*this);
         GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
     }
 
@@ -120,12 +120,13 @@ namespace hgl{
         DrawType mode, unsigned int count, int offset
     ) noexcept {
         static_assert((target == IndexBuffer), "Invalid draw call!");
-        bind();
+        Binder b(*this);
         GL_CALL(glDrawElements(mode, count, getOpenGLTypeEnum<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
     }
 
     template<typename T>
     inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset) noexcept{
+        Binder b(ib);
         GL_CALL(glDrawElements(mode, count, getOpenGLTypeEnum<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
     }
 

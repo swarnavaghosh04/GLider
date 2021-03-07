@@ -6,7 +6,7 @@
 
 namespace hgl{
 
-    class HERMYGL_EXPORT Window{
+    class Window{
     protected:
         SDL_Window *window;
     public:
@@ -20,7 +20,7 @@ namespace hgl{
         SDL_Window* get() noexcept { return window; }
     };
 
-    class HERMYGL_EXPORT Renderer{
+    class Renderer{
     protected:
         SDL_Renderer *renderer;
     public:
@@ -34,7 +34,7 @@ namespace hgl{
         SDL_Renderer* get() noexcept {return renderer;}
     };
 
-    class HERMYGL_EXPORT OpenGLContext{
+    class OpenGLContext{
     protected:
         SDL_GLContext glContext;
     public:
@@ -48,7 +48,7 @@ namespace hgl{
         SDL_GLContext& get() noexcept {return glContext;}
     };
 
-    class HERMYGL_EXPORT OpenGLWindow : public Window{
+    class OpenGLWindow : public Window{
     protected:
         Renderer renderer;
         OpenGLContext glContext;
