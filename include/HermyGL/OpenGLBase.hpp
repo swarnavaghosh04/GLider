@@ -132,7 +132,6 @@ namespace hgl{
     template<typename T>
     class Binder{
     private:
-        const OpenGLBase<T>& base;
         int prev;
     public:
         Binder(const OpenGLBase<T>& base) noexcept;

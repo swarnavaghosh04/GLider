@@ -78,15 +78,15 @@ namespace hgl{
 
     unsigned int Shaders::getUniformLocation(const char* name){
 
-        if(uniformLocCache.find(name) != uniformLocCache.end())
-            return uniformLocCache[name];
+        // if(uniformLocCache.find(name) != uniformLocCache.end())
+        //     return uniformLocCache[name];
 
         GL_CALL(int loc = glGetUniformLocation(this->id, name));
 
         if(loc == -1)
             throw std::runtime_error("Uniform not found");
 
-        uniformLocCache[name] = loc;
+        // uniformLocCache[name] = loc;
         return loc;
     }
 

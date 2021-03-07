@@ -272,31 +272,6 @@ struct Cube{
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
-// class Oscillator{
-// private:
-//     float value;
-//     float lower, upper;
-//     float frequency;
-// public:
-//     Oscillator(float lower, float upper, float frequency):
-//         lower(lower),
-//         upper(upper),
-//         frequency(frequency*2*(upper-lower)),
-//         value(0)
-//         {}
-//     inline float get(){return value;}
-//     void update(float fps){
-//         if(value > upper){
-//             frequency *= -1;
-//             value = upper;
-//         }else if(value < lower){
-//             frequency *= -1;
-//             value = lower;
-//         }
-//         value += frequency/fps;
-//     }
-// };
-
 void test(){
 
     #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
@@ -348,9 +323,7 @@ int main(int argc, const char* argv[]){
 
         // Setup MVP =============================
 
-
         float aspect_ratio = (float)dm.w/(float)dm.h;
-        //Oscillator fov(3.14159/4, 3.14159/2, 1.f/5.f);
 
         glm::mat4 mvp, projection = 
             glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);
@@ -471,7 +444,6 @@ int main(int argc, const char* argv[]){
             cube.rotationState.rotFactor =
             (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps();
 
-            //fov.update(fps());
 
             printf(
                 "fps: %5.0f\n"

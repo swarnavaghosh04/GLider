@@ -46,7 +46,6 @@ namespace hgl{
 
     template<typename T>
     Binder<T>::Binder(const OpenGLBase<T>& base) noexcept:
-        base(base),
         prev(base.getBound())
     {
         base.bind();
@@ -54,9 +53,8 @@ namespace hgl{
 
     template<typename T>
     Binder<T>::~Binder() noexcept{
-        base.bind(prev);
+        T::bind(prev);
     }
-
 
     inline void clear(BufferBit mask) noexcept{
         GL_CALL(glClear(mask | BufferBit::DepthBufferBit));

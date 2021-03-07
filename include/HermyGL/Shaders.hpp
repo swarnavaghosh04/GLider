@@ -27,7 +27,7 @@ namespace hgl{
 
     class Shaders : public OpenGLBase<Shaders>{
     private:
-        std::unordered_map<const char*, unsigned int> uniformLocCache;
+        //std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
         Shaders() noexcept;
         ~Shaders() noexcept;
