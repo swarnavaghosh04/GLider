@@ -131,8 +131,7 @@ namespace hgl{
         const unsigned int& getId() const noexcept {return id;}
         unsigned int& getId() noexcept {return id;}
     };
-
-    //template<typename T>
+    
     class Binder{
     private:
         const OpenGLBase& base;
