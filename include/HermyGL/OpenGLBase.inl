@@ -11,49 +11,49 @@ namespace hgl{
         );
     }
 
-    template<typename T>
-    OpenGLBase<T>::OpenGLBase(OpenGLBase&& other) noexcept
+    template<class Derived>
+    OpenGLBase<Derived>::OpenGLBase(OpenGLBase<Derived>&& other) noexcept
         : id(other.id)
     {
         other.id = 0;
     }
 
-    template<typename T>
-    OpenGLBase<T>& OpenGLBase<T>::operator= (OpenGLBase<T>&& other) noexcept{
+    template<class Derived>
+    OpenGLBase<Derived>& OpenGLBase<Derived>::operator= (OpenGLBase<Derived>&& other) noexcept{
         std::swap(id, other.id);
         return *this;
     }
     
-    template<typename T>
-    inline void OpenGLBase<T>::bind() const noexcept{
-        ((T*)(this))->bind();
+    template<class Derived>
+    inline void OpenGLBase<Derived>::bind() const noexcept{
+        ((Derived*)(this))->bind();
     }
     
-    template<typename T>
-    inline void OpenGLBase<T>::bind(unsigned int id) noexcept{
-        T::bind(id);
+    template<class Derived>
+    inline void OpenGLBase<Derived>::bind(unsigned int id) noexcept{
+        Derived::bind(id);
     }
     
-    template<typename T>
-    inline void OpenGLBase<T>::unbind() noexcept{
-        T::unbind();
+    template<class Derived>
+    inline void OpenGLBase<Derived>::unbind() noexcept{
+        Derived::unbind();
     }
     
-    template<typename T>
-    inline int OpenGLBase<T>::getBound() noexcept{
-        return T::getBound();
+    template<class Derived>
+    inline int OpenGLBase<Derived>::getBound() noexcept{
+        return Derived::getBound();
     }
 
-    template<typename T>
-    Binder<T>::Binder(const OpenGLBase<T>& base) noexcept:
+    template<class Derived>
+    Binder<Derived>::Binder(const OpenGLBase<Derived>& base) noexcept:
         prev(base.getBound())
     {
         base.bind();
     }
 
-    template<typename T>
-    Binder<T>::~Binder() noexcept{
-        T::bind(prev);
+    template<class Derived>
+    Binder<Derived>::~Binder() noexcept{
+        Derived::bind(prev);
     }
 
     inline void clear(BufferBit mask) noexcept{

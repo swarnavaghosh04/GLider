@@ -111,16 +111,16 @@ namespace hgl{
         ScissorTest = GL_SCISSOR_TEST,
     };
 
-    template<typename T>
+    template<class Derived>
     class OpenGLBase{
     protected:
         unsigned int id;
     public:
         OpenGLBase() noexcept = default;
-        OpenGLBase(const OpenGLBase<T>&) = delete;
-        OpenGLBase(OpenGLBase<T>&& other) noexcept;
-        OpenGLBase<T>& operator= (const OpenGLBase<T>&) = delete;
-        OpenGLBase<T>& operator= (OpenGLBase<T>&& other) noexcept;
+        OpenGLBase(const OpenGLBase<Derived>&) = delete;
+        OpenGLBase(OpenGLBase<Derived>&& other) noexcept;
+        OpenGLBase<Derived>& operator= (const OpenGLBase<Derived>&) = delete;
+        OpenGLBase<Derived>& operator= (OpenGLBase<Derived>&& other) noexcept;
         void bind() const noexcept;
         static void bind(unsigned int id) noexcept;
         static void unbind() noexcept;
@@ -129,12 +129,12 @@ namespace hgl{
         unsigned int& getId() noexcept {return id;}
     };
 
-    template<typename T>
+    template<class Derived>
     class Binder{
     private:
         int prev;
     public:
-        Binder(const OpenGLBase<T>& base) noexcept;
+        Binder(const OpenGLBase<Derived>& base) noexcept;
         ~Binder() noexcept;
     };
 

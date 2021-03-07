@@ -59,6 +59,7 @@ namespace hgl{
 
     template<BufferTarget target>
     class Buffer : public OpenGLBase<Buffer<target>>{
+        friend class OpenGLBase<Buffer<target>>;
     public:
         Buffer() noexcept;
         ~Buffer() noexcept;

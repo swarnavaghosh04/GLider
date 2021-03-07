@@ -7,6 +7,7 @@
 namespace hgl{
 
     class VertexArray : public OpenGLBase<VertexArray>{
+        friend class OpenGLBase<VertexArray>;
     public:
         VertexArray() noexcept;
         VertexArray(unsigned int id) noexcept;
