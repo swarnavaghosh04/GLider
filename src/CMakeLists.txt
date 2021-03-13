@@ -27,6 +27,10 @@ target_sources(
 
 target_link_libraries(HermyGL PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(HermyGL PUBLIC HGL_DEBUG)
+endif()
+
 target_include_directories(
     HermyGL PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>

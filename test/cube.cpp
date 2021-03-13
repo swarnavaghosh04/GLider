@@ -5,8 +5,13 @@
 
 // Rotations Characteristics ==================================================
 
-// Number of Key hits for a 360 Degree rotation about an axis
-#define KEYHITS_PER_ROTATION        40
+// Number of Key hits for a 360 Degree rotation about an axis (multiple of 8)
+#define KEYHITS_PER_ROTATION 40
+
+static_assert(
+    KEYHITS_PER_ROTATION % 8 == 0,
+    "Key hits per rotation should be a multiple of 8"
+);
 
 /* If the difference between the desired and current rotation is
 below this value, then actual is set equal to desired */
@@ -77,7 +82,7 @@ struct MotionVector3D{
         z{v.z, pBounds}
     {}
 
-    glm::vec3 getActual() const {return glm::vec3(x.actual, y.actual, z.actual);}
+    glm::vec3 getCurrent() const {return glm::vec3(x.actual, y.actual, z.actual);}
     glm::vec3 getDesired() const {return glm::vec3(x.desired, y.desired, z.desired);}
     void reset(float x=0, float y=0, float z=0) {
         this->x.desired = x;
@@ -112,10 +117,11 @@ struct Cube{
         layout(location=0) in vec3 position;
 
         uniform mat4 u_mat;
-        uniform vec3 theta;
+        uniform vec3 orientation;
+        // uniform float theta;
 
-
-        vec4 quat_mult(vec4 a, vec4 b){
+        vec4 quat_mult(vec4 a, vec4 b)
+        {
             return vec4(
                 ((a.w*b.x) + (a.x*b.w) + (a.y*b.z) - (a.z*b.y)), // x
                 ((a.w*b.y) - (a.x*b.z) + (a.y*b.w) + (a.z*b.x)), // y
@@ -124,11 +130,18 @@ struct Cube{
             );
         }
 
-        vec4 quat_conj(vec4 q){
+        vec4 quat_conj(vec4 q)
+        {
             return vec4(-q.x, -q.y, -q.z, q.w);
         }
 
-        vec4 quat_rot(float angle, vec3 axis, vec4 q){
+        vec4 quat_inv(vec4 q)
+        {
+            float mag_sqr = q.x*q.x + q.y*q.y + q.z*q.z * q.w*q.w;
+            return quat_conj(q)/mag_sqr;
+        }
+
+        vec4 quat_rot(float angle, vec3 axis){
             float half_angle = angle/2;
             float sin_half_angle = sin(half_angle);
             return vec4(
@@ -143,13 +156,14 @@ struct Cube{
 
             vec4 pos = vec4(position, 1.f);
 
-            vec4 rotx = quat_rot(theta.z, vec3(0.f, 0.f, 1.f), pos);
-            vec4 roty = quat_rot(theta.y, vec3(0.f, 1.f, 0.f), pos);
-            vec4 rotz = quat_rot(theta.x, vec3(1.f, 0.f, 0.f), pos);
+            vec4 rotx = quat_rot(orientation.z, vec3(0.f, 0.f, 1.f));
+            vec4 roty = quat_rot(orientation.y, vec3(0.f, 1.f, 0.f));
+            vec4 rotz = quat_rot(orientation.x, vec3(1.f, 0.f, 0.f));
 
             vec4 rot = quat_mult(rotz,quat_mult(roty,rotx));
 
             gl_Position = u_mat * quat_mult(rot,quat_mult(pos, quat_conj(rot)));
+
         }
     )CODE";
 
@@ -179,6 +193,7 @@ struct Cube{
     MotionVector3D observerForwards;
     MotionVector3D observerUpwards;
     MotionVector3D rotationState;
+    MotionVar theta;
 
     template <std::size_t N1, std::size_t N2>
     static void generateVertices(
@@ -205,12 +220,11 @@ struct Cube{
                 a.y, b.y, c.x,
             };
             memcpy(vertexOutputBuffer.data(), vertices, sizeof(vertices));
-        }
-        {
+        }{
             const unsigned char indices[6*6] = {
                 0, 1, 3, 1, 3, 2,
-                1, 0, 5, 0, 5, 4,
                 6, 5, 7, 5, 7, 4,
+                1, 0, 5, 0, 5, 4,
                 2, 3, 6, 3, 6, 7,
                 0, 3, 4, 3, 4, 7,
                 2, 1, 6, 1, 6, 5
@@ -226,7 +240,8 @@ struct Cube{
         observerPosition{ 0.f, 0.f, 5.f, translationBounds},
         observerForwards{ 0.f, 0.f, -1.f, translationBounds},
         observerUpwards{ 0.f, 1.f, 0.f, translationBounds},
-        rotationState{ 0.f,  0.f, 0.f, rotationBounds}
+        rotationState{ 0.f,  0.f, 0.f, rotationBounds},
+        theta{0, {0.f, 2.f*3.14159f}}
     {
         SDL_Log("Cube Init\n");
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
@@ -242,8 +257,8 @@ struct Cube{
         indexBuffer.bind();
     }
 
-    void draw(){
-
+    void draw()
+    {
         int drawCounter = 0;
 
         vertexArray.bind();
@@ -254,17 +269,19 @@ struct Cube{
             indexBuffer.draw<unsigned char>(
                 hgl::DrawTriangles,
                 6,
-                6*(drawCounter++));
+                drawCounter);
+            drawCounter += 6;
+            indexBuffer.draw<unsigned char>(
+                hgl::DrawTriangles,
+                6,
+                drawCounter);
+            drawCounter += 6;
 
         };
 
         draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
         draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
-        draw_square_with_color(glm::vec4(1.0, 0.0, 0.0, 1.0));
-        draw_square_with_color(glm::vec4(0.0, 1.0, 0.0, 1.0));
-        draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
-        draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));
-        
+        draw_square_with_color(glm::vec4(0.0, 0.0, 1.0, 1.0));   
     }
 
 };
@@ -289,7 +306,7 @@ int main(int argc, const char* argv[]){
 
     test();
 
-    try{ hgl::initialize(3,0); }
+    try{ hgl::initialize(3,3); }
     catch(std::exception& ex){
         printf("%s occured! Cannot initialize HermyGL\n", typeid(ex).name());
         printf(ex.what());
@@ -348,20 +365,21 @@ int main(int argc, const char* argv[]){
             mvp =
                 projection*
                 glm::lookAt(
-                    cube.observerPosition.getActual(),
-                    cube.observerPosition.getActual() + cube.observerForwards.getActual(),
-                    cube.observerUpwards.getActual()
+                    cube.observerPosition.getCurrent(),
+                    cube.observerPosition.getCurrent() + cube.observerForwards.getCurrent(),
+                    cube.observerUpwards.getCurrent()
                 );
                 // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual)+(PI_4) ) *
                 // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4) ) *
                 // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0) );
 
             cube.shaders.setUniform("u_mat", mvp, false);
-            cube.shaders.setUniform("theta", glm::vec3(
+            cube.shaders.setUniform("orientation", glm::vec3(
                 (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual)+(PI_4),
                 (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4),
                 (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0)
             ));
+            //cube.shaders.setUniform("theta", glm::vec1(cube.theta.actual));
 
             /* Render here */
             hgl::clear(hgl::ColorBufferBit);
@@ -418,6 +436,12 @@ int main(int argc, const char* argv[]){
                         else
                             cube.rotationState.z.incrementDesired();
                         break;
+                    case SDLK_w:
+                        cube.theta.desired += 3.14159/18.f; // + 10 degrees
+                        break;
+                    case SDLK_s:
+                        cube.theta.desired -= 3.14159/18.f; // - 10 degrees
+                        break;
                     case SDLK_SPACE:
                         if(shiftModifiersActived){
                             cube.observerPosition.reset(0,0,5);
@@ -436,7 +460,6 @@ int main(int argc, const char* argv[]){
 
             } // while(SDL_PollEvent(&event))
 
-
             fps.compute();
 
             // Compute Rotation Rate ===============
@@ -444,6 +467,7 @@ int main(int argc, const char* argv[]){
             cube.rotationState.rotFactor =
             (std::log(1.f/ROTATION_CLAMP_THRESHOLD)/ROTATION_CONVERGENCE_TIME)/fps();
 
+            cube.theta.actual += (cube.theta.desired - cube.theta.actual)/fps();
 
             printf(
                 "fps: %5.0f\n"

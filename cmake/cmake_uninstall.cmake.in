@@ -1,39 +1,39 @@
 if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
-  message(FATAL_ERROR "Cannot find install manifest: @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
 endif()
 
 file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach(file ${files})
-  message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
-  if(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
-    exec_program(
-      "@CMAKE_COMMAND@" ARGS "-E remove \"$ENV{DESTDIR}${file}\""
-      OUTPUT_VARIABLE rm_out
-      RETURN_VALUE rm_retval
-      )
-    if(NOT "${rm_retval}" STREQUAL 0)
-      message(FATAL_ERROR "Problem when removing $ENV{DESTDIR}${file}")
+    message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
+    if(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
+        exec_program(
+            "@CMAKE_COMMAND@" ARGS "-E remove \"$ENV{DESTDIR}${file}\""
+            OUTPUT_VARIABLE rm_out
+            RETURN_VALUE rm_retval
+            )
+        if(NOT "${rm_retval}" STREQUAL 0)
+            message(FATAL_ERROR "Problem when removing $ENV{DESTDIR}${file}")
+        endif()
+        
+        get_filename_component(dir "${DESTDIR}${file}" DIRECTORY)
+        get_filename_component(dirname "${dir}" NAME)
+        if(("${dirname}" STREQUAL "@PROJECT_NAME@") AND (EXISTS "${dir}" OR IS_SYMLINK "${dir}"))
+            message(STATUS "Uninstalling ${dir}")
+            exec_program(
+                "@CMAKE_COMMAND@" ARGS "-E remove_directory \"${dir}\""
+                OUTPUT_VARIABLE rm_out
+                RETURN_VALUE rm_retval
+            )
+            if(NOT "${rm_retval}" STREQUAL 0)
+                message(FATAL_ERROR "Problem when removing ${dir}")
+            endif()
+        endif()
+
+    else(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
+        message(STATUS "File $ENV{DESTDIR}${file} does not exist.")
     endif()
+
     
-    get_filename_component(dir "${DESTDIR}${file}" DIRECTORY)
-    get_filename_component(dirname "${dir}" NAME)
-    if(("${dirname}" STREQUAL "@PROJECT_NAME@") AND (EXISTS "${dir}" OR IS_SYMLINK "${dir}"))
-      message(STATUS "Uninstalling ${dir}")
-      exec_program(
-        "@CMAKE_COMMAND@" ARGS "-E remove_directory \"${dir}\""
-        OUTPUT_VARIABLE rm_out
-        RETURN_VALUE rm_retval
-      )
-      if(NOT "${rm_retval}" STREQUAL 0)
-        message(FATAL_ERROR "Problem when removing ${dir}")
-      endif()
-    endif()
-
-  else(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
-    message(STATUS "File $ENV{DESTDIR}${file} does not exist.")
-  endif()
-
-  
 endforeach()

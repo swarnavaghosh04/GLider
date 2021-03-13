@@ -26,7 +26,7 @@ namespace hgl{
     
     template<class Derived>
     inline void OpenGLBase<Derived>::bind() const noexcept{
-        ((Derived*)(this))->bind();
+        static_cast<const Derived*>(this)->bind();
     }
     
     template<class Derived>
@@ -46,7 +46,7 @@ namespace hgl{
 
     template<class Derived>
     Binder<Derived>::Binder(const OpenGLBase<Derived>& base) noexcept:
-        prev(base.getBound())
+        prev(Derived::getBound())
     {
         base.bind();
     }

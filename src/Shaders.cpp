@@ -1,16 +1,20 @@
 #include "HermyGL/Shaders.hpp"
 
-namespace hgl{
+namespace hgl
+{
 
-    Shaders::Shaders() noexcept{
+    Shaders::Shaders() noexcept
+    {
         GL_CALL(this->id = glCreateProgram());
     }
 
-    Shaders::~Shaders() noexcept{
+    Shaders::~Shaders() noexcept
+    {
         GL_CALL(glDeleteProgram(this->id));
     }
 
-    void Shaders::compileString(ShaderType shaderType, const char* sourceCode){
+    void Shaders::compileString(ShaderType shaderType, const char *sourceCode)
+    {
 
         GL_CALL(unsigned int shader = glCreateShader((unsigned int)shaderType));
         GL_CALL(glShaderSource(shader, 1, &sourceCode, NULL));
@@ -18,7 +22,8 @@ namespace hgl{
 
         int res;
         GL_CALL(glGetShaderiv(shader, GL_COMPILE_STATUS, &res));
-        if(res == GL_FALSE){
+        if (res == GL_FALSE)
+        {
             GL_CALL(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &res));
             char message[res];
             GL_CALL(glGetShaderInfoLog(shader, res, NULL, message));
@@ -27,33 +32,37 @@ namespace hgl{
         }
         GL_CALL(glAttachShader(this->id, shader));
         GL_CALL(glDeleteShader(shader));
-
     }
 
-    void Shaders::compileFile(ShaderType shaderType, const char* sourceFilePath){
+    void Shaders::compileFile(ShaderType shaderType, const char *sourceFilePath)
+    {
 
-        if(
+        if (
             std::ifstream sourceFile(sourceFilePath, std::ios_base::in);
-            sourceFile.is_open()
-        ){
+            sourceFile.is_open())
+        {
             std::string line, text;
-            while(std::getline(sourceFile, line)){
+            while (std::getline(sourceFile, line))
+            {
                 text += line + '\n';
             }
             compileString(shaderType, text.c_str());
-        }else{
+        }
+        else
+        {
             throw std::runtime_error("Cannot Open Shader Source File");
         }
-
     }
 
-    void Shaders::link(){
+    void Shaders::link()
+    {
 
         GL_CALL(glLinkProgram(this->id));
 
         int res;
         GL_CALL(glGetProgramiv(this->id, GL_LINK_STATUS, &res));
-        if(res == GL_FALSE){
+        if (res == GL_FALSE)
+        {
             GL_CALL(glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &res));
             char message[res];
             GL_CALL(glGetProgramInfoLog(this->id, res, NULL, message));
@@ -61,29 +70,31 @@ namespace hgl{
         }
     }
 
-    void Shaders::validate() const{
+    void Shaders::validate() const
+    {
 
         GL_CALL(glValidateProgram(this->id));
 
         int res;
         GL_CALL(glGetProgramiv(this->id, GL_VALIDATE_STATUS, &res));
-        if(res == GL_FALSE){
+        if (res == GL_FALSE)
+        {
             GL_CALL(glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &res));
             char message[res];
             GL_CALL(glGetProgramInfoLog(this->id, res, NULL, message));
             throw std::runtime_error(message);
         }
-
     }
 
-    unsigned int Shaders::getUniformLocation(const char* name){
+    unsigned int Shaders::getUniformLocation(const char *name)
+    {
 
         // if(uniformLocCache.find(name) != uniformLocCache.end())
         //     return uniformLocCache[name];
 
         GL_CALL(int loc = glGetUniformLocation(this->id, name));
 
-        if(loc == -1)
+        if (loc == -1)
             throw std::runtime_error("Uniform not found");
 
         // uniformLocCache[name] = loc;

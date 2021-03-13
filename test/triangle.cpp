@@ -3,13 +3,14 @@
 const char* vertexShader = R"CODE(
     #version 330 core
 
-    uniform int width;
-    uniform int height;
+    layout(location = 0) in vec4 vertexPos;
+    layout(location = 1) in vec3 vertexColor;
 
-    layout(location = 0) in vec4 pos;
+    out vec3 fragmentColor;
 
     void main(){
-        gl_Position = vec4(2.f*pos.x/width, 2.f*pos.y/height, pos.z, pos.w);
+        gl_Position = vertexPos;
+        fragmentColor = vertexColor;
     }
 
 )CODE";
@@ -17,8 +18,10 @@ const char* vertexShader = R"CODE(
 const char* fragmentShader = R"CODE(
     #version 330 core
 
+    in vec3 fragmentColor;
+
     void main(){
-        gl_FragColor = vec4(0.f, 1.f, 0.f, 1.f);
+        gl_FragColor = vec4(fragmentColor, 1.f);
     }
 
 )CODE";
@@ -26,7 +29,7 @@ const char* fragmentShader = R"CODE(
 int main(int argc, const char** argv){
 
     try{
-        hgl::initialize();
+        hgl::initialize(3,0);
     }catch(std::exception& e){
         SDL_Log("cannot initialize: %s", e.what());
         return 1;
@@ -34,41 +37,39 @@ int main(int argc, const char** argv){
 
     try{
 
-        std::array<float, 2*6> vertecies = {
-            -100, -100,
-               0,  100,
-             100, -100,
+        std::array<float, 5*3> vertecies = {
+        //---Positions---||-----Colors-----||
+            -.75, -.75,     1.f, 0.f, 0.f,
+               0,  .75,     0.f, 1.f, 0.f,
+             .75, -.75,     0.f, 0.f, 1.f
         };
 
         SDL_DisplayMode dm;
         if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
             throw std::runtime_error(SDL_GetError());
 
-        hgl::OpenGLWindow win{"Triangle", 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP};
+        hgl::OpenGLWindow win{"Triangle", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
 
         hgl::VertexArray va;
         hgl::Buffer<hgl::VertexBuffer> vb;
         hgl::Shaders shaders;
 
-        auto p = glm::perspective(70.f, static_cast<float>(dm.w)/static_cast<float>(dm.h), 0.001f, 1000.f);
-
-        glm::vec4 v = p*glm::vec4(1.f, 1.f, 0.f, 1.f);
-        SDL_Log("v = < %.5f, %.5f, %.5f >\n", v.x, v.y, v.z);
-
         vb.feedData(vertecies, hgl::UseDynamicDraw);
-        va.readBufferData<float>(vb, std::array<hgl::LayoutElement, 1>({hgl::D2, hgl::Norm_FALSE}));
+        va.readBufferData<float>(
+            vb,
+            std::array<hgl::LayoutElement, 2>{
+                hgl::LayoutElement{hgl::D2, hgl::Norm_FALSE},   // Position
+                hgl::LayoutElement{hgl::D3, hgl::Norm_FALSE}    // Color
+            }
+        );
 
         shaders.compileString(hgl::VertexShader, vertexShader);
         shaders.compileString(hgl::FragmentShader, fragmentShader);
         shaders.link();
         shaders.validate();
+
+        va.bind();
         shaders.bind();
-
-        shaders.setUniform("width", glm::vec<1,int>(dm.w));
-        shaders.setUniform("height", glm::vec<1,int>(dm.h));
-
-        float modData[] = {4.f, 30.f};
-        int modDataCounter = 0;
 
         bool keepRunning = true;
         SDL_Event e;
@@ -77,7 +78,7 @@ int main(int argc, const char** argv){
 
             hgl::clear(hgl::ColorBufferBit);
             
-            va.draw(hgl::DrawTriangles, 0, 6);
+            va.draw(hgl::DrawTriangles, 0, 3);
 
             SDL_GL_SwapWindow(win.get());
             
@@ -100,7 +101,6 @@ int main(int argc, const char** argv){
             }
 
         }
-        
 
     }catch(std::exception& e){
         SDL_Log("Error Occured: %s\n", typeid(e).name());

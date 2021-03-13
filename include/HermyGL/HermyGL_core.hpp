@@ -1,7 +1,7 @@
 #ifndef HGL_CORE__H_
 #define HGL_CORE__H_
 
-#define HGL_DEBUG
+//#define HGL_DEBUG
 
 #include <SDL2/SDL.h>
 #include <stdexcept>

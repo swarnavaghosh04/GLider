@@ -6,7 +6,10 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+    set(
+        CMAKE_BUILD_TYPE "Release" CACHE
+        STRING "Choose the type of build." FORCE
+    )
 endif()
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
