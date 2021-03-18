@@ -1,4 +1,3 @@
-
 # Maintainer: Swarnava Ghosh <swarnavaghosh04@gmail.com>
 _realname=HermyGL
 pkgbase=mingw-w64-${_realname}
