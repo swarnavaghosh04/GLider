@@ -10,7 +10,10 @@ arch=('x86_64' 'i686')
 url="https://github.com/swarnavaghosh04/HermyGL.git"
 license=('MIT')
 depends=("${MINGW_PACKAGE_PREFIX}-SDL2")
-makedepends=("git" "${MINGW_PACKAGE_PREFIX}-make" "${MINGW_PACKAGE_PREFIX}-cmake" "${MINGW_PACKAGE_PREFIX}-glm") # 'bzr', 'git', 'mercurial' or 'subversion'
+makedepends=(
+	"git" "${MINGW_PACKAGE_PREFIX}-make"
+	"${MINGW_PACKAGE_PREFIX}-cmake"
+	"${MINGW_PACKAGE_PREFIX}-glm")
 provides=("${pkgname}")
 conflicts=("${pkgname}")
 source=("git+${url}")
