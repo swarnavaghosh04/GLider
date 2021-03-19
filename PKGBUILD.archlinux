@@ -1,0 +1,40 @@
+# Maintainer: Swarnava Ghosh <swarnavaghosh04@gmail.com>
+
+# For Archlinux Based Linux Distributions (pacman)
+
+# Manual installation:
+# 1. make an empty directory
+# 2. copy this file into that directory and remove the ".archlinux" extension
+# 3. run command: makepkg -si
+# 4. once installation is done, delete this directory.
+
+_realname=HermyGL
+pkgname=${_realname}-git
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="OpenGL Class Abstraction"
+arch=('x86_64')
+url="https://github.com/swarnavaghosh04/HermyGL"
+license=('MIT')
+depends=("sdl2" "glm")
+makedepends=("git" "cmake")
+provides=("${pkgname}")
+conflicts=("${pkgname}")
+source=("git+${url}.git")
+md5sums=('SKIP')
+
+prepare() {
+	cd "${srcdir}/${_realname}"
+}
+
+build() {
+	cd "${srcdir}/${_realname}"
+	mkdir build && cd build
+	cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+	make
+}
+
+package() {
+	cd "${srcdir}/${_realname}/build"
+	DESTDIR=${pkgdir} make install
+}
