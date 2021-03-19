@@ -77,6 +77,9 @@ install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HermyGL
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+install(
+    FILES LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/HermyGL
+)
 
 # install dependency libraries
 
