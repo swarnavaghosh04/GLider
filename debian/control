@@ -1,0 +1,6 @@
+Package: HermyGL
+Version: 0.1.0
+Description: OpenGL Class Abstraction
+Priority: optional
+Architecture: all
+Depends: libsdl2-dev;libglm-dev
