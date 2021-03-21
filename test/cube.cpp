@@ -471,8 +471,6 @@ int main(int argc, const char* argv[]){
 
             cube.theta.actual += (cube.theta.desired - cube.theta.actual)/fps();
 
-            
-
             if(
                 float timePassed = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::steady_clock::now() - fps_print
@@ -483,7 +481,6 @@ int main(int argc, const char* argv[]){
                     "fps: %5.0f\r",
                     fps()
                 );
-                std::fflush(stdout);
                 fps_print = std::chrono::steady_clock::now();
             }
             
