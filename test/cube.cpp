@@ -350,8 +350,9 @@ int main(int argc, const char* argv[]){
 
         bool keepRunning = true;
         SDL_Event event;
-        
+
         hgl::FrameRate fps;
+        auto fps_print = std::chrono::steady_clock::now();
 
         /* Loop until the user closes the window */
         while (keepRunning)
@@ -469,11 +470,22 @@ int main(int argc, const char* argv[]){
 
             cube.theta.actual += (cube.theta.desired - cube.theta.actual)/fps();
 
-            printf(
-                "fps: %5.0f\n"
-                "\033[1A",
-                fps()
-            );
+            
+
+            if(
+                float timePassed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now() - fps_print
+                ).count();
+                timePassed >= 500
+            ){
+                printf(
+                    "fps: %5.0f\n",
+                    // "\033[1A",
+                    fps()
+                );
+                fps_print = std::chrono::steady_clock::now();
+            }
+            
             
         } // while(keepRunning)
 
