@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <array>
+#include <cstdio>
 
 // Rotations Characteristics ==================================================
 
@@ -478,11 +479,11 @@ int main(int argc, const char* argv[]){
                 ).count();
                 timePassed >= 500
             ){
-                printf(
-                    "fps: %5.0f\n",
-                    // "\033[1A",
+                std::printf(
+                    "fps: %5.0f\r",
                     fps()
                 );
+                std::fflush(stdout);
                 fps_print = std::chrono::steady_clock::now();
             }
             
