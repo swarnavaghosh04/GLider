@@ -1,6 +1,6 @@
-## Installation Procedure ##
+# Installation Procedure #
 
-# Manual Installation on Linux #
+## Manual Installation on Linux ##
 
     git clone "https://github.com/swarnavaghosh04/HermyGL.git" ~/HermyGLTemp
     cd ~/HermyGLTemp
