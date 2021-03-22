@@ -1,11 +1,12 @@
-# Installation Procedure #
+## Installation Procedure ##
 
-Manual Installation:
+# Manual Installation on Linux #
 
+    git clone "https://github.com/swarnavaghosh04/HermyGL.git" ~/HermyGLTemp
+    cd ~/HermyGLTemp
     mkdir build && cd build
-    cmake .. -DCMAKE_INSTALL_PREFIX="HermyGL"
-    DESTDIR="$HOME" make install
-
-Note:
-The final product is installed in `DESTDIR/CMAKE_INSTALL_PREFIX/`.
-Therefore, the library will be located at `DESTDIR/CMAKE_INSTALL_PREFIX/lib/libHermyGL.a`.
+    cmake .. [-G "<generator>"]
+    cmake --build .
+    cmake --install . --prefix "/usr" [or --prefix "$HOME/HermyGL"]
+    cd ~
+    rm -rf HermyGLTemp
