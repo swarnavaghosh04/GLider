@@ -9,6 +9,8 @@
 // Number of Key hits for a 360 Degree rotation about an axis (multiple of 8)
 #define KEYHITS_PER_ROTATION 40
 
+// This is a test
+
 static_assert(
     KEYHITS_PER_ROTATION % 8 == 0,
     "Key hits per rotation should be a multiple of 8"
