@@ -13,12 +13,17 @@
 (you can change `mingw64` to `mingw32`, or ommit it all together for dual installation)
 3. Remove this directory after successful installation
 
-### For Debian Based Linux ###
+### For Debian Based Linux ### (NOT TESTED YET)
 
 1. Follow the manual installation procdure with `--prefix "$HOME/GLider/usr"`
 2. Before deleting GLiderTemp, copy the debian folder int `$HOME/GLider`
 3. rename debian forlder to DEBIAN (all caps)
-4. Run the following command in 
+4. Run the following command in `$HOME`:
+
+    dpkg-deb --build GLider
+    rm -rf GLider
+
+5. Install GLider from the generated .deb file
 
 ### Manual Installation ###
 
