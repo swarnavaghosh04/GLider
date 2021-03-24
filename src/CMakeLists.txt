@@ -28,7 +28,7 @@ target_sources(
 
 target_link_libraries(HermyGL PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2 glm)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     target_compile_definitions(HermyGL PUBLIC HGL_DEBUG)
 endif()
 
