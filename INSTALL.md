@@ -15,9 +15,9 @@
 
 ### For Debian Based Linux ###
 
-1. Follow the manual installation procdure with --prefix "$HOME/GLider/usr"
-2. Before deleting GLiderTemp, copy the debian folder int $HOME/GLider.
-3. rename debian forlder to DEBIAN (all caps).
+1. Follow the manual installation procdure with `--prefix "$HOME/GLider/usr"`
+2. Before deleting GLiderTemp, copy the debian folder int `$HOME/GLider`
+3. rename debian forlder to DEBIAN (all caps)
 4. Run the following command in 
 
 ### Manual Installation ###
