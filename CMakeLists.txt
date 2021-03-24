@@ -12,7 +12,8 @@ if(NOT CMAKE_BUILD_TYPE)
     )
 endif()
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+set(CMAKE_CXX_FLAGS_RELEASE "$<IF:$<CXX_COMPILER_ID:MSVC>,/02,-03>")
 
 include(GNUInstallDirs)
 
