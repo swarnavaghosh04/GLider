@@ -20,8 +20,10 @@
 3. rename debian forlder to DEBIAN (all caps)
 4. Run the following command in `$HOME`:
 
+    ```
     dpkg-deb --build GLider
     rm -rf GLider
+    ```
 
 5. Install GLider from the generated .deb file
 
