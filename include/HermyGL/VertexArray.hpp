@@ -40,6 +40,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/VertexArray.inl"
+#include "HermyGL/impl/VertexArray.inl"
 
 #endif

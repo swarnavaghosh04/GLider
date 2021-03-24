@@ -148,6 +148,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/OpenGLBase.inl"
+#include "HermyGL/impl/OpenGLBase.inl"
 
 #endif

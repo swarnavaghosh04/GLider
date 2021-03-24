@@ -91,6 +91,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/Buffer.inl"
+#include "HermyGL/impl/Buffer.inl"
 
 #endif

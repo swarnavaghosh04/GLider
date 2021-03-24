@@ -49,6 +49,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/Shaders.inl"
+#include "HermyGL/impl/Shaders.inl"
 
 #endif
