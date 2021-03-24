@@ -24,7 +24,7 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /**
  * @file GLider.hpp
- * @brief Main include file for GLider
+ * @brief Main header file for GLider which includes all other header files
 */
 
 #ifndef GLIDER__H_
@@ -50,9 +50,25 @@ namespace gli{
      * 
      * This should be called before using any funtions from
      * GLider. It initlializes all the subsystems for SDL2
-     * and sets important attributes
+     * and sets important attributes.
+     * 
+     * @note When `HGL_DEBUG` is defined, this function
+     * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
+     * to `SDL_LOG_PRIORITY_DEBUG`.
+     * 
+     * @param major is the major version for OpenGL to be initialized. should be greater than 3.
+     * @param minor is the minor version for OpenGL to be initialized. defaults to 0.
+     * 
+     * @throws std::invalid_argument invalid OpenGL version.
+     * @throws std::runtime_error SDL2 could not be initialized or GL attributes could not be set.
     */
     void initialize(int major=3, int minor=0);
+
+    /**
+     * @brief Quits SDL2
+     * 
+     * Should be called after @ref initialize has been called.
+    */
     void quit() noexcept;
 
 }

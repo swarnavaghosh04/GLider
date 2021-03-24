@@ -9,20 +9,20 @@
 namespace gli{
 
     enum ShaderType : unsigned int{
-        #if GL_VERSION_2_0
+        // #if GL_VERSION_2_0
         VertexShader            = GL_VERTEX_SHADER,
         FragmentShader          = GL_FRAGMENT_SHADER,
-        #endif
-        #if GL_VERSION_3_0
+        // #endif
+        // #if GL_VERSION_3_0
         GeometryShader          = GL_GEOMETRY_SHADER,
-        #endif
-        #if GL_VERSION_4_0
+        // #endif
+        // #if GL_VERSION_4_0
         TessControlShader       = GL_TESS_CONTROL_SHADER,
         TessEvaluationShader    = GL_TESS_EVALUATION_SHADER,
-        #endif
-        #if GL_VERSION_4_3
+        // #endif
+        // #if GL_VERSION_4_3
         ComputeShader           = GL_COMPUTE_SHADER,
-        #endif
+        // #endif
     };
 
     class Shaders : public OpenGLBase<Shaders>{

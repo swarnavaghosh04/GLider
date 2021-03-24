@@ -11,14 +11,14 @@ void gli::initialize(int major, int minor){
     switch(major){
     case 3:
         if(minor < 0 || minor > 3)
-            throw std::runtime_error("Unrecognized OpenGL Version");
+            throw std::invalid_argument("Invalid minor version for OpenGL 3.x inputted for initialization");
         break;
     case 4:
         if(minor < 0 || minor > 6)
-            throw std::runtime_error("Unrecognized OpenGL Version");
+            throw std::invalid_argument("Invalid minor version for OpenGL 4.x inputted for initialization");
         break;
     default:
-        throw std::runtime_error("Provided major version should be either 3 or 4");
+        throw std::invalid_argument("OpenGL major version inputted for initialization should be either 3 or 4");
     }
 
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
