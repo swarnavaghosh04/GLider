@@ -23,25 +23,25 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /**
- * @file HermyGL.hpp
- * @brief Main include file for HermyGL
+ * @file GLider.hpp
+ * @brief Main include file for GLider
 */
 
-#ifndef HERMYGL__H_
-#define HERMYGL__H_
+#ifndef GLIDER__H_
+#define GLIDER__H_
 
 #ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #endif
 
-#include "HermyGL/HermyGL_core.hpp"
-#include "HermyGL/Window.hpp"
-#include "HermyGL/VertexArray.hpp"
-#include "HermyGL/Buffer.hpp"
-#include "HermyGL/Shaders.hpp"
-#include "HermyGL/FrameRate.hpp"
+#include "GLider/GLider_core.hpp"
+#include "GLider/Window.hpp"
+#include "GLider/VertexArray.hpp"
+#include "GLider/Buffer.hpp"
+#include "GLider/Shaders.hpp"
+#include "GLider/FrameRate.hpp"
 
-namespace hgl{
+namespace gli{
 
     typedef gladGLversionStruct OpenGLVersion;
 
@@ -49,7 +49,7 @@ namespace hgl{
      * @brief Initializes all subsystems for SDL2
      * 
      * This should be called before using any funtions from
-     * HermyGL. It initlializes all the subsystems for SDL2
+     * GLider. It initlializes all the subsystems for SDL2
      * and sets important attributes
     */
     void initialize(int major=3, int minor=0);

@@ -1,10 +1,10 @@
-#ifndef HGL_WINDOW__H_
-#define HGL_WINDOW__H_
+#ifndef GLI_WINDOW__H_
+#define GLI_WINDOW__H_
 
-#include "HermyGL/HermyGL_core.hpp"
-#include "HermyGL/OpenGLBase.hpp"
+#include "GLider/GLider_core.hpp"
+#include "GLider/OpenGLBase.hpp"
 
-namespace hgl{
+namespace gli{
 
     class Window{
     protected:

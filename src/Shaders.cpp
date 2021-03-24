@@ -1,6 +1,6 @@
-#include "HermyGL/Shaders.hpp"
+#include "GLider/Shaders.hpp"
 
-namespace hgl
+namespace gli
 {
 
     Shaders::Shaders() noexcept

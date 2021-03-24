@@ -1,6 +1,6 @@
-#include "HermyGL/FrameRate.hpp"
+#include "GLider/FrameRate.hpp"
 
-namespace hgl
+namespace gli
 {
 
     void FrameRate::compute()

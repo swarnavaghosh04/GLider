@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(HermyGL LANGUAGES C CXX VERSION 0.1.0)
+project(GLider LANGUAGES C CXX VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -23,12 +23,12 @@ endif()
 
 # Set where dependency libraries are going to be built
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/HermyGL)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/HermyGL)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/GLider)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/GLider)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_BINDIR})
 
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/HermyGL)
-set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/HermyGL)
+set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/GLider)
+set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR}/GLider)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR})
 
 # build dependency libraries
@@ -53,79 +53,79 @@ endif()
 # install library and test for library
 
 install(
-    TARGETS HermyGL
-    EXPORT HermyGLTargets
+    TARGETS GLider
+    EXPORT GLiderTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        COMPONENT HermyGL_Runtime
+        COMPONENT GLider_Runtime
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT HermyGL_Development
+        COMPONENT GLider_Development
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT HermyGL_Development
+        COMPONENT GLider_Development
 )
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     install(
         TARGETS cube triangle
-        EXPORT HermyGLTargets
+        EXPORT GLiderTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-            COMPONENT HermyGL_Runtime
+            COMPONENT GLider_Runtime
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT HermyGL_Development
+            COMPONENT GLider_Development
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT HermyGL_Development
+            COMPONENT GLider_Development
     )
 endif()
 install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HermyGL
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/GLider
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(
-    FILES LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/HermyGL
+    FILES LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/GLider
 )
 
 # install dependency libraries
 
 install(
     TARGETS glad
-    EXPORT HermyGLTargets
+    EXPORT GLiderTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        COMPONENT HermyGL_Runtime
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/HermyGL
-        COMPONENT HermyGL_Development
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/HermyGL
-        COMPONENT HermyGL_Development
+        COMPONENT GLider_Runtime
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+        COMPONENT GLider_Development
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+        COMPONENT GLider_Development
 )
 install(
-    EXPORT HermyGLTargets
-    FILE HermyGLTargets.cmake
-    NAMESPACE HermyGL::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/HermyGL
+    EXPORT GLiderTargets
+    FILE GLiderTargets.cmake
+    NAMESPACE GLider::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GLider
 )
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/HermyGLConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/HermyGLConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/HermyGL
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GLiderConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/GLiderConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GLider
 )
 
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/HermyGLConfigVersion.cmake
-    VERSION ${HermyGL_VERSION}
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/GLiderConfigVersion.cmake
+    VERSION ${GLider_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
 install(
     FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/cmake/HermyGLConfig.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/cmake/HermyGLConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/HermyGL
+        ${CMAKE_CURRENT_BINARY_DIR}/cmake/GLiderConfig.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/cmake/GLiderConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GLider
 )
 
 export(
-    EXPORT HermyGLTargets
-    FILE ${CMAKE_CURRENT_BINARY_DIR}/cmake/HermyGLTargets.cmake
-    NAMESPACE HermyGL::
+    EXPORT GLiderTargets
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/cmake/GLiderTargets.cmake
+    NAMESPACE GLider::
 )
 
 # uninstall target

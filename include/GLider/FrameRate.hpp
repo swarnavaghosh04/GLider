@@ -1,9 +1,9 @@
-#ifndef HGL_FRAME_RATE__H_
-#define HGL_FRAME_RATE__H_
+#ifndef GLI_FRAME_RATE__H_
+#define GLI_FRAME_RATE__H_
 
 #include <chrono>
 
-namespace hgl{
+namespace gli{
     class FrameRate{
     private:
         typedef std::chrono::steady_clock Clock;

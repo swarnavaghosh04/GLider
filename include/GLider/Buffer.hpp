@@ -1,11 +1,11 @@
-#ifndef HGL_BUFFER__H_
-#define HGL_BUFFER__H_
+#ifndef GLI_BUFFER__H_
+#define GLI_BUFFER__H_
 
 #include <vector>
 #include <array>
-#include "HermyGL/OpenGLBase.hpp"
+#include "GLider/OpenGLBase.hpp"
 
-namespace hgl{
+namespace gli{
 
     enum BufferTarget : unsigned int{
         VertexBuffer            = GL_ARRAY_BUFFER,
@@ -91,6 +91,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/impl/Buffer.inl"
+#include "GLider/impl/Buffer.inl"
 
 #endif

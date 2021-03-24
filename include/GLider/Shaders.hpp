@@ -1,12 +1,12 @@
-#ifndef HGL_SHADERS__H_
-#define HGL_SHADERS__H_
+#ifndef GLI_SHADERS__H_
+#define GLI_SHADERS__H_
 
 #include <fstream>
 #include <unordered_map>
 #include <cstdarg>
-#include "HermyGL/OpenGLBase.hpp"
+#include "GLider/OpenGLBase.hpp"
 
-namespace hgl{
+namespace gli{
 
     enum ShaderType : unsigned int{
         #if GL_VERSION_2_0
@@ -49,6 +49,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/impl/Shaders.inl"
+#include "GLider/impl/Shaders.inl"
 
 #endif

@@ -1,6 +1,6 @@
-#include "HermyGL/Window.hpp"
+#include "GLider/Window.hpp"
 
-namespace hgl{
+namespace gli{
 
     Window::Window(const char* title, int width, int height, unsigned int windowFlags):
         window(
@@ -14,24 +14,24 @@ namespace hgl{
     {
         if(window == NULL)
             throw std::runtime_error(SDL_GetError());
-        HGL_PRINT_DEBUG("Window Created\n");
+        GLI_PRINT_DEBUG("Window Created\n");
     }
 
     Window::~Window() noexcept {
         SDL_DestroyWindow(window);
-        HGL_PRINT_DEBUG("Window Destroyed\n");
+        GLI_PRINT_DEBUG("Window Destroyed\n");
     }
 
     Window::Window(Window&& other) noexcept:
         window(other.window)
     {
         other.window = nullptr;
-        HGL_PRINT_DEBUG("Window Move Contructed\n");
+        GLI_PRINT_DEBUG("Window Move Contructed\n");
     }
 
     Window& Window::operator=(Window&& other) noexcept{
         std::swap(window, other.window);
-        HGL_PRINT_DEBUG("Window Move Assigned\n");
+        GLI_PRINT_DEBUG("Window Move Assigned\n");
         return *this;
     }
 
@@ -42,24 +42,24 @@ namespace hgl{
     {
         if(renderer == NULL)
             throw std::runtime_error(SDL_GetError());
-        HGL_PRINT_DEBUG("Renderer Created\n");
+        GLI_PRINT_DEBUG("Renderer Created\n");
     }
 
     Renderer::~Renderer() noexcept{
         SDL_DestroyRenderer(renderer);
-        HGL_PRINT_DEBUG("Renderer Destroyed\n");
+        GLI_PRINT_DEBUG("Renderer Destroyed\n");
     }
 
     Renderer::Renderer(Renderer&& other) noexcept:
         renderer(other.renderer)
     {
         other.renderer = nullptr;
-        HGL_PRINT_DEBUG("Renderer Move Contructed\n");
+        GLI_PRINT_DEBUG("Renderer Move Contructed\n");
     }
 
     Renderer& Renderer::operator=(Renderer&& other) noexcept{
         std::swap(renderer, other.renderer);
-        HGL_PRINT_DEBUG("Renderer Move Assigned\n");
+        GLI_PRINT_DEBUG("Renderer Move Assigned\n");
         return *this;
     }
 
@@ -68,24 +68,24 @@ namespace hgl{
     {   
         if(glContext == NULL)
             throw std::runtime_error(SDL_GetError());
-        HGL_PRINT_DEBUG("OpenGLContext Created\n");
+        GLI_PRINT_DEBUG("OpenGLContext Created\n");
     }
 
     OpenGLContext::~OpenGLContext() noexcept{
         SDL_GL_DeleteContext(glContext);
-        HGL_PRINT_DEBUG("OpenGLContext Destroyed\n");
+        GLI_PRINT_DEBUG("OpenGLContext Destroyed\n");
     }
 
     OpenGLContext::OpenGLContext(OpenGLContext&& other) noexcept:
         glContext(other.glContext)
     {
         other.glContext = NULL;
-        HGL_PRINT_DEBUG("OpenGLContext Move Contructed\n");
+        GLI_PRINT_DEBUG("OpenGLContext Move Contructed\n");
     }
 
     OpenGLContext& OpenGLContext::operator=(OpenGLContext&& other) noexcept{
         std::swap(glContext, other.glContext);
-        HGL_PRINT_DEBUG("OpenGLContext Move Assigned\n");
+        GLI_PRINT_DEBUG("OpenGLContext Move Assigned\n");
         return *this;
     }
 

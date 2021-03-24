@@ -1,4 +1,4 @@
-#include "HermyGL/HermyGL.hpp"
+#include "GLider/GLider.hpp"
 
 const char* vertexShader = R"CODE(
     #version 330 core
@@ -29,7 +29,7 @@ const char* fragmentShader = R"CODE(
 int main(int argc, const char** argv){
 
     try{
-        hgl::initialize(3,0);
+        gli::initialize(3,0);
     }catch(std::exception& e){
         SDL_Log("cannot initialize: %s", e.what());
         return 1;
@@ -48,23 +48,23 @@ int main(int argc, const char** argv){
         if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
             throw std::runtime_error(SDL_GetError());
 
-        hgl::OpenGLWindow win{"Triangle", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
+        gli::OpenGLWindow win{"Triangle", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
 
-        hgl::VertexArray va;
-        hgl::Buffer<hgl::VertexBuffer> vb;
-        hgl::Shaders shaders;
+        gli::VertexArray va;
+        gli::Buffer<gli::VertexBuffer> vb;
+        gli::Shaders shaders;
 
-        vb.feedData(vertecies, hgl::UseDynamicDraw);
+        vb.feedData(vertecies, gli::UseDynamicDraw);
         va.readBufferData<float>(
             vb,
-            std::array<hgl::LayoutElement, 2>{
-                hgl::LayoutElement{hgl::D2, hgl::Norm_FALSE},   // Position
-                hgl::LayoutElement{hgl::D3, hgl::Norm_FALSE}    // Color
+            std::array<gli::LayoutElement, 2>{
+                gli::LayoutElement{gli::D2, gli::Norm_FALSE},   // Position
+                gli::LayoutElement{gli::D3, gli::Norm_FALSE}    // Color
             }
         );
 
-        shaders.compileString(hgl::VertexShader, vertexShader);
-        shaders.compileString(hgl::FragmentShader, fragmentShader);
+        shaders.compileString(gli::VertexShader, vertexShader);
+        shaders.compileString(gli::FragmentShader, fragmentShader);
         shaders.link();
         shaders.validate();
 
@@ -76,9 +76,9 @@ int main(int argc, const char** argv){
 
         while(keepRunning){
 
-            hgl::clear(hgl::ColorBufferBit);
+            gli::clear(gli::ColorBufferBit);
             
-            va.draw(hgl::DrawTriangles, 0, 3);
+            va.draw(gli::DrawTriangles, 0, 3);
 
             SDL_GL_SwapWindow(win.get());
             
@@ -107,6 +107,6 @@ int main(int argc, const char** argv){
         SDL_Log(e.what());
     }
 
-    hgl::quit();
+    gli::quit();
 
 }

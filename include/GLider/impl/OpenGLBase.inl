@@ -1,9 +1,9 @@
-#ifndef HGL_OPENGL_BASE__I_
-#define HGL_OPENGL_BASE__I_
+#ifndef GLI_OPENGL_BASE__I_
+#define GLI_OPENGL_BASE__I_
 
-#include "HermyGL/OpenGLBase.hpp"
+#include "GLider/OpenGLBase.hpp"
 
-namespace hgl{
+namespace gli{
 
     inline BufferBit operator|(BufferBit a, BufferBit b){
         return static_cast<BufferBit>(

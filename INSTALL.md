@@ -15,25 +15,25 @@
 
 ### For Debian Based Linux ###
 
-1. Follow the manual installation procdure with --prefix "$HOME/HermyGL/usr"
-2. Before deleting HermyGLTemp, copy the debian folder int $HOME/HermyGL.
+1. Follow the manual installation procdure with --prefix "$HOME/GLider/usr"
+2. Before deleting GLiderTemp, copy the debian folder int $HOME/GLider.
 3. rename debian forlder to DEBIAN (all caps).
 4. Run the following command in 
 
 ### Manual Installation ###
 
-    git clone "https://github.com/swarnavaghosh04/HermyGL.git" ~/HermyGLTemp
-    cd ~/HermyGLTemp
+    git clone "https://github.com/swarnavaghosh04/GLider.git" ~/GLiderTemp
+    cd ~/GLiderTemp
     mkdir build && cd build
     cmake ..   # -G "generator_of_your_choice" (if needed)
     cmake --build .
-    cmake --install . --prefix "$HOME/HermyGL"    # or --prefix "/usr"
+    cmake --install . --prefix "$HOME/GLider"    # or --prefix "/usr"
     cd ~
-    rm -rf HermyGLTemp
+    rm -rf GLiderTemp
 
 To use the home build in susequent cmake builds using this library, add the following lines
 to you CMakeLists.txt:
 
     include(GNUInstallDirs) # if not done already
-    list(APPEND CMAKE_MODULE_PATH $ENV{HOME}/HermyGL/${CMAKE_INSTALL_LIBDIR}/cmake)
-    find_package(HermyGL)
+    list(APPEND CMAKE_MODULE_PATH $ENV{HOME}/GLider/${CMAKE_INSTALL_LIBDIR}/cmake)
+    find_package(GLider)

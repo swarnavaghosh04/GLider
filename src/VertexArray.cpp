@@ -1,6 +1,6 @@
-#include "HermyGL/VertexArray.hpp"
+#include "GLider/VertexArray.hpp"
 
-namespace hgl
+namespace gli
 {
     VertexArray::VertexArray() noexcept
     {

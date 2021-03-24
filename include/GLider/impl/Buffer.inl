@@ -1,9 +1,9 @@
-#ifndef HGL_BUFFER__I_
-#define HGL_BUFFER__I_
+#ifndef GLI_BUFFER__I_
+#define GLI_BUFFER__I_
 
-#include "HermyGL/Buffer.hpp"
+#include "GLider/Buffer.hpp"
 
-namespace hgl{
+namespace gli{
 
     constexpr unsigned int getBufferTargetBinding(BufferTarget target){
         switch(target){

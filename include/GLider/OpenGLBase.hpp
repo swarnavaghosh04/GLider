@@ -1,16 +1,16 @@
-#ifndef HGL_OPENGL_BASE__H_
-#define HGL_OPENGL_BASE__H_
+#ifndef GLI_OPENGL_BASE__H_
+#define GLI_OPENGL_BASE__H_
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "HermyGL/HermyGL_core.hpp"
-#include "HermyGL/GLErrorHandling.hpp"
+#include "GLider/GLider_core.hpp"
+#include "GLider/GLErrorHandling.hpp"
 
 #if GL_VERSION_4_0
     #define INCORPORATE_DOUBLE
 #endif
 
-namespace hgl{
+namespace gli{
 
     /**
      * @brief Converts privitive datatypes to OpenGL definitions
@@ -148,6 +148,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/impl/OpenGLBase.inl"
+#include "GLider/impl/OpenGLBase.inl"
 
 #endif

@@ -1,9 +1,9 @@
-#ifndef HGL_SHADERS__I_
-#define HGL_SHADERS__I_
+#ifndef GLI_SHADERS__I_
+#define GLI_SHADERS__I_
 
-#include "HermyGL/Shaders.hpp"
+#include "GLider/Shaders.hpp"
 
-namespace hgl{
+namespace gli{
 
     inline void Shaders::bind() const noexcept{
         GL_CALL(glUseProgram(this->id));

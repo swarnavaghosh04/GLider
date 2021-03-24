@@ -1,10 +1,10 @@
-#ifndef HGL_VERTEXARRAY__H_
-#define HGL_VERTEXARRAY__H_
+#ifndef GLI_VERTEXARRAY__H_
+#define GLI_VERTEXARRAY__H_
 
-#include "HermyGL/OpenGLBase.hpp"
-#include "HermyGL/Buffer.hpp"
+#include "GLider/OpenGLBase.hpp"
+#include "GLider/Buffer.hpp"
 
-namespace hgl{
+namespace gli{
 
     class VertexArray : public OpenGLBase<VertexArray>{
         friend class OpenGLBase<VertexArray>;
@@ -40,6 +40,6 @@ namespace hgl{
 
 }
 
-#include "HermyGL/impl/VertexArray.inl"
+#include "GLider/impl/VertexArray.inl"
 
 #endif

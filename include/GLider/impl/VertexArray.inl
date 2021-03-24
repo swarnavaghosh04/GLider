@@ -1,9 +1,9 @@
-#ifndef HGL_VERTEXARRAY__I_
-#define HGL_VERTEXARRAY__I_
+#ifndef GLI_VERTEXARRAY__I_
+#define GLI_VERTEXARRAY__I_
 
-#include "HermyGL/VertexArray.hpp"
+#include "GLider/VertexArray.hpp"
 
-namespace hgl{
+namespace gli{
 
     inline void VertexArray::bind() const noexcept{
         GL_CALL(glBindVertexArray(this->id));

@@ -1,10 +1,10 @@
-#include "HermyGL/HermyGL.hpp"
+#include "GLider/GLider.hpp"
 
-void hgl::initialize(int major, int minor){
+void gli::initialize(int major, int minor){
 
     static_assert(GL_VERSION_3_0, "Glad should provide at least OpenGL 3.0");
 
-    #ifdef HGL_DEBUG
+    #ifdef GLI_DEBUG
         SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
     #endif
 
@@ -42,7 +42,7 @@ void hgl::initialize(int major, int minor){
 
 }
 
-void hgl::quit() noexcept{
+void gli::quit() noexcept{
     SDL_Quit();
 }
 

@@ -1,4 +1,4 @@
-#include "HermyGL/HermyGL.hpp"
+#include "GLider/GLider.hpp"
 #include <cmath>
 #include <vector>
 #include <array>
@@ -181,11 +181,11 @@ struct Cube{
     std::array<float,3*8>            vertexBufData;
     std::array<unsigned char, 6*6>   indexBufData;
 
-    hgl::VertexArray                        vertexArray;
-    const std::array<hgl::LayoutElement,1>  verBufLayout;
-    hgl::Buffer<hgl::VertexBuffer>          vertexBuffer;
-    hgl::Buffer<hgl::IndexBuffer>           indexBuffer;
-    hgl::Shaders                            shaders;
+    gli::VertexArray                        vertexArray;
+    const std::array<gli::LayoutElement,1>  verBufLayout;
+    gli::Buffer<gli::VertexBuffer>          vertexBuffer;
+    gli::Buffer<gli::IndexBuffer>           indexBuffer;
+    gli::Shaders                            shaders;
 
     const MotionVar::Bounds translationBounds;
     const MotionVar::Bounds rotationBounds;
@@ -235,7 +235,7 @@ struct Cube{
     }
 
     Cube():
-        verBufLayout{{hgl::D3, hgl::Norm_FALSE}},
+        verBufLayout{{gli::D3, gli::Norm_FALSE}},
         translationBounds{-50.f, 50.f},
         rotationBounds{-KEYHITS_PER_ROTATION/2, KEYHITS_PER_ROTATION/2},
         observerPosition{ 0.f, 0.f, 5.f, translationBounds},
@@ -244,13 +244,13 @@ struct Cube{
         rotationState{ 0.f,  0.f, 0.f, rotationBounds},
         theta{0, {0.f, 2.f*3.14159f}}
     {
-        HGL_PRINT_DEBUG("Cube Init\n");
+        GLI_PRINT_DEBUG("Cube Init\n");
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
-        vertexBuffer.feedData<float>(vertexBufData, hgl::UseStaticDraw);
-        indexBuffer.feedData<unsigned char>(indexBufData, hgl::UseStaticDraw);
+        vertexBuffer.feedData<float>(vertexBufData, gli::UseStaticDraw);
+        indexBuffer.feedData<unsigned char>(indexBufData, gli::UseStaticDraw);
         vertexArray.readBufferData<float>(vertexBuffer, verBufLayout);
-        shaders.compileString(hgl::VertexShader, vertexShader);
-        shaders.compileString(hgl::FragmentShader, fragmentShader);
+        shaders.compileString(gli::VertexShader, vertexShader);
+        shaders.compileString(gli::FragmentShader, fragmentShader);
         shaders.link();
         shaders.validate();
         shaders.bind();
@@ -268,12 +268,12 @@ struct Cube{
 
             shaders.setUniform("u_color", v);
             indexBuffer.draw<unsigned char>(
-                hgl::DrawTriangles,
+                gli::DrawTriangles,
                 6,
                 drawCounter);
             drawCounter += 6;
             indexBuffer.draw<unsigned char>(
-                hgl::DrawTriangles,
+                gli::DrawTriangles,
                 6,
                 drawCounter);
             drawCounter += 6;
@@ -292,12 +292,12 @@ constexpr const char* const Cube::fragmentShader;
 
 void test(){
 
-    #define printSize(x) HGL_PRINT_DEBUG("%-20s: %u\n", #x , sizeof(x))
+    #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u\n", #x , sizeof(x))
 
-    printSize(hgl::Binder<hgl::VertexArray>);
-    printSize(hgl::VertexArray);
-    printSize(hgl::Buffer<hgl::VertexBuffer>);
-    printSize(hgl::Shaders);
+    printSize(gli::Binder<gli::VertexArray>);
+    printSize(gli::VertexArray);
+    printSize(gli::Buffer<gli::VertexBuffer>);
+    printSize(gli::Shaders);
 
     #undef printSize
 
@@ -306,9 +306,9 @@ void test(){
 int main(int argc, const char* argv[]){
 
 
-    try{ hgl::initialize(3,3); }
+    try{ gli::initialize(3,3); }
     catch(std::exception& ex){
-        printf("%s occured! Cannot initialize HermyGL\n", typeid(ex).name());
+        printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
         printf(ex.what());
         return 1;
     }
@@ -325,19 +325,19 @@ int main(int argc, const char* argv[]){
         int q = std::min(dm.h, dm.w) * 3.f/4.f;
         dm.h = dm.w = q;
 
-        hgl::OpenGLWindow window{"Cube", dm.w, dm.h};
+        gli::OpenGLWindow window{"Cube", dm.w, dm.h};
         
-        HGL_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
+        GLI_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
         Cube cube;
 
-        HGL_PRINT_DEBUG("Cube Created\n");
+        GLI_PRINT_DEBUG("Cube Created\n");
 
         {
             int buffers, samples;
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &samples );
-            HGL_PRINT_DEBUG("buf = %d, samples = %d\n", buffers, samples);
+            GLI_PRINT_DEBUG("buf = %d, samples = %d\n", buffers, samples);
         }
 
         // Setup MVP =============================
@@ -353,7 +353,7 @@ int main(int argc, const char* argv[]){
         bool keepRunning = true;
         SDL_Event event;
 
-        hgl::FrameRate fps;
+        gli::FrameRate fps;
         auto fps_print = std::chrono::steady_clock::now();
 
         /* Loop until the user closes the window */
@@ -385,7 +385,7 @@ int main(int argc, const char* argv[]){
             //cube.shaders.setUniform("theta", glm::vec1(cube.theta.actual));
 
             /* Render here */
-            hgl::clear(hgl::ColorBufferBit);
+            gli::clear(gli::ColorBufferBit);
 
             cube.draw();
 
@@ -493,7 +493,7 @@ int main(int argc, const char* argv[]){
         printf(ex.what());
     }
 
-    hgl::quit();
+    gli::quit();
 
     return 0;
 
