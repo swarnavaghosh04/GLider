@@ -244,7 +244,7 @@ struct Cube{
         rotationState{ 0.f,  0.f, 0.f, rotationBounds},
         theta{0, {0.f, 2.f*3.14159f}}
     {
-        SDL_Log("Cube Init\n");
+        HGL_PRINT_DEBUG("Cube Init\n");
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
         vertexBuffer.feedData<float>(vertexBufData, hgl::UseStaticDraw);
         indexBuffer.feedData<unsigned char>(indexBufData, hgl::UseStaticDraw);
@@ -292,7 +292,7 @@ constexpr const char* const Cube::fragmentShader;
 
 void test(){
 
-    #define printSize(x) SDL_Log("%-20s: %u\n", #x , sizeof(x))
+    #define printSize(x) HGL_PRINT_DEBUG("%-20s: %u\n", #x , sizeof(x))
 
     printSize(hgl::Binder<hgl::VertexArray>);
     printSize(hgl::VertexArray);
@@ -305,7 +305,6 @@ void test(){
 
 int main(int argc, const char* argv[]){
 
-    test();
 
     try{ hgl::initialize(3,3); }
     catch(std::exception& ex){
@@ -313,6 +312,8 @@ int main(int argc, const char* argv[]){
         printf(ex.what());
         return 1;
     }
+
+    test();
 
     try{
         
@@ -326,17 +327,17 @@ int main(int argc, const char* argv[]){
 
         hgl::OpenGLWindow window{"Cube", dm.w, dm.h};
         
-        SDL_Log("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
+        HGL_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
         Cube cube;
 
-        SDL_Log("Cube Created\n");
+        HGL_PRINT_DEBUG("Cube Created\n");
 
         {
             int buffers, samples;
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &samples );
-            SDL_Log("buf = %d, samples = %d\n", buffers, samples);
+            HGL_PRINT_DEBUG("buf = %d, samples = %d\n", buffers, samples);
         }
 
         // Setup MVP =============================

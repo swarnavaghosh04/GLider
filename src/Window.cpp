@@ -14,32 +14,24 @@ namespace hgl{
     {
         if(window == NULL)
             throw std::runtime_error(SDL_GetError());
-        #ifdef HGL_DEBUG
-        SDL_Log("Window Created\n");
-        #endif
+        HGL_PRINT_DEBUG("Window Created\n");
     }
 
     Window::~Window() noexcept {
         SDL_DestroyWindow(window);
-        #ifdef HGL_DEBUG
-        SDL_Log("Window Destroyed\n");
-        #endif
+        HGL_PRINT_DEBUG("Window Destroyed\n");
     }
 
     Window::Window(Window&& other) noexcept:
         window(other.window)
     {
         other.window = nullptr;
-        #ifdef HGL_DEBUG
-        SDL_Log("Window Move Contructed\n");
-        #endif
+        HGL_PRINT_DEBUG("Window Move Contructed\n");
     }
 
     Window& Window::operator=(Window&& other) noexcept{
         std::swap(window, other.window);
-        #ifdef HGL_DEBUG
-        SDL_Log("Window Move Assigned\n");
-        #endif
+        HGL_PRINT_DEBUG("Window Move Assigned\n");
         return *this;
     }
 
@@ -50,32 +42,24 @@ namespace hgl{
     {
         if(renderer == NULL)
             throw std::runtime_error(SDL_GetError());
-        #ifdef HGL_DEBUG
-        SDL_Log("Renderer Created\n");
-        #endif
+        HGL_PRINT_DEBUG("Renderer Created\n");
     }
 
     Renderer::~Renderer() noexcept{
         SDL_DestroyRenderer(renderer);
-        #ifdef HGL_DEBUG
-        SDL_Log("Renderer Destroyed\n");
-        #endif
+        HGL_PRINT_DEBUG("Renderer Destroyed\n");
     }
 
     Renderer::Renderer(Renderer&& other) noexcept:
         renderer(other.renderer)
     {
         other.renderer = nullptr;
-        #ifdef HGL_DEBUG
-        SDL_Log("Renderer Move Contructed\n");
-        #endif
+        HGL_PRINT_DEBUG("Renderer Move Contructed\n");
     }
 
     Renderer& Renderer::operator=(Renderer&& other) noexcept{
         std::swap(renderer, other.renderer);
-        #ifdef HGL_DEBUG
-        SDL_Log("Renderer Move Assigned\n");
-        #endif
+        HGL_PRINT_DEBUG("Renderer Move Assigned\n");
         return *this;
     }
 
@@ -84,32 +68,24 @@ namespace hgl{
     {   
         if(glContext == NULL)
             throw std::runtime_error(SDL_GetError());
-        #ifdef HGL_DEBUG
-        SDL_Log("OpenGLContext Created\n");
-        #endif
+        HGL_PRINT_DEBUG("OpenGLContext Created\n");
     }
 
     OpenGLContext::~OpenGLContext() noexcept{
         SDL_GL_DeleteContext(glContext);
-        #ifdef HGL_DEBUG
-        SDL_Log("OpenGLContext Destroyed\n");
-        #endif
+        HGL_PRINT_DEBUG("OpenGLContext Destroyed\n");
     }
 
     OpenGLContext::OpenGLContext(OpenGLContext&& other) noexcept:
         glContext(other.glContext)
     {
         other.glContext = NULL;
-        #ifdef HGL_DEBUG
-        SDL_Log("OpenGLContext Move Contructed\n");
-        #endif
+        HGL_PRINT_DEBUG("OpenGLContext Move Contructed\n");
     }
 
     OpenGLContext& OpenGLContext::operator=(OpenGLContext&& other) noexcept{
         std::swap(glContext, other.glContext);
-        #ifdef HGL_DEBUG
-        SDL_Log("OpenGLContext Move Assigned\n");
-        #endif
+        HGL_PRINT_DEBUG("OpenGLContext Move Assigned\n");
         return *this;
     }
 

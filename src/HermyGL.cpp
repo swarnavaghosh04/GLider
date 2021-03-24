@@ -4,6 +4,10 @@ void hgl::initialize(int major, int minor){
 
     static_assert(GL_VERSION_3_0, "Glad should provide at least OpenGL 3.0");
 
+    #ifdef HGL_DEBUG
+        SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+    #endif
+
     switch(major){
     case 3:
         if(minor < 0 || minor > 3)
