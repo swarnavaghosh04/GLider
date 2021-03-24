@@ -1,5 +1,6 @@
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 add_library(HermyGL STATIC)
 
@@ -25,7 +26,7 @@ target_sources(
     $<TARGET_OBJECTS:glad>
 )
 
-target_link_libraries(HermyGL PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2)
+target_link_libraries(HermyGL PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2 glm)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(HermyGL PUBLIC HGL_DEBUG)

@@ -6,6 +6,6 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
 #include "glad/glad.h"
-#include "HermyGL/HermyGL_export.h"
+// #include "HermyGL/HermyGL_export.h"
 
 #endif
