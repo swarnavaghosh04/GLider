@@ -63,8 +63,8 @@ int main(int argc, const char** argv){
             }
         );
 
-        shaders.compileString(gli::VertexShader, vertexShader);
-        shaders.compileString(gli::FragmentShader, fragmentShader);
+        shaders.compileString(gli::VertexShader, vertexShader);     // shaders.compileFile() can also be used if you
+        shaders.compileString(gli::FragmentShader, fragmentShader); // wrote your shader source in a separate file
         shaders.link();
         shaders.validate();
 
@@ -80,7 +80,8 @@ int main(int argc, const char** argv){
             
             va.draw(gli::DrawTriangles, 0, 3);
 
-            SDL_GL_SwapWindow(win.get());
+            // SDL_GL_SwapWindow(win.get());
+            win.swap();
             
             while(SDL_PollEvent(&e)){
 

@@ -58,6 +58,7 @@ namespace gli{
             int width, int height,
             unsigned int windowFlags = 0,
             unsigned int rendererFlags = 0);
+        void swap() noexcept;
     };
     
 }

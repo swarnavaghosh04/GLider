@@ -392,7 +392,7 @@ int main(int argc, const char* argv[]){
             cube.draw();
 
             /* Swap front and back buffers */
-            SDL_GL_SwapWindow(window.get());
+            window.swap();
 
             /* Poll for and process events */
             while(SDL_PollEvent(&event)){

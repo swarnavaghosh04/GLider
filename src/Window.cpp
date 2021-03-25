@@ -106,4 +106,8 @@ namespace gli{
         enable(DepthTest);
     }
 
+    void OpenGLWindow::swap() noexcept{
+        SDL_GL_SwapWindow(this->window);
+    }
+
 }
