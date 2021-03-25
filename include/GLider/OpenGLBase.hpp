@@ -6,14 +6,14 @@
 #include "GLider/GLider_core.hpp"
 #include "GLider/GLErrorHandling.hpp"
 
-#if GL_VERSION_4_0
-    #define INCORPORATE_DOUBLE
-#endif
+// #if GL_VERSION_4_0
+//     #define INCORPORATE_DOUBLE
+// #endif
 
 namespace gli{
 
     /**
-     * @brief Converts privitive datatypes to OpenGL definitions
+     * @brief Converts primitive datatypes to OpenGL definitions
      * 
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
@@ -29,9 +29,9 @@ namespace gli{
             std::is_same<T, int>()              ? GL_INT :
             std::is_same<T, unsigned int>()     ? GL_UNSIGNED_INT :
             std::is_same<T, float>()            ? GL_FLOAT :
-            #ifdef INCORPORATE_DOUBLE
+            // #ifdef INCORPORATE_DOUBLE
             std::is_same<T, double>()           ? GL_DOUBLE :
-            #endif
+            // #endif
             throw std::logic_error("Invalid data type")
         );
     }
@@ -42,7 +42,7 @@ namespace gli{
     };
 
     enum DrawType : unsigned int{
-        #if GL_VERSION_2_0
+        // #if GL_VERSION_2_0
         DrawPoints          = GL_POINTS,
         DrawLineStrip       = GL_LINE_STRIP,
         DrawLineLoop        = GL_LINE_LOOP,
@@ -50,22 +50,21 @@ namespace gli{
         DrawTriangleStrip   = GL_TRIANGLE_STRIP,
         DrawTriangleFan     = GL_TRIANGLE_FAN,
         DrawTriangles       = GL_TRIANGLES,
-        #if !GL_VERSION_3_0
+        // #if !GL_VERSION_3_0
         DrawQuadStrip       = GL_QUAD_STRIP,
         DrawQuads           = GL_QUADS,
         DrawPolygon         = GL_POLYGON,
-        #endif
-        #endif
-        #if GL_VERSION_3_2
+        // #endif
+        // #endif
+        // #if GL_VERSION_3_2
         DrawLineStripAdjacency      = GL_LINE_STRIP_ADJACENCY,
         DrawLinesAdjacency          = GL_LINES_ADJACENCY,
         DrawTriangleStripAdjacency  = GL_TRIANGLE_STRIP_ADJACENCY,
         DrawTrianglesAdjacency      = GL_TRIANGLES_ADJACENCY,
-        #endif
-        #if GL_VERSION_4_0
+        // #endif
+        // #if GL_VERSION_4_0
         DrawPatches                 = GL_PATCHES,
-        #endif
-
+        // #endif
     };
 
     enum BufferBit : unsigned int{

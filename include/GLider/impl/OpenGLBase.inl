@@ -57,7 +57,7 @@ namespace gli{
     }
 
     inline void clear(BufferBit mask) noexcept{
-        GL_CALL(glClear(mask | BufferBit::DepthBufferBit));
+        GL_CALL(glClear(mask));
     }
 
     inline void enable(Capability_NI cap) noexcept{

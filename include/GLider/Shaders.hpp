@@ -28,7 +28,7 @@ namespace gli{
     class Shaders : public OpenGLBase<Shaders>{
     private:
         friend class OpenGLBase<Shaders>;
-        //std::unordered_map<const char*, unsigned int> uniformLocCache;
+        // std::unordered_map<const char*, unsigned int> uniformLocCache;
     public:
         Shaders() noexcept;
         ~Shaders() noexcept;

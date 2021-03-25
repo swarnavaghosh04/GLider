@@ -387,7 +387,7 @@ int main(int argc, const char* argv[]){
             //cube.shaders.setUniform("theta", glm::vec1(cube.theta.actual));
 
             /* Render here */
-            gli::clear(gli::ColorBufferBit);
+            gli::clear(gli::ColorBufferBit | gli::DepthBufferBit);
 
             cube.draw();
 

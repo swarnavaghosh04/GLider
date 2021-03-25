@@ -14,24 +14,24 @@ namespace gli{
         PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER,
         CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
         TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-        #if GL_VERSION_3_1
+        // #if GL_VERSION_3_1
         CopyReadBuffer          = GL_COPY_READ_BUFFER,
         TextureBuffer           = GL_TEXTURE_BUFFER,
         UniformBuffer           = GL_UNIFORM_BUFFER,
-        #endif
-        #ifdef GL_VERSION_4_0
+        // #endif
+        // #ifdef GL_VERSION_4_0
         DrawIndirectBuffer      = GL_DRAW_INDIRECT_BUFFER,
-        #endif
-        #if GL_VERSION_4_2
+        // #endif
+        // #if GL_VERSION_4_2
         AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
-        #endif
-        #if GL_VERSION_4_3
+        // #endif
+        // #if GL_VERSION_4_3
         DispatchIndirectBuffer  = GL_DISPATCH_INDIRECT_BUFFER,
         ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
-        #endif
-        #if GL_VERSION_4_4
+        // #endif
+        // #if GL_VERSION_4_4
         QueryBuffer             = GL_QUERY_BUFFER,
-        #endif
+        // #endif
     };
 
     constexpr unsigned int getBufferTargetBinding(BufferTarget target);

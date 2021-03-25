@@ -76,7 +76,7 @@ int main(int argc, const char** argv){
 
         while(keepRunning){
 
-            gli::clear(gli::ColorBufferBit);
+            gli::clear(gli::ColorBufferBit | gli::DepthBufferBit);
             
             va.draw(gli::DrawTriangles, 0, 3);
 

@@ -2,7 +2,7 @@
 
 void gli::initialize(int major, int minor){
 
-    static_assert(GL_VERSION_3_0, "Glad should provide at least OpenGL 3.0");
+    // static_assert(GL_VERSION_3_0, "Glad should provide at least OpenGL 3.0");
 
     #ifdef GLI_DEBUG
         SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
