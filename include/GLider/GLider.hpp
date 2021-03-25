@@ -23,6 +23,19 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /**
+ * @mainpage GLider - OpenGL C++ Class Abstraction
+ * 
+ * @section intro_sec Introduction
+ * 
+ * As from the title, it is clear that this is an OpenGL
+ * class abstraction library. It uses
+ * <a href="https://www.libsdl.org/index.php">SDL2</a> for
+ * window management, and
+ * <a href="https://github.com/g-truc/glm">GLM</a> for
+ * the required mathematics.
+*/
+
+/**
  * @file GLider.hpp
  * @brief Main header file for GLider which includes all other header files
 */
