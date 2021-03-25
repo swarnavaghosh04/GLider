@@ -30,9 +30,11 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * As from the title, it is clear that this is an OpenGL
  * class abstraction library. It uses
  * <a href="https://www.libsdl.org/index.php">SDL2</a> for
- * window management, and
+ * window management, 
  * <a href="https://github.com/g-truc/glm">GLM</a> for
- * the required mathematics.
+ * the required mathematics, and
+ * <a href="https://glad.dav1d.de/">GLAD</a> for loading
+ * the OpenGL function pointers.
 */
 
 /**
