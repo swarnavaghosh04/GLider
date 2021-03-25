@@ -26,14 +26,17 @@ target_sources(
     $<TARGET_OBJECTS:glad>
 )
 
-target_link_libraries(GLider PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2 glm)
+target_link_libraries(GLider PUBLIC glad ${OPENGL_LIBRARIES} SDL2::SDL2)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     target_compile_definitions(GLider PUBLIC GLI_DEBUG)
 endif()
 
+get_target_property(glm_incl glm INTERFACE_INCLUDE_DIRECTORIES)
+
 target_include_directories(
     GLider PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+        ${glm_incl}
 )
