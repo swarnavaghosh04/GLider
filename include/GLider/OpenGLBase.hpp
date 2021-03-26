@@ -92,17 +92,17 @@ namespace gli{
         SampleCoverage = GL_SAMPLE_COVERAGE,
         StencilTest = GL_STENCIL_TEST,
         ProgramPointSize = GL_PROGRAM_POINT_SIZE,
-        #if GL_VERSION_3_1
+        // #if GL_VERSION_3_1
         PrimitiveRestart = GL_PRIMITIVE_RESTART,
-        #endif
-        #if GL_VERSION_3_2
+        // #endif
+        // #if GL_VERSION_3_2
         TextureCubeMapSeamless = GL_TEXTURE_CUBE_MAP_SEAMLESS,
-        #endif
-        #if GL_VERSION_4_3
+        // #endif
+        // #if GL_VERSION_4_3
         PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX,
         DebugOutput = GL_DEBUG_OUTPUT,
         DebugOutputSynchronous = GL_DEBUG_OUTPUT_SYNCHRONOUS,
-        #endif
+        // #endif
     };
 
     enum Capability_I : unsigned int{

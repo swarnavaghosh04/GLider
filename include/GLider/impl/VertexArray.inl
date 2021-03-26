@@ -5,6 +5,21 @@
 
 namespace gli{
 
+    inline VertexArray::VertexArray() noexcept
+    {
+        GL_CALL(glGenVertexArrays(1, &(this->id)));
+    }
+
+    inline VertexArray::~VertexArray() noexcept
+    {
+        GL_CALL(glDeleteVertexArrays(1, &(this->id)));
+    }
+
+    inline void VertexArray::draw(DrawType mode, int first, int count) const noexcept
+    {
+        GL_CALL(glDrawArrays(static_cast<unsigned int>(mode), first, count));
+    }
+
     inline void VertexArray::bind() const noexcept{
         GL_CALL(glBindVertexArray(this->id));
     }
@@ -24,7 +39,7 @@ namespace gli{
     }
 
     template<typename T>
-    inline void VertexArray::readBufferData(
+    void VertexArray::readBufferData(
         const Buffer<VertexBuffer>& vb,
         const LayoutElement*        layout,
         unsigned int                layoutCount,
