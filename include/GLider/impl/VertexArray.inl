@@ -50,7 +50,7 @@ namespace gli{
         Binder b2(vb);
 
         int stride = 0;
-        for(int i = 0; i < layoutCount; i++)
+        for(unsigned int i = 0; i < layoutCount; i++)
             stride += (int)(layout[i].dimension);
         stride *= sizeof(T);
 

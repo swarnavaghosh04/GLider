@@ -67,22 +67,22 @@ struct MotionVar{
 
 struct MotionVector3D{
 
-    MotionVar x,y,z;
+    MotionVar x, y, z;
     const MotionVar::Bounds& pBounds;
     float rotFactor = 0;
 
     MotionVector3D(float x, float y, float z, const MotionVar::Bounds& pBounds = {0,0}):
-        pBounds{pBounds},
         x{x, pBounds},
         y{y, pBounds},
-        z{z, pBounds}
+        z{z, pBounds},
+        pBounds{pBounds}
     {}
 
     MotionVector3D(glm::vec3 v, const MotionVar::Bounds& pBounds = {0,0}):
-        pBounds{pBounds},
         x{v.x, pBounds},
         y{v.y, pBounds},
-        z{v.z, pBounds}
+        z{v.z, pBounds},
+        pBounds{pBounds}
     {}
 
     glm::vec3 getCurrent() const {return glm::vec3(x.actual, y.actual, z.actual);}
@@ -294,7 +294,7 @@ constexpr const char* const Cube::fragmentShader;
 
 void test(){
 
-    #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u\n", #x , sizeof(x))
+    #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u \n", #x , (unsigned int)sizeof(x))
 
     printSize(gli::Binder<gli::VertexArray>);
     printSize(gli::VertexArray);
@@ -305,7 +305,7 @@ void test(){
 
 }
 
-int main(int argc, const char* argv[]){
+int main(){
 
 
     try{ gli::initialize(3,3); }
@@ -343,8 +343,6 @@ int main(int argc, const char* argv[]){
         }
 
         // Setup MVP =============================
-
-        float aspect_ratio = (float)dm.w/(float)dm.h;
 
         glm::mat4 mvp, projection = 
             glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);

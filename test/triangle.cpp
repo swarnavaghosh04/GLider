@@ -26,7 +26,7 @@ const char* fragmentShader = R"CODE(
 
 )CODE";
 
-int main(int argc, const char** argv){
+int main(){
 
     try{
         gli::initialize(3,0);
