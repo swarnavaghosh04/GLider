@@ -105,7 +105,7 @@ int main(){
 
     }catch(std::exception& e){
         SDL_Log("Error Occured: %s\n", typeid(e).name());
-        SDL_Log(e.what());
+        SDL_Log("%s", e.what());
     }
 
     gli::quit();

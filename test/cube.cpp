@@ -237,7 +237,7 @@ struct Cube{
     }
 
     Cube():
-        verBufLayout{{gli::D3, gli::Norm_FALSE}},
+        verBufLayout{gli::LayoutElement{gli::D3, gli::Norm_FALSE}},
         translationBounds{-50.f, 50.f},
         rotationBounds{-KEYHITS_PER_ROTATION/2, KEYHITS_PER_ROTATION/2},
         observerPosition{ 0.f, 0.f, 5.f, translationBounds},

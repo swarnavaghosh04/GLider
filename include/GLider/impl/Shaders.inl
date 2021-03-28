@@ -109,7 +109,7 @@ namespace gli{
 
         if(GLVersion.major == 4 && GLVersion.minor >= 0){
 
-            if(R == C){
+            if constexpr(R == C){
                 
                 switch(R){
                 case 2:
@@ -164,7 +164,7 @@ namespace gli{
 
         Binder b(*this);
 
-        if(R == C){
+        if constexpr(R == C){
             
             switch(R){
             case 2:
