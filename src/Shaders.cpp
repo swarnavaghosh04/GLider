@@ -38,7 +38,7 @@ namespace gli
     {
 
         if (
-            std::ifstream sourceFile(sourceFilePath, std::ios_base::in);
+            std::ifstream sourceFile(sourceFilePath);
             sourceFile.is_open())
         {
             std::string line, text;

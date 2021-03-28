@@ -64,7 +64,6 @@ namespace gli{
             return;
         }
 
-        
         Binder b(*this);
 
         switch(L){
