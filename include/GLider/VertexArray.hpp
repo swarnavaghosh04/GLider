@@ -8,14 +8,12 @@ namespace gli{
 
     class VertexArray : public OpenGLBase<VertexArray>{
         friend class OpenGLBase<VertexArray>;
+        VertexArray(unsigned int id) noexcept;
+        static void bindID(unsigned int id) noexcept;
+        static unsigned int getBoundID() noexcept;
     public:
         VertexArray() noexcept;
-        VertexArray(unsigned int id) noexcept;
         ~VertexArray() noexcept;
-        void bind() const noexcept;
-        static void bind(unsigned int id) noexcept;
-        static void unbind() noexcept;
-        static int getBound() noexcept;
         template<typename T>
         void readBufferData(
             const Buffer<VertexBuffer>& vb,
@@ -23,17 +21,11 @@ namespace gli{
             unsigned int                layoutCount,
             unsigned int                startingAttribIndex = 0
         );
-        template<typename T>
+        template<typename T, class stdContainer>
         void readBufferData(
-            const Buffer<VertexBuffer>&         vb,
-            const std::vector<LayoutElement>&   layout,
-            unsigned int                        startingAttribIndex = 0
-        );
-        template<typename T, std::size_t N>
-        void readBufferData(
-            const Buffer<VertexBuffer>&         vb,
-            const std::array<LayoutElement, N>& layout,
-            unsigned int                        startingAttribIndex = 0
+            const Buffer<VertexBuffer>& vb,
+            const stdContainer&         layout,
+            unsigned int                startingAttribIndex = 0
         );
         void draw(DrawType mode, int first, int count) const noexcept;
     };

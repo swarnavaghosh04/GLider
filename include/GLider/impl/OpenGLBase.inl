@@ -12,6 +12,11 @@ namespace gli{
     }
 
     template<class Derived>
+    OpenGLBase<Derived>::OpenGLBase(unsigned int id) noexcept:
+        id(id)
+    {}
+
+    template<class Derived>
     OpenGLBase<Derived>::OpenGLBase(OpenGLBase<Derived>&& other) noexcept
         : id(other.id)
     {
@@ -23,37 +28,52 @@ namespace gli{
         std::swap(id, other.id);
         return *this;
     }
-    
+
     template<class Derived>
-    inline void OpenGLBase<Derived>::bind() const noexcept{
-        static_cast<const Derived*>(this)->bind();
+    inline void OpenGLBase<Derived>::bindID(unsigned int id) noexcept{
+        Derived::bindID(id);
+    }
+
+    template<class Derived>
+    inline unsigned int OpenGLBase<Derived>::getBoundID() noexcept{
+        return Derived::getBoundID();
     }
     
     template<class Derived>
-    inline void OpenGLBase<Derived>::bind(unsigned int id) noexcept{
-        Derived::bind(id);
+    inline void OpenGLBase<Derived>::bind() const noexcept{
+        bindID(id);
+    }
+    
+    template<class Derived>
+    inline void OpenGLBase<Derived>::bind(const OpenGLBase<Derived>& toBeBound) noexcept{
+        bindID(toBeBound.id);
     }
     
     template<class Derived>
     inline void OpenGLBase<Derived>::unbind() noexcept{
-        Derived::unbind();
+        bindID(0);
     }
     
     template<class Derived>
-    inline int OpenGLBase<Derived>::getBound() noexcept{
-        return Derived::getBound();
+    inline OpenGLBase<Derived> OpenGLBase<Derived>::getBound() noexcept{
+        return OpenGLBase<Derived>(getBoundID());
     }
 
     template<class Derived>
-    Binder<Derived>::Binder(const OpenGLBase<Derived>& base) noexcept:
-        prev(Derived::getBound())
+    inline bool OpenGLBase<Derived>::isBound() const noexcept{
+        return (id == getBoundID());
+    }
+
+    template<class Derived>
+    inline Binder<Derived>::Binder(const OpenGLBase<Derived>& base) noexcept:
+        prev(base)
     {
         base.bind();
     }
 
     template<class Derived>
-    Binder<Derived>::~Binder() noexcept{
-        Derived::bind(prev);
+    inline Binder<Derived>::~Binder() noexcept{
+        prev.bind();
     }
 
     inline void clear(BufferBit mask) noexcept{
@@ -82,6 +102,21 @@ namespace gli{
 
     inline void disable(Capability_I cap, unsigned int index) noexcept{
         GL_CALL(glDisablei(cap, index));
+    }
+
+    template<typename FLOAT_OR_DOUBLE>
+    void depthRange(FLOAT_OR_DOUBLE near, FLOAT_OR_DOUBLE far) noexcept{
+
+        constexpr bool isFloat = std::is_same<FLOAT_OR_DOUBLE, float>();
+        constexpr bool isDouble = std::is_same<FLOAT_OR_DOUBLE, double>();
+
+        static_assert(isFloat || isDouble, "Type must be either float or double");
+
+        if constexpr(isFloat){
+            GL_CALL(glDepthRangef(near, far));
+        }else{
+            GL_CALL(glDepthRange(near,far));
+        }
     }
 
 }

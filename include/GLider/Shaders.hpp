@@ -29,13 +29,12 @@ namespace gli{
     private:
         friend class OpenGLBase<Shaders>;
         // std::unordered_map<const char*, unsigned int> uniformLocCache;
+        Shaders(unsigned int id) noexcept;
+        static void bindID(unsigned int id) noexcept;
+        static unsigned int getBoundID() noexcept;
     public:
         Shaders() noexcept;
         ~Shaders() noexcept;
-        void bind() const noexcept;
-        static void bind(unsigned int id) noexcept;
-        static void unbind() noexcept;
-        static int getBound() noexcept;
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();

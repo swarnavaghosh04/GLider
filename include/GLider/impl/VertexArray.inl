@@ -10,6 +10,10 @@ namespace gli{
         GL_CALL(glGenVertexArrays(1, &(this->id)));
     }
 
+    inline VertexArray::VertexArray(unsigned int id) noexcept:
+        OpenGLBase(id)
+    {}
+
     inline VertexArray::~VertexArray() noexcept
     {
         GL_CALL(glDeleteVertexArrays(1, &(this->id)));
@@ -20,22 +24,14 @@ namespace gli{
         GL_CALL(glDrawArrays(static_cast<unsigned int>(mode), first, count));
     }
 
-    inline void VertexArray::bind() const noexcept{
-        GL_CALL(glBindVertexArray(this->id));
-    }
-
-    inline void VertexArray::bind(unsigned int id) noexcept{
+    inline void VertexArray::bindID(unsigned int id) noexcept{
         GL_CALL(glBindVertexArray(id));
     }
 
-    inline void VertexArray::unbind() noexcept{
-        GL_CALL(glBindVertexArray(0));
-    }
-
-    inline int VertexArray::getBound() noexcept{
+    inline unsigned int VertexArray::getBoundID() noexcept{
         int r;
-        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &r);
-        return r;
+        GL_CALL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &r));
+        return static_cast<unsigned int>(r);
     }
 
     template<typename T>
@@ -71,20 +67,11 @@ namespace gli{
 
     }
 
-    template<typename T>
+    template<typename T, class stdContainer>
     inline void VertexArray::readBufferData(
-        const Buffer<VertexBuffer>&         vb,
-        const std::vector<LayoutElement>&   layout,
-        unsigned int                        startingAttribIndex
-    ){
-        readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
-    }
-
-    template<typename T, std::size_t N>
-    inline void VertexArray::readBufferData(
-        const Buffer<VertexBuffer>&         vb,
-        const std::array<LayoutElement, N>& layout,
-        unsigned int                        startingAttribIndex
+        const Buffer<VertexBuffer>& vb,
+        const stdContainer&         layout,
+        unsigned int                startingAttribIndex
     ){
         readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
     }

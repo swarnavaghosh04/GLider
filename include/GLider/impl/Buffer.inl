@@ -19,32 +19,32 @@ namespace gli{
             return GL_COPY_WRITE_BUFFER_BINDING;
         case TransformFeedbackBuffer:
             return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
-        #if GL_VERSION_3_1
+        // #if GL_VERSION_3_1
         case CopyReadBuffer:
             return GL_COPY_READ_BUFFER_BINDING;
         case TextureBuffer:
             return GL_TEXTURE_BUFFER_BINDING;
         case UniformBuffer:
             return GL_UNIFORM_BUFFER_BINDING;
-        #endif
-        #ifdef GL_VERSION_4_0
+        // #endif
+        // #ifdef GL_VERSION_4_0
         case DrawIndirectBuffer:
             return GL_DRAW_INDIRECT_BUFFER_BINDING;
-        #endif
-        #if GL_VERSION_4_2
+        // #endif
+        // #if GL_VERSION_4_2
         case AtomicCounterBuffer:
             return GL_ATOMIC_COUNTER_BUFFER_BINDING;
-        #endif
-        #if GL_VERSION_4_3
+        // #endif
+        // #if GL_VERSION_4_3
         case DispatchIndirectBuffer:
             return GL_DISPATCH_INDIRECT_BUFFER_BINDING;
         case ShaderStorageBuffer:
             return GL_SHADER_STORAGE_BUFFER_BINDING;
-        #endif
-        #if GL_VERSION_4_4
+        // #endif
+        // #if GL_VERSION_4_4
         case QueryBuffer:
             return GL_QUERY_BUFFER_BINDING;
-        #endif
+        // #endif
         }
         throw std::logic_error("Invalid Buffer Target Binding");
     }
@@ -53,6 +53,11 @@ namespace gli{
     Buffer<target>::Buffer() noexcept{
         GL_CALL(glGenBuffers(1, &(this->id)));
     }
+    
+    template<BufferTarget target>
+    inline Buffer<target>::Buffer(unsigned int id) noexcept:
+        OpenGLBase<Buffer<target>>(id)
+    {}
 
     template<BufferTarget target>
     Buffer<target>::~Buffer() noexcept{
@@ -60,25 +65,15 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::bind() const noexcept{
-        GL_CALL(glBindBuffer((unsigned int)target, this->id));
-    }
-
-    template<BufferTarget target>
-    inline void Buffer<target>::bind(unsigned int id) noexcept{
+    inline void Buffer<target>::bindID(unsigned int id) noexcept{
         GL_CALL(glBindBuffer((unsigned int)target, id));
     }
-
+    
     template<BufferTarget target>
-    inline void Buffer<target>::unbind() noexcept{
-        GL_CALL(glBindBuffer((unsigned int)target, 0));
-    }
-
-    template<BufferTarget target>
-    inline int Buffer<target>::getBound() noexcept{
+    inline unsigned int Buffer<target>::getBoundID() noexcept{
         int r;
         GL_CALL(glGetIntegerv(getBufferTargetBinding(target), &r));
-        return r;
+        return static_cast<unsigned int>(r);
     }
 
     template<BufferTarget target>
@@ -111,8 +106,6 @@ namespace gli{
         Binder b(*this);
         GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
     }
-
-    
 
     template<BufferTarget target>
     template<typename T>

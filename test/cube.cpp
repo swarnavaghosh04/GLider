@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <cstdio>
+#include <string> // for testing
 
 // Rotations Characteristics ==================================================
 
@@ -296,10 +297,7 @@ void test(){
 
     #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u \n", #x , (unsigned int)sizeof(x))
 
-    printSize(gli::Binder<gli::VertexArray>);
-    printSize(gli::VertexArray);
-    printSize(gli::Buffer<gli::VertexBuffer>);
-    printSize(gli::Shaders);
+    printSize(std::string_view);
 
     #undef printSize
 
@@ -314,8 +312,6 @@ int main(){
         printf(ex.what());
         return 1;
     }
-
-    test();
 
     try{
         
@@ -335,6 +331,8 @@ int main(){
 
         GLI_PRINT_DEBUG("Cube Created\n");
 
+        test();
+
         {
             int buffers, samples;
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
@@ -347,8 +345,7 @@ int main(){
         glm::mat4 mvp, projection = 
             glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);
 
-
-        GL_CALL(glDepthRange(0.01, 1000));
+        gli::depthRange(0.01, 1000.0);
 
         bool keepRunning = true;
         SDL_Event event;

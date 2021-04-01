@@ -5,29 +5,25 @@
 
 namespace gli{
 
-    inline void Shaders::bind() const noexcept{
-        GL_CALL(glUseProgram(this->id));
-    }
+    inline Shaders::Shaders(unsigned int id) noexcept:
+        OpenGLBase(id)
+    {}
 
-    inline void Shaders::bind(unsigned int anotherID) noexcept{
+    inline void Shaders::bindID(unsigned int anotherID) noexcept{
         GL_CALL(glUseProgram(anotherID));
     }
 
-    inline void Shaders::unbind() noexcept{
-        GL_CALL(glUseProgram(0));
-    }
-
-    inline int Shaders::getBound() noexcept{
+    inline unsigned int Shaders::getBoundID() noexcept{
         int r;
         glGetIntegerv(GL_CURRENT_PROGRAM, &r);
-        return r;
+        return static_cast<unsigned int>(r);
     }
-
     
+
     #define COMMA ,
 
     #define SET_PROGRAM_UNIFORM(n, Program, thisID, ...)\
-        if(std::is_same<T, int>())\
+        if constexpr(std::is_same<T, int>())\
             gl##Program##Uniform##n##i(thisID getUniformLocation(name), __VA_ARGS__);\
         else if(std::is_same<T, unsigned int>())\
             gl##Program##Uniform##n##ui(thisID getUniformLocation(name), __VA_ARGS__);\
@@ -90,7 +86,7 @@ namespace gli{
     #undef SET_PROGRAM_UNIFORM
 
     #define SET_PROGRAM_UNIFORM_MATRIX_N(N, Program, thisID)\
-        if(std::is_same<T, float>())\
+        if constexpr(std::is_same<T, float>())\
             gl##Program##UniformMatrix##N##fv(thisID getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
         else if(std::is_same<T, double>() && GLVersion.major == 4)\
             gl##Program##UniformMatrix##N##dv(thisID getUniformLocation(name), 1, transpose, (double*)&m[0][0]);\

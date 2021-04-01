@@ -60,13 +60,12 @@ namespace gli{
     template<BufferTarget target>
     class Buffer : public OpenGLBase<Buffer<target>>{
         friend class OpenGLBase<Buffer<target>>;
+        Buffer(unsigned int id) noexcept;
+        static void bindID(unsigned int id) noexcept;
+        static unsigned int getBoundID() noexcept;
     public:
         Buffer() noexcept;
         ~Buffer() noexcept;
-        void bind() const noexcept;
-        static void bind(unsigned int id) noexcept;
-        static void unbind() noexcept;
-        static int getBound() noexcept;
         template<typename T>
         void feedData(
             const T* data,

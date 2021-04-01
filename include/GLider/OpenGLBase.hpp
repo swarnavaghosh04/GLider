@@ -18,10 +18,10 @@ namespace gli{
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
     */
-
     template<typename T>
-    constexpr unsigned int getOpenGLTypeEnum() noexcept(false){
-        return (
+    constexpr unsigned int getOpenGLTypeEnum() noexcept{
+
+        constexpr int returnValue = 
             std::is_same<T, char>()             ? GL_BYTE :
             std::is_same<T, unsigned char>()    ? GL_UNSIGNED_BYTE :
             std::is_same<T, short>()            ? GL_SHORT :
@@ -32,11 +32,11 @@ namespace gli{
             // #ifdef INCORPORATE_DOUBLE
             std::is_same<T, double>()           ? GL_DOUBLE :
             // #endif
-            throw std::logic_error("Invalid data type")
-        );
+            0;
+        static_assert(returnValue, "Invalid data type");
+        return returnValue;
     }
 
-    
     enum Dimension : unsigned char{
         D1 = 1, D2 = 2, D3 = 3, D4 = 4
     };
@@ -112,8 +112,13 @@ namespace gli{
 
     template<class Derived>
     class OpenGLBase{
+        template<class Derived2>
+        friend class Binder;
     protected:
         unsigned int id;
+        OpenGLBase(unsigned int id) noexcept;         // Create Constructor from unsigned int in Derived class under private scope
+        static void bindID(unsigned int id) noexcept; // Define in Derived class under private scope
+        static unsigned int getBoundID() noexcept;    // Define in Derived class under private scope
     public:
         OpenGLBase() noexcept = default;
         OpenGLBase(const OpenGLBase<Derived>&) = delete;
@@ -121,17 +126,18 @@ namespace gli{
         OpenGLBase<Derived>& operator= (const OpenGLBase<Derived>&) = delete;
         OpenGLBase<Derived>& operator= (OpenGLBase<Derived>&& other) noexcept;
         void bind() const noexcept;
-        static void bind(unsigned int id) noexcept;
+        static void bind(const OpenGLBase<Derived>& toBeBound) noexcept;
         static void unbind() noexcept;
-        static int getBound() noexcept;
-        const unsigned int& getId() const noexcept {return id;}
-        unsigned int& getId() noexcept {return id;}
+        static OpenGLBase<Derived> getBound() noexcept;
+        bool isBound() const noexcept;
+        const unsigned int& getID() const noexcept {return id;}
+        unsigned int& getID() noexcept {return id;}
     };
 
     template<class Derived>
     class Binder{
     private:
-        int prev;
+        const OpenGLBase<Derived>& prev;
     public:
         Binder(const OpenGLBase<Derived>& base) noexcept;
         ~Binder() noexcept;
@@ -144,7 +150,8 @@ namespace gli{
     void disable(Capability_NI cap) noexcept;
     void disable(Capability_I cap) noexcept;
     void disable(Capability_I cap, unsigned int index) noexcept;
-
+    template<typename FLOAT_OR_DOUBLE>
+    void depthRange(FLOAT_OR_DOUBLE near, FLOAT_OR_DOUBLE far) noexcept;
 }
 
 #include "GLider/impl/OpenGLBase.inl"
