@@ -14,7 +14,7 @@ namespace gli{
 #define GL_CALL(x)\
     x;\
     gli::checkErrors();\
-    if(gli::numErrors!=0){\
+    while(gli::numErrors!=0){\
         SDL_LogError(\
             SDL_LOG_CATEGORY_APPLICATION,\
             "    (%u) %s:%i:%s()\n",\
