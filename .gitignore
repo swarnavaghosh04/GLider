@@ -1,3 +1,11 @@
+# build/ can be generated using cmake:
+#   mkdir build && cd build
+#   cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
+#   cmake --build .
+#   cmake --install .
+#   cd .. && rm -rf build
 build/
-include/GLider/GLider_export.h
+
+# doxygen/ can be generate using doxygen documentaiton generator:
+#   doxygen dconfig
 doxygen/

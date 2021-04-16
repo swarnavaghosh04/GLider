@@ -293,11 +293,12 @@ struct Cube{
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
+template<class stdContainer>
 void test(){
 
     #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u \n", #x , (unsigned int)sizeof(x))
 
-    printSize(std::string_view);
+    std::printf("%s\n", typeid(typename stdContainer::size_type).name());
 
     #undef printSize
 
@@ -331,7 +332,7 @@ int main(){
 
         GLI_PRINT_DEBUG("Cube Created\n");
 
-        test();
+        test<std::vector<float>>();
 
         {
             int buffers, samples;

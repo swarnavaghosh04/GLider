@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.10)
 project(GLider LANGUAGES C CXX VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,6 +10,10 @@ if(NOT CMAKE_BUILD_TYPE)
         CMAKE_BUILD_TYPE "Release" CACHE
         STRING "Choose the type of build." FORCE
     )
+endif()
+
+if(NOT BUILD_TESTS)
+    set(BUILD_TESTS FALSE)
 endif()
 
 string(
@@ -53,7 +57,8 @@ set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR})
 # build library
 
 add_subdirectory(src)
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+if(BUILD_TESTS)
+    enable_testing()
     add_subdirectory(test)
 endif()
 

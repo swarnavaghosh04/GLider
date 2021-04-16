@@ -104,7 +104,7 @@ namespace gli{
         BufferUsage usage
     ){
         Binder b(*this);
-        GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
+        GL_CALL(glBufferData(target, N*sizeof(T), data.data(), usage));
     }
 
     template<BufferTarget target>
