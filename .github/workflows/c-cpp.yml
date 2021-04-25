@@ -21,6 +21,11 @@ jobs:
         run: |
           sudo apt update
           sudo apt install cmake python3-pip libsdl2-dev libglm-dev
+      
+      - name: test
+        run: |
+          cat /usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config-version.cmake
+          cat /usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake
 
       - name: CMake Configure and Build
         run: |
