@@ -25,7 +25,7 @@ jobs:
       - name: CMake Configure and Build
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
+          cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
           cmake --build .
         
       - name: Run Tests
