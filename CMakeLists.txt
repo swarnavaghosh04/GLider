@@ -52,8 +52,8 @@ add_subdirectory(lib/glad)
 
 # Library fixes
 
-if(NOT TARGET SDL2::SDL2)
-    add_library(SDL2::SDL2 ALIAS SDL2)
+if(NOT TARGET SDL2::SDL2 OR NOT TARGET SDL2::SDL2-static)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SDL2ConfigBackup.cmake)
 endif()
 
 if(NOT TARGET glm::glm)
