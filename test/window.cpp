@@ -6,7 +6,10 @@ constexpr int t = 2000;
 #include <exception>
 #include <chrono>
 
-int main(){
+int main(int argc, const char* argv[]){
+
+    (void)argc;
+    (void)argv[0];
 
     try{
         gli::initialize(3,0);
