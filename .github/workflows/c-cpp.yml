@@ -1,0 +1,33 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  manual-build-debug:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - uses: actions/checkout@v2
+      
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install cmake python3-pip libsdl2-dev libglm-dev
+
+      - name: CMake Configure and Build
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
+          cmake --build .
+        
+      - name: Run Tests
+        run: |
+          ctest -C Debug -T test
