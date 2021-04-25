@@ -26,7 +26,7 @@ jobs:
         run: |
           mkdir build && cd build
           cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
-          cmake --build .
+          cmake --build . --verbose
         
       - name: Run Tests
         run: |
