@@ -2,7 +2,6 @@
 #define GLI_OPENGL_BASE__H_
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include "GLider/GLider_core.hpp"
 #include "GLider/GLErrorHandling.hpp"
 

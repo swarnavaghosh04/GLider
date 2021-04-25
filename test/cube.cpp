@@ -4,6 +4,9 @@
 #include <array>
 #include <cstdio>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+
 // Rotations Characteristics ==================================================
 
 // Number of Key hits for a 360 Degree rotation about an axis (multiple of 8)
