@@ -11,7 +11,7 @@ on:
 jobs:
   manual-build-debug:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     
@@ -20,12 +20,12 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt install gcc-10 g++-10 cmake python3-pip libsdl2-dev libglm-dev
+          sudo apt install cmake python3-pip libsdl2-dev libglm-dev
 
       - name: CMake Configure and Build
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++-10
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
           cmake --build . --verbose
         
       - name: Run Tests
