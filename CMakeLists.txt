@@ -50,6 +50,16 @@ find_package(glm CONFIG REQUIRED)
 find_package(glad CONFIG)
 add_subdirectory(lib/glad)
 
+# Library fixes
+
+if(NOT TARGET SDL2::SDL2)
+    add_library(SDL2::SDL2 ALIAS SDL2)
+endif()
+
+if(NOT TARGET glm::glm)
+    add_library(glm::glm ALIAS glm)
+endif()
+
 # Set where library is going to be built
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR})
