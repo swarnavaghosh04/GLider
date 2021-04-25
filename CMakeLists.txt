@@ -44,6 +44,10 @@ set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/${CMAKE_INSTALL_LIBDIR})
 
 # build dependency libraries
 
+find_package(OpenGL REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(glad CONFIG)
 add_subdirectory(lib/glad)
 
 # Set where library is going to be built
@@ -95,17 +99,19 @@ install(
 )
 
 # install dependency libraries
+if(NOT glad_FOUND)
+    install(
+        TARGETS glad
+        EXPORT GLiderTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT GLider_Runtime
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+            COMPONENT GLider_Development
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+            COMPONENT GLider_Development
+    )
+endif()
 
-install(
-    TARGETS glad
-    EXPORT GLiderTargets
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        COMPONENT GLider_Runtime
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
-        COMPONENT GLider_Development
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
-        COMPONENT GLider_Development
-)
 install(
     EXPORT GLiderTargets
     FILE GLiderTargets.cmake
