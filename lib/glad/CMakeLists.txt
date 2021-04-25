@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(glad LANGUAGES C VERSION 0.1.34)
+if(NOT glad_FOUND)
 
-find_library(glad_lib NAMES glad)
-find_path(glad_include NAMES "glad/glad.h")
+    message(STATUS "glad not found, generating sources using python pip")
 
-if(${glad_lib} STREQUAL "glad_lib-NOTFOUND" OR ${glad_include} STREQUAL "glad_include-NOTFOUND")
-
-    message(STATUS "glad not found, resorting to provided library")
+    project(glad LANGUAGES C)
 
     add_library(glad OBJECT)
+
+    execute_process(
+        COMMAND python -m pip install glad
+    )
+    execute_process(
+        COMMAND python -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c
+    )
 
     file(
         GLOB glad_SOURCES
@@ -25,20 +29,11 @@ if(${glad_lib} STREQUAL "glad_lib-NOTFOUND" OR ${glad_include} STREQUAL "glad_in
     target_include_directories(
         glad PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/HermyGL>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider>
     )
 
-    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/HermyGL)
+    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider)
 
-else()
-
-    message(STATUS "glad found")
-    message(STATUS "\tlibrary location: ${glad_lib}")
-    message(STATUS "\tbase header:      ${glad_include}/glad/glad.hpp")
-
-    add_library(glad INTERFACE IMPORTED)
-
-    target_link_libraries(glad INTERFACE ${glad_lib})
-    target_include_directories(glad INTERFACE ${glad_include})
+    add_library(glad::glad ALIAS glad)
 
 endif()
