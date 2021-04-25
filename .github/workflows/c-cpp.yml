@@ -20,12 +20,12 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt install cmake python3-pip libsdl2-dev libglm-dev
+          sudo apt gcc g++ install cmake python3-pip libsdl2-dev libglm-dev
 
       - name: CMake Configure and Build
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++
           cmake --build . --verbose
         
       - name: Run Tests
