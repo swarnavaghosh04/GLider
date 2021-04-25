@@ -27,6 +27,10 @@ execute_process(
     OUTPUT_VARIABLE sdl2-static-libs
 )
 
+string(REPLACE " " ";" sdl2-cflags ${sdl2-cflags})
+string(REPLACE " " ";" sdl2-libs ${sdl2-libs})
+string(REPLACE " " ";" sdl2-static-libs ${sdl2-static-libs})
+
 message(STATUS ${sdl2-version})
 message(STATUS ${sdl2-cflags})
 message(STATUS ${sdl2-libs})
