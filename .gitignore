@@ -8,4 +8,8 @@ build/
 
 # doxygen/ can be generate using doxygen documentaiton generator:
 #   doxygen dconfig
-doxygen/
+documentation/
+
+# if needed, glad sources will be generated
+lib/glad/include/
+lib/glad/src/
