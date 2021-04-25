@@ -11,7 +11,7 @@ add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
 
 execute_process(
-    COMMAND sdl2-config --cfalgs
+    COMMAND sdl2-config --cflags
     OUTPUT_VARIABLE sdl2-cflags
 )
 
