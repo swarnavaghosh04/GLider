@@ -30,10 +30,6 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef GLIDER__H_
 #define GLIDER__H_
 
-#ifndef SDL_MAIN_HANDLED
-#define SDL_MAIN_HANDLED
-#endif
-
 #include "GLider/GLider_core.hpp"
 #include "GLider/Window.hpp"
 #include "GLider/VertexArray.hpp"
