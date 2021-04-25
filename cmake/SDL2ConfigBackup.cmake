@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
 
-execute_process(
-    COMMAND sdl2-config --version
-    OUTPUT_VARIABLE sdl2-version   
-)
+# execute_process(
+#     COMMAND sdl2-config --version
+#     OUTPUT_VARIABLE sdl2-version
+# )
 
-project(SDL2 LANGUAGES C VERSION ${sdl2-version})
+project(SDL2 LANGUAGES C VERSION) #${sdl2-version})
 
 add_library(SDL2 INTERFACE IMPORTED)
 add_library(SD2-static INTERFACE IMPORTED)
