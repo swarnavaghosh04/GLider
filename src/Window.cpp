@@ -102,8 +102,8 @@ namespace gli{
         if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
             throw std::runtime_error("GLAD Unable to load OpenGL");
 
-        enable(Multisample);
-        enable(DepthTest);
+        // enable(Multisample);
+        // enable(DepthTest);
     }
 
     void OpenGLWindow::swap() noexcept{

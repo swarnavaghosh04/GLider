@@ -23,47 +23,6 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /**
- * @mainpage GLider - OpenGL C++ Class Abstraction
- * 
- * @section intro_sec Introduction
- * 
- * As from the title, it is clear that this is an OpenGL
- * class abstraction library. It uses
- * <a href="https://www.libsdl.org/index.php">SDL2</a> for
- * window management, 
- * <a href="https://github.com/g-truc/glm">GLM</a> for
- * the required mathematics, and
- * <a href="https://glad.dav1d.de/">GLAD</a> for loading
- * the OpenGL function pointers.
- * 
- * @section usage_sec Usage
- * 
- * To get the best idea on how to use this library, look at the
- * code for rendering a triangle:
- * <a href="https://github.com/swarnavaghosh04/GLider/blob/main/test/triangle.cpp">
- * triangle.cpp
- * </a>
- * 
- * Here is a step by step guide as to what that program does:
- * 
- * 1. gli::initialize() with OpenGL 3.0
- * 2. Creates an array of vertices
- * 3. Creates a window that has 3/4 dimensions of the
- *    screen
- * 4. Declared @ref VertexArray, @ref VertexBuffer, and @ref Shaders objects
- * 5. feeds the data of the vertices to the GPU through VertexBuffer
- * 6. VertexArray makes sense of the VertexBuffer data by reading it in a specific 
- *    structure defined by an array of @ref LayoutElement
- * 7. Compiles, links and validates shaders
- * 8. Bind necessary objects
- * 9. Draw loop where the buffer is being cleared, new triangle is being drawn, and
- *    the buffer is being swapped. Then the SDL2 events are handled. Consult
- *    <a href="https://www.libsdl.org/index.php"> SDL2</a> documentation for more
- *    details
- * 10. gli::quit() at the end 
-*/
-
-/**
  * @file GLider.hpp
  * @brief Main header file for GLider which includes all other header files
 */
@@ -82,36 +41,182 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "GLider/Shaders.hpp"
 #include "GLider/FrameRate.hpp"
 
+#include <array>
+#include <vector>
+#include <list>
+#include <functional>
+
+/**
+ * @brief Main namepsace for GLider
+*/
 namespace gli{
 
-    typedef gladGLversionStruct OpenGLVersion;
+    template<std::size_t N>
+    using SDLAttributeArray = std::array<std::pair<SDL_GLattr, int>, N>;
+    using SDLAttributeList = std::list<std::pair<SDL_GLattr, int>>;
+    using SDLAttributeVector = std::vector<std::pair<SDL_GLattr, int>>;
+
+    /// @private
+    void checkVersion(int major, int minor);
 
     /**
-     * @brief Initializes all subsystems for SDL2
+     * @{
+     * @name initializers
+     * @anchor initializers
+    */
+
+    /// @private
+    void initialize_base(int major, int minor, const std::function<void(int&)>& attributeSetter);
+
+    /**
+     * @brief Initializes all subsystems for SDL2 with default SDL2 attributes
      * 
-     * This should be called before using any funtions from
-     * GLider. It initlializes all the subsystems for SDL2
+     * This, or any other overload of this function, should
+     * be called before using any funtions from GLider.
+     * It initlializes all the subsystems for SDL2
      * and sets important attributes.
      * 
-     * @note When `HGL_DEBUG` is defined, this function
+     * @note When `GLI_DEBUG` is defined, this function
      * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
      * to `SDL_LOG_PRIORITY_DEBUG`.
+     * @note This function will initate SDL2 with  the following
+     * attributes:
+     *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
+     *  - `SDL_GL_CONTEXT_MAJOR_VERSION =` @p major
+     *  - `SDL_GL_CONTEXT_MINOR_VERSION =` @p minor
+     *  - `SDL_GL_DOUBLEBUFFER = 1`
+     *  - `SDL_GL_DEPTH_SIZE = 32`
+     *  - `SDL_GL_MULTISAMPLEBUFFERS = 1`
+     *  - `SDL_GL_MULTISAMPLESAMPLES = 4`
+     *  - `SDL_GL_ACCELERATED_VISUAL = 1`
      * 
-     * @param major is the major version for OpenGL to be initialized. should be greater than 3.
-     * @param minor is the minor version for OpenGL to be initialized. defaults to 0.
+     * @note if you want to have different attributes, use one of the
+     * overloads of this function.
+     * 
+     * @param[in] major the major version for OpenGL to be initialized. should be greater than 3.
+     * @param[in] minor the minor version for OpenGL to be initialized. defaults to 0.
      * 
      * @throws std::invalid_argument invalid OpenGL version.
      * @throws std::runtime_error SDL2 could not be initialized or GL attributes could not be set.
-    */
+     * 
+     * @see
+     *  - @ref gli::initialize(int, int, const gli::SDLAttributeArray<N>&)
+     *  - @ref gli::initialize(int, int, const gli::SDLAttributeList&)
+     *  - @ref gli::initialize(int, int, const gli::SDLAttributeVector&)
+     */
     void initialize(int major=3, int minor=0);
+
+    /**
+     * @overload
+     * @brief Initializes all subsystems for SDL2
+     * 
+     * This, or any other overload of this function, should
+     * be called before using any funtions from GLider.
+     * It initlializes all the subsystems for SDL2
+     * and sets important attributes.
+     * 
+     * @note When `GLI_DEBUG` is defined, this function
+     * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
+     * to `SDL_LOG_PRIORITY_DEBUG`.
+     * @note The following 3 attributes will always take up the 
+     * following values after this function call regardless
+     * of the value passed in through @p attributes:
+     *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
+     *  - `SDL_GL_CONTEXT_MAJOR_VERSION =` @p major
+     *  - `SDL_GL_CONTEXT_MINOR_VERSION =` @p minor
+     * 
+     * @param[in] major the major version for OpenGL to be initialized. should be greater than 3.
+     * @param[in] minor the minor version for OpenGL to be initialized. defaults to 0.
+     * @param[in] attributes `std::array` of `std::pair<SDL_GLattr, int>` specifying user SDL attribute values.
+     * @tparam N number of `std::pair` objects inside attributes.
+     * 
+     * @throws std::invalid_argument invalid OpenGL version.
+     * @throws std::runtime_error SDL2 could not be initialized or GL attributes could not be set.
+     * 
+     * @see
+     * @ref gli::SDLAttributeArray
+     */
+    template<std::size_t N>
+    void initialize(int major, int minor, const SDLAttributeArray<N>& attributes);
+
+    /// @private
+    template<typename T>
+    void initialize(int major, int minor, const T& attributes);
+
+    /**
+     * @overload
+     * @brief Initializes all subsystems for SDL2
+     * 
+     * This, or any other overload of this function, should
+     * be called before using any funtions from GLider.
+     * It initlializes all the subsystems for SDL2
+     * and sets important attributes.
+     * 
+     * @note When `GLI_DEBUG` is defined, this function
+     * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
+     * to `SDL_LOG_PRIORITY_DEBUG`.
+     * @note The following 3 attributes will always take up the 
+     * following values after this function call regardless
+     * of the value passed in through @p attributes:
+     *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
+     *  - `SDL_GL_CONTEXT_MAJOR_VERSION =` @p major
+     *  - `SDL_GL_CONTEXT_MINOR_VERSION =` @p minor
+     * 
+     * @param[in] major the major version for OpenGL to be initialized. should be greater than 3.
+     * @param[in] minor the minor version for OpenGL to be initialized. defaults to 0.
+     * @param[in] attributes `std::list` of `std::pair<SDL_GLattr, int>` specifying user SDL attribute values.
+     * 
+     * @throws std::invalid_argument invalid OpenGL version.
+     * @throws std::runtime_error SDL2 could not be initialized or GL attributes could not be set.
+     * 
+     * @see
+     * @ref gli::SDLAttributeList
+    */
+    extern template void initialize(int major, int minor, const SDLAttributeList& attributes);
+
+    /**
+     * @overload
+     * @brief Initializes all subsystems for SDL2
+     * 
+     * This, or any other overload of this function, should
+     * be called before using any funtions from GLider.
+     * It initlializes all the subsystems for SDL2
+     * and sets important attributes.
+     * 
+     * @note When `GLI_DEBUG` is defined, this function
+     * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
+     * to `SDL_LOG_PRIORITY_DEBUG`.
+     * @note The following 3 attributes will always take up the 
+     * following values after this function call regardless
+     * of the value passed in through @p attributes:
+     *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
+     *  - `SDL_GL_CONTEXT_MAJOR_VERSION =` @p major
+     *  - `SDL_GL_CONTEXT_MINOR_VERSION =` @p minor
+     * 
+     * @param[in] major the major version for OpenGL to be initialized. should be greater than 3.
+     * @param[in] minor the minor version for OpenGL to be initialized. defaults to 0.
+     * @param[in] attributes `std::vector` of `std::pair<SDL_GLattr, int>` specifying user SDL attribute values.
+     * 
+     * @throws std::invalid_argument invalid OpenGL version.
+     * @throws std::runtime_error SDL2 could not be initialized or GL attributes could not be set.
+     * 
+     * @see
+     * @ref gli::SDLAttributeVector
+    */
+    extern template void initialize(int major, int minor, const SDLAttributeVector& attributes);
+
+    /// @}
 
     /**
      * @brief Quits SDL2
      * 
-     * Should be called after @ref initialize has been called.
+     * Should be called after at the very end of your program
+     * (and after one of the @ref initializers have been called)
     */
     void quit() noexcept;
 
 }
+
+#include "GLider/impl/GLider.inl"
 
 #endif

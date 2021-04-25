@@ -4,13 +4,14 @@
 #include "GLider/GLider_core.hpp"
 
 namespace gli{
-
-    extern int numErrors;
-    void checkErrors() noexcept;
+    
+    extern int numErrors; ///< @private
+    void checkErrors() noexcept; ///< @private
 
 }
 
 #ifdef GLI_DEBUG
+/// @private
 #define GL_CALL(x)\
     x;\
     gli::checkErrors();\
@@ -28,6 +29,7 @@ namespace gli{
             #x);\
     }
 #else
+/// @private
 #define GL_CALL(x) x
 #endif
 

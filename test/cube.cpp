@@ -3,7 +3,6 @@
 #include <vector>
 #include <array>
 #include <cstdio>
-#include <string> // for testing
 
 // Rotations Characteristics ==================================================
 
@@ -293,19 +292,15 @@ struct Cube{
 constexpr const char* const Cube::vertexShader;
 constexpr const char* const Cube::fragmentShader;
 
-template<class stdContainer>
 void test(){
 
     #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u \n", #x , (unsigned int)sizeof(x))
-
-    std::printf("%s\n", typeid(typename stdContainer::size_type).name());
 
     #undef printSize
 
 }
 
 int main(){
-
 
     try{ gli::initialize(3,3); }
     catch(std::exception& ex){
@@ -332,8 +327,6 @@ int main(){
 
         GLI_PRINT_DEBUG("Cube Created\n");
 
-        test<std::vector<float>>();
-
         {
             int buffers, samples;
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
@@ -346,6 +339,7 @@ int main(){
         glm::mat4 mvp, projection = 
             glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);
 
+        gli::enable(gli::Capability_NI::DepthTest);
         gli::depthRange(0.01, 1000.0);
 
         bool keepRunning = true;
