@@ -24,7 +24,8 @@ depends=(
 makedepends=(
 	"git"
 	"${MINGW_PACKAGE_PREFIX}-make"
-	"${MINGW_PACKAGE_PREFIX}-cmake")
+	"${MINGW_PACKAGE_PREFIX}-cmake"
+	"${MINGW_PACKAGE_PREFIX}-python-pip")
 provides=("${pkgname}")
 conflicts=("${pkgname}")
 source=("git+${url}.git")
