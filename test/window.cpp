@@ -6,8 +6,6 @@ constexpr int t = 2000;
 #include <exception>
 #include <chrono>
 
-
-
 int main(){
 
     try{

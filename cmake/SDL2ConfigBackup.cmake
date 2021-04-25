@@ -11,6 +11,11 @@ add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
 
 execute_process(
+    COMMAND sdl2-config --cfalgs
+    OUTPUT_VARIABLE sdl2-cflags
+)
+
+execute_process(
     COMMAND sdl2-config --libs
     OUTPUT_VARIABLE sdl2-libs
 )
@@ -23,6 +28,9 @@ execute_process(
 find_path(sdl2-incl NAMES "SDL2/SDL.h")
 target_include_directories(SDL2 INTERFACE ${sdl2-incl})
 target_include_directories(SDL2-static INTERFACE ${sdl2-incl})
+
+target_compile_options(SDL2 INTERFACE ${sdl2-cflags})
+target_compile_options(SDL2-static INTERFACE ${sdl2-cflags})
 
 target_link_options(SDL2 INTERFACE ${sdl2-libs})
 target_link_options(SDL2-static INTERFACE ${sdl2-static-libs})

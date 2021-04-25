@@ -13,10 +13,7 @@
     #define GLI_PRINT_DEBUG(format, ...)
 #endif
 
-
-#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
-#endif
 
 #include <SDL2/SDL.h>
 #include <stdexcept>
