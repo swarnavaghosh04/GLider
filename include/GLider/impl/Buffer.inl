@@ -46,7 +46,6 @@ namespace gli{
             return GL_QUERY_BUFFER_BINDING;
         // #endif
         }
-        throw std::logic_error("Invalid Buffer Target Binding");
     }
 
     template<BufferTarget target>
