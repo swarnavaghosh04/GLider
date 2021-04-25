@@ -20,7 +20,7 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt gcc g++ install cmake python3-pip libsdl2-dev libglm-dev
+          sudo apt install gcc g++ cmake python3-pip libsdl2-dev libglm-dev
 
       - name: CMake Configure and Build
         run: |
