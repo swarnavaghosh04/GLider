@@ -17,9 +17,7 @@ string(REPLACE "\"" "" sdl2-version ${sdl2-version}) # hell
 
 project(SDL2 LANGUAGES C) # VERSION ${sdl2-version})
 
-set(CMAKE_REQUIRED_FLAGS 
-    "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:,-std=>${CMAKE_CXX_STANDARD}"
-)
+set(CMAKE_CXX_FLAGS "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:,-std=>${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
 
 add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
