@@ -13,6 +13,8 @@ foreach(flag version cflags libs static-libs)
     string(REPLACE " " ";" sdl2-${flag} ${sdl2-${flag}})
 endforeach()
 
+string(REPLACE "\"" "" sdl2-version ${sdl2-version}) # hell
+
 project(SDL2 LANGUAGES C VERSION ${sdl2-version})
 
 set(CMAKE_REQUIRED_FLAGS 
