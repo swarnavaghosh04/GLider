@@ -17,7 +17,20 @@ string(REPLACE "\"" "" sdl2-version ${sdl2-version}) # hell
 
 project(SDL2 LANGUAGES C) # VERSION ${sdl2-version})
 
-set(CMAKE_CXX_FLAGS "$<IF:$<CXX_COMPILER_ID:MSVC>,\/std\:${CMAKE_CXX_STANDARD},\-std\=${CMAKE_CXX_STANDARD}> ${CMAKE_CXX_FLAGS}")
+string(
+    APPEND _opts
+    "$<IF:$<CXX_COMPILER_ID:MSVC>,"
+        ";/W4;$<$<CONFIG:RELEASE>:/O2>,"
+        "-Wall;-Wextra;-Werror;"
+            "$<$<CONFIG:RELEASE>:-O3>"
+    ">"
+)
+
+string(APPEND _cppstd
+    "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:,-std=>"
+)
+
+set(CMAKE_CXX_FLAGS "${_cppstd}${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
 
 add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
