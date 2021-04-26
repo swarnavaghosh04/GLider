@@ -66,16 +66,24 @@ int main(int argc, char* argv[]){
             }
         );
 
+        
+
         shaders.compileString(gli::VertexShader, vertexShader);     // shaders.compileFile() can also be used if you
+        std::printf("test\n");
         shaders.compileString(gli::FragmentShader, fragmentShader); // wrote your shader source in a separate file
+        std::printf("test\n");
         shaders.link();
+        std::printf("test\n");
         shaders.validate();
+        std::printf("test\n");
 
         va.bind();
         shaders.bind();
 
+
         bool keepRunning = true;
         SDL_Event e;
+
 
         while(keepRunning){
 

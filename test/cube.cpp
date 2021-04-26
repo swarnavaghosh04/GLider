@@ -314,8 +314,8 @@ int main(int argc, char* argv[]){
 
     try{ gli::initialize(3,3); }
     catch(std::exception& ex){
-        printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
-        printf(ex.what());
+        std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
+        std::printf("%s", ex.what());
         return 1;
     }
 
@@ -491,8 +491,8 @@ int main(int argc, char* argv[]){
         } // while(keepRunning)
 
     }catch(const std::exception& ex){
-        printf("%s occured!\n", typeid(ex).name());
-        printf(ex.what());
+        std::printf("%s occured!\n", typeid(ex).name());
+        std::printf("%s", ex.what());
     }
 
     gli::quit();
