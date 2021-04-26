@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
 
-execute_process(
-    COMMAND sdl2-config --version
-    OUTPUT_VARIABLE sdl2-version
-)
-
 foreach(flag version cflags libs static-libs)
     execute_process(
         COMMAND sdl2-config --${flag}
@@ -29,6 +24,15 @@ target_compile_options(SDL2-static INTERFACE "${sdl2-cflags}")
 
 target_link_options(SDL2 INTERFACE "${sdl2-libs}")
 target_link_options(SDL2-static INTERFACE "${sdl2-static-libs}")
+
+find_library(SDL2-library NAMES SDL2)
+find_library(SDL2-main NAMES SDL2main)
+find_path(sdl2-incl NAMES "SDL2/SDL.h")
+
+foreach(target SDL2 SDL2-static)
+    target_link_libraries(${target} INTERFACE ${SDL2-library} ${SDL2-main})
+    target_include_directories(${target} INTERFACE ${sdl2-incl})
+endforeach()
 
 add_library(SDL2::SDL2 ALIAS SDL2)
 add_library(SDL2::SDL2-static ALIAS SDL2-static)
