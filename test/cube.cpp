@@ -30,6 +30,10 @@ this many seconds after a key is pressed once. */
 #define ROTATION_CONVERGENCE_TIME      1.f
 
 // Macors ======================================================================
+
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 #define PI2 (2.f*(float)M_PI)
 #define PI_4 ((float)M_PI/4.f)
 // Structures For Data Organization ============================================
@@ -303,7 +307,7 @@ void test(){
 
 }
 
-int main(int argc, const char* argv[]){
+int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];

@@ -26,7 +26,7 @@ const char* fragmentShader = R"CODE(
 
 )CODE";
 
-int main(int argc, const char* argv[]){
+int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];

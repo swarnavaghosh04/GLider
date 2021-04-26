@@ -2,7 +2,7 @@
 #include <iostream>
 #include <exception>
 
-int main(int argc, const char* argv[]){
+int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];
