@@ -27,10 +27,10 @@ project(SDL2 LANGUAGES C) # VERSION ${sdl2-version})
 # )
 
 string(APPEND _cppstd
-    "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:,-std=>"
+    $<IF:$<CXX_COMPILER_ID:MSVC>,"/std:","-std=">
 )
 
-set(CMAKE_CXX_FLAGS "${_cppstd}c++${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS " ${_cppstd}c++${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
 
 add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
