@@ -13,19 +13,13 @@ foreach(flag version cflags libs static-libs)
     string(REPLACE " " ";" sdl2-${flag} ${sdl2-${flag}})
 endforeach()
 
-string(REPLACE "\"" "" sdl2-version ${sdl2-version}) # hell
-
 project(SDL2 LANGUAGES C) # VERSION ${sdl2-version})
 
-string(
-    APPEND _cppstd
-    "$<IF:$<CXX_COMPILER_ID:MSVC>,"
-        "/std=${CMAKE_CXX_STANDARD},"
-        "-std=${CMAKE_CXX_STANDARD}"
-    ">"
-)
-
-set(CMAKE_CXX_FLAGS " ${_cppstd} ${CMAKE_CXX_FLAGS}")
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "/std=c++${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
+else()
+    set(CMAKE_CXX_FLAGS "-std=c++${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
+endif()
 
 add_library(SDL2 INTERFACE IMPORTED)
 add_library(SDL2-static INTERFACE IMPORTED)
