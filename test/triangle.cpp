@@ -66,7 +66,7 @@ int main(int argc, char* argv[]){
             }
         );
 
-        
+
 
         shaders.compileString(gli::VertexShader, vertexShader);     // shaders.compileFile() can also be used if you
         std::printf("test\n");
