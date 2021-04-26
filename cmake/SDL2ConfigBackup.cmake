@@ -32,3 +32,8 @@ target_link_options(SDL2-static INTERFACE "${sdl2-static-libs}")
 
 add_library(SDL2::SDL2 ALIAS SDL2)
 add_library(SDL2::SDL2-static ALIAS SDL2-static)
+
+message(${sdl2-version})
+message(${sdl2-cflags})
+message(${sdl2-libs})
+message(${sdl2-static-libs})
