@@ -9,10 +9,10 @@ if(NOT glad_FOUND)
     add_library(glad OBJECT)
 
     execute_process(
-        COMMAND python -m pip install glad
+        COMMAND python3 -m pip install glad
     )
     execute_process(
-        COMMAND python -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c
+        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c
     )
 
     file(
