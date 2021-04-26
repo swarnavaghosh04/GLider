@@ -16,8 +16,8 @@ else()
     set(CMAKE_CXX_FLAGS "-std=c++${CMAKE_CXX_STANDARD} ${CMAKE_CXX_FLAGS}")
 endif()
 
-add_library(SDL2 INTERFACE IMPORTED)
-add_library(SDL2-static INTERFACE IMPORTED)
+add_library(SDL2 INTERFACE IMPORTED GLOBAL)
+add_library(SDL2-static INTERFACE IMPORTED GLOBAL)
 
 find_library(SDL2-library NAMES SDL2)
 find_library(SDL2-main NAMES SDL2main)
