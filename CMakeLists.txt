@@ -21,7 +21,7 @@ endif()
 string(
     APPEND _opts
     "$<IF:$<CXX_COMPILER_ID:MSVC>,"
-        "/W4;$<$<CONFIG:RELEASE>:/O2>,"
+        ";/W4;$<$<CONFIG:RELEASE>:/O2>,"
         "-Wall;-Wextra;-Werror;"
             "$<$<CONFIG:RELEASE>:-O3>"
     ">"
