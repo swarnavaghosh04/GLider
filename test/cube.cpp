@@ -263,6 +263,7 @@ struct Cube{
         shaders.link();
         shaders.validate();
         shaders.bind();
+        shaders.bindAttribLocation(0, "position");
         vertexArray.bind();
         indexBuffer.bind();
     }
@@ -312,7 +313,7 @@ int main(int argc, char* argv[]){
     (void)argc;
     (void)argv[0];
 
-    try{ gli::initialize(3,3); }
+    try{ gli::initialize(3,1); }
     catch(std::exception& ex){
         std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
         std::printf("%s", ex.what());
