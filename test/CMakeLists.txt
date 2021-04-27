@@ -1,17 +1,12 @@
-foreach(test_target init window)
+foreach(target init window triangle cube)
 
-    add_executable(${test_target})
-    target_sources(${test_target} PRIVATE ${test_target}.cpp)
-    target_link_libraries(${test_target} PRIVATE GLider)
-    add_test(NAME ${test_target} COMMAND ${test_target})
-
-endforeach()
-
-foreach(normal_target cube triangle)
-
-    add_executable(${normal_target})
-    target_sources(${normal_target} PRIVATE ${normal_target}.cpp)
-    target_link_libraries(${normal_target} PRIVATE GLider)
+    add_executable(${target})
+    target_sources(${target} PRIVATE ${target}.cpp)
+    target_link_libraries(${target} PRIVATE GLider)
 
 endforeach()
+
+add_test(NAME init COMMAND init)
+add_test(NAME window COMMAND window 2000)
+add_test(NAME triangle COMMAND triangle 2000)
 

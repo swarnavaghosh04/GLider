@@ -12,7 +12,7 @@ if(NOT glad_FOUND)
         COMMAND python3 -m pip install glad
     )
     execute_process(
-        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c
+        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c --profile=core
     )
 
     file(

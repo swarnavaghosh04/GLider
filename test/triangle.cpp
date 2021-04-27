@@ -1,10 +1,13 @@
 #include "GLider/GLider.hpp"
+#include <cstdio>
+#include <cstdlib>
+#include <chrono>
 
 const char* vertexShader = R"CODE(
-    #version 330 core
+    #version 140
 
-    layout(location = 0) in vec4 vertexPos;
-    layout(location = 1) in vec3 vertexColor;
+    in vec4 vertexPos;
+    in vec3 vertexColor;
 
     out vec3 fragmentColor;
 
@@ -16,7 +19,7 @@ const char* vertexShader = R"CODE(
 )CODE";
 
 const char* fragmentShader = R"CODE(
-    #version 330 core
+    #version 140
 
     in vec3 fragmentColor;
 
@@ -28,11 +31,16 @@ const char* fragmentShader = R"CODE(
 
 int main(int argc, char* argv[]){
 
-    (void)argc;
-    (void)argv[0];
+	// if not arguments are passed, keep window open until terminated
+	// If valid float has been passed, keep window open for that many milliseconds
+
+    float openDuration_ms = 0.f;
+    auto start = std::chrono::steady_clock::now();
+
+    if(argc >= 2) openDuration_ms = std::atof(argv[1]);
 
     try{
-        gli::initialize(3,0);
+        gli::initialize(3,1);
     }catch(std::exception& e){
         SDL_Log("cannot initialize: %s", e.what());
         return 1;
@@ -52,6 +60,11 @@ int main(int argc, char* argv[]){
             throw std::runtime_error(SDL_GetError());
 
         gli::OpenGLWindow win{"Triangle", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
+        
+        std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
+        std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));
+        std::printf("OpenGL Renderer        : %s \n", glGetString(GL_RENDERER));
 
         gli::VertexArray va;
         gli::Buffer<gli::VertexBuffer> vb;
@@ -69,13 +82,9 @@ int main(int argc, char* argv[]){
 
 
         shaders.compileString(gli::VertexShader, vertexShader);     // shaders.compileFile() can also be used if you
-        std::printf("test\n");
         shaders.compileString(gli::FragmentShader, fragmentShader); // wrote your shader source in a separate file
-        std::printf("test\n");
         shaders.link();
-        std::printf("test\n");
         shaders.validate();
-        std::printf("test\n");
 
         va.bind();
         shaders.bind();
@@ -91,7 +100,6 @@ int main(int argc, char* argv[]){
             
             va.draw(gli::DrawTriangles, 0, 3);
 
-            // SDL_GL_SwapWindow(win.get());
             win.swap();
             
             while(SDL_PollEvent(&e)){
@@ -112,11 +120,19 @@ int main(int argc, char* argv[]){
 
             }
 
+            if(openDuration_ms > 0.f){
+            	if(
+            		std::chrono::duration_cast<std::chrono::duration<float, std::milli>>
+            		(std::chrono::steady_clock::now() - start).count() >= openDuration_ms
+            	)
+            		keepRunning = false;
+            }
+
         }
 
     }catch(std::exception& e){
-        SDL_Log("Error Occured: %s\n", typeid(e).name());
-        SDL_Log("%s", e.what());
+        std::printf("Error Occured: %s\n", typeid(e).name());
+        std::printf("%s", e.what());
     }
 
     gli::quit();

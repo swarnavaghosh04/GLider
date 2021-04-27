@@ -122,9 +122,9 @@ struct MotionVector3D{
 struct Cube{
 
     static constexpr const char* const vertexShader = R"CODE(
-        #version 330 core
+        #version 140
 
-        layout(location=0) in vec3 position;
+        in vec3 position;
 
         uniform mat4 u_mat;
         uniform vec3 orientation;
@@ -178,7 +178,7 @@ struct Cube{
     )CODE";
 
     static constexpr const char* const fragmentShader = R"CODE(
-        #version 330 core
+        #version 140
 
         uniform vec4 u_color;
 
