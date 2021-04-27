@@ -44,6 +44,7 @@ namespace gli{
         void setUniform(const char* name, const glm::vec<L,T,Q>& v);
         template<int R, int C, typename T, glm::qualifier Q>
         void setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose);
+        void bindAttribLocation(unsigned int index, const char* name) const noexcept;
     };
 
 }

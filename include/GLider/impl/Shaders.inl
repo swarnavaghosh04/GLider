@@ -217,5 +217,9 @@ namespace gli{
 
     #undef COMMA
 
+    inline void Shaders::bindAttribLocation(unsigned int index, const char* name) const noexcept{
+        GL_CALL(glBindAttribLocation(this->id, index, name));
+    }
+
 }
 #endif

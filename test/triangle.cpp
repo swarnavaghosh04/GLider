@@ -5,7 +5,7 @@
 
 const char* vertexShader = R"CODE(
     #version 140
-
+    
     in vec4 vertexPos;
     in vec3 vertexColor;
 
@@ -70,6 +70,9 @@ int main(int argc, char* argv[]){
         gli::Buffer<gli::VertexBuffer> vb;
         gli::Shaders shaders;
 
+        shaders.bindAttribLocation(0, "vertexPos");
+        shaders.bindAttribLocation(1, "vertexColor");
+
         vb.feedData(vertecies, gli::UseDynamicDraw);
         va.readBufferData<float>(
             vb,
@@ -78,8 +81,6 @@ int main(int argc, char* argv[]){
                 gli::LayoutElement{gli::D3, gli::Norm_FALSE}    // Color
             }
         );
-
-
 
         shaders.compileString(gli::VertexShader, vertexShader);     // shaders.compileFile() can also be used if you
         shaders.compileString(gli::FragmentShader, fragmentShader); // wrote your shader source in a separate file
