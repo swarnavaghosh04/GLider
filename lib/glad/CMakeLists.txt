@@ -23,6 +23,7 @@ if(NOT glad_FOUND)
     )
 
     target_sources(glad PRIVATE ${glad_SOURCES})
+    target_link_libraries(glad INTERFACE ${CMAKE_DL_LIBS})
 
     include(GNUInstallDirs)
 

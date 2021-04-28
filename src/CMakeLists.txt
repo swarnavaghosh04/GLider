@@ -23,7 +23,7 @@ if(NOT glad_FOUND)
     )
 endif()
 
-target_link_libraries(GLider PUBLIC glad::glad ${OPENGL_opengl_LIBRARY} SDL2::SDL2 ${CMAKE_DL_LIBS})
+target_link_libraries(GLider PUBLIC glad::glad ${OPENGL_opengl_LIBRARY} SDL2::SDL2)
  
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     target_compile_definitions(GLider PUBLIC GLI_DEBUG)
