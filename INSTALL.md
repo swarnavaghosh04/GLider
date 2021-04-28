@@ -13,12 +13,16 @@
 (you can change `mingw64` to `mingw32`, or ommit it all together for dual installation)
 3. Remove this directory after successful installation
 
-### For Debian Based Linux ### (NOT TESTED YET)
+### For Debian Based Linux ###
 
-1. Follow the manual installation procdure with `--prefix "$HOME/GLider/usr"`
-2. Before deleting GLiderTemp, copy the debian folder int `$HOME/GLider`
-3. rename debian forlder to DEBIAN (all caps)
-4. Run the following command in `$HOME`:
+1. Follow the manual installation procdure with `<install_location>` as `<some_path>/GLider`
+2. Before deleting GLiderTemp, copy contents of debian folder into `<install_location>/DEBIAN`:
+
+    ```
+    cp <git_local_repo>/debian/. <install_location>/DEBIAN/
+    ```
+
+4. Run the following command in `<install_location>/..` (or `<some_path>`):
 
     ```
     dpkg-deb --build GLider
@@ -29,13 +33,14 @@
 
 ### Manual Installation ###
 
-    git clone "https://github.com/swarnavaghosh04/GLider.git" ~/GLiderTemp
-    cd ~/GLiderTemp
+    git clone "https://github.com/swarnavaghosh04/GLider.git" ./GLiderTemp
+    cd GLiderTemp
     mkdir build && cd build
     cmake ..   # -G "generator_of_your_choice" (if needed)
     cmake --build .
-    cmake --install . --prefix "$HOME/GLider"    # or --prefix "/usr"
-    cd ~
+    cmake --install . --prefix "<install_location>"
+        # <install_location> can be something like $HOME/GLider or /usr
+    cd ../..
     rm -rf GLiderTemp
 
 To use the home build in susequent cmake builds using this library, add the following lines
