@@ -13,3 +13,6 @@ documentation/
 # if needed, glad sources will be generated
 lib/glad/include/
 lib/glad/src/
+
+# ain't nobody need this
+.vscode/
