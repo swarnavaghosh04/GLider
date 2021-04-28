@@ -20,15 +20,41 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt install git cmake python3-pip libsdl2-dev libglm-dev
+          sudo apt install gcc g++ git cmake python3-pip libsdl2-dev libglm-dev
 
       - name: CMake Configure and Build
         run: |
           mkdir build && cd build
-          cmake --version
           cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
           cmake --build . --verbose
         
       - name: Run Tests
         run: |
           ctest -C Debug -T test
+  
+  deb-package-creation:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - uses: actions/checkout@v2
+      
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install gcc g++ git cmake python3-pip libsdl2-dev libglm-dev
+
+      - name: CMake Configure, Build and Install
+        run: |
+          mkdir build && cd build
+          cmake ..
+          cmake --build .
+          cmake --install . --prefix "$HOME/GLider/usr"
+          cp -r ../debian ~/GLider/DEBIAN
+        
+      - name: Create Package
+        run: |
+          cd ~
+          dpkg-deb --build GLider
+          ls -l
