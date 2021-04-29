@@ -4,57 +4,58 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  manual-build-debug:
+
+  build-debug:
 
     runs-on: ubuntu-latest
 
     steps:
     
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
       
       - name: install dependencies
         run: |
           sudo apt update
           sudo apt install gcc g++ git cmake python3-pip libsdl2-dev libglm-dev
 
-      - name: CMake Configure and Build
+      - name: CMake Configure
         run: |
           mkdir build && cd build
           cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
-          cmake --build . --verbose
+      
+      - name: Build
+        run: cmake --build . --verbose
         
       - name: Run Tests
-        run: |
-          ctest -C Debug -T test
+        run: ctest -C Debug -T test
   
-  deb-package-creation:
+  # build-relese:
 
-    runs-on: ubuntu-latest
-
-    steps:
+  #   runs-on: ubuntu-latest
+  #   needs: build-debug
     
-      - uses: actions/checkout@v2
-      
-      - name: install dependencies
-        run: |
-          sudo apt update
-          sudo apt install gcc g++ git cmake python3-pip libsdl2-dev libglm-dev
+  #   steps:
 
-      - name: CMake Configure, Build and Install
-        run: |
-          mkdir build && cd build
-          cmake ..
-          cmake --build .
-          cmake --install . --prefix "$HOME/GLider/usr"
-          cp -r ../debian ~/GLider/DEBIAN
-        
-      - name: Create Package
-        run: |
-          cd ~
-          dpkg-deb --build GLider
-          ls -l
+  #     - name: Reconfigure CMake
+  #       run: |
+  #         rm -rf *
+  #         rm -rf .*
+  #         cmake ..
+      
+  #     - name: Build
+  #       run: cmake --build . --verbose
+      
+  #     - name: Install
+  #       run: |
+  #         cmake --install . --prefix "$HOME/GLider/usr"
+  #         cp -r ../debian/. ~/GLider/DEBIAN/
+      
+  #     - name: Create Debian Package
+  #       run: |
+  #         cd ~
+  #         dpkg-deb --build GLider
+  
+
