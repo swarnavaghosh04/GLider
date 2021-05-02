@@ -27,10 +27,10 @@ jobs:
           cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
       
       - name: Build
-        run: cmake --build . --verbose
+        run: cmake --build build --verbose
         
       - name: Run Tests
-        run: ctest -C Debug -T test
+        run: ctest -C Debug -T test --output-on-failure --test-dir build
   
   # build-relese:
 
