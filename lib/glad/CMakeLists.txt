@@ -6,13 +6,34 @@ if(NOT glad_FOUND)
 
     project(glad LANGUAGES C)
 
+    set(GLAD_PROFILE "" CACHE STRING "OpenGL profile (defaults to compatibility)")
+    set(GLAD_API "" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
+    set(GLAD_SPEC "" CACHE STRING "Name of spec (gl, egl, glx or wgl)")
+    set(GLAD_EXTENSIONS "" CACHE STRING "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
+
+    if(NOT (GLAD_PROFILE STREQUAL ""))
+        string(PREPEND GLAD_EXTENSIONS "--profile;")
+    endif()
+
+    if(NOT (GLAD_API STREQUAL ""))
+        string(PREPEND GLAD_EXTENSIONS "--api;")
+    endif()
+
+    if(NOT (GLAD_SPEC STREQUAL ""))
+        string(PREPEND GLAD_EXTENSIONS "--spec;")
+    endif()
+
+    if(NOT (GLAD_EXTENSIONS STREQUAL ""))
+        string(PREPEND GLAD_EXTENSIONS "--extensions;")
+    endif()
+
     add_library(glad OBJECT)
 
     execute_process(
         COMMAND python3 -m pip install glad
     )
     execute_process(
-        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} --generator=c --profile=core
+        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
     )
 
     file(

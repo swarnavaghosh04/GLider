@@ -4,10 +4,12 @@
 #include <chrono>
 
 const char* vertexShader = R"CODE(
+
     #version 140
+    #extension GL_ARB_separate_shader_objects : require
     
-    in vec4 vertexPos;
-    in vec3 vertexColor;
+    layout(location = 0) in vec4 vertexPos;
+    layout(location = 1) in vec3 vertexColor;
 
     out vec3 fragmentColor;
 
@@ -70,8 +72,8 @@ int main(int argc, char* argv[]){
         gli::Buffer<gli::VertexBuffer> vb;
         gli::Shaders shaders;
 
-        shaders.bindAttribLocation(0, "vertexPos");
-        shaders.bindAttribLocation(1, "vertexColor");
+        // shaders.bindAttribLocation(0, "vertexPos");
+        // shaders.bindAttribLocation(1, "vertexColor");
 
         vb.feedData(vertecies, gli::UseDynamicDraw);
         va.readBufferData<float>(
