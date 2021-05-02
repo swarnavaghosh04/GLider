@@ -6,21 +6,21 @@ if(NOT glad_FOUND)
 
     project(glad LANGUAGES C)
 
-    set(GLAD_PROFILE "" CACHE STRING "OpenGL profile (defaults to compatibility)")
+    set(GLAD_PROFILE "core" CACHE STRING "OpenGL profile (defaults to compatibility)")
     set(GLAD_API "" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
     set(GLAD_SPEC "" CACHE STRING "Name of spec (gl, egl, glx or wgl)")
     set(GLAD_EXTENSIONS "" CACHE STRING "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
 
     if(NOT (GLAD_PROFILE STREQUAL ""))
-        string(PREPEND GLAD_EXTENSIONS "--profile;")
+        string(PREPEND GLAD_PROFILE "--profile;")
     endif()
 
     if(NOT (GLAD_API STREQUAL ""))
-        string(PREPEND GLAD_EXTENSIONS "--api;")
+        string(PREPEND GLAD_API "--api;")
     endif()
 
     if(NOT (GLAD_SPEC STREQUAL ""))
-        string(PREPEND GLAD_EXTENSIONS "--spec;")
+        string(PREPEND GLAD_SPEC "--spec;")
     endif()
 
     if(NOT (GLAD_EXTENSIONS STREQUAL ""))

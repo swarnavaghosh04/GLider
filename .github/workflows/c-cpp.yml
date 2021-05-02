@@ -30,7 +30,7 @@ jobs:
         run: cmake --build build --verbose
         
       - name: Run Tests
-        run: ctest -C Debug -T test --test-dir build
+        run: ctest -C Debug -T test --output-on-failure --test-dir build
   
   # build-relese:
 
