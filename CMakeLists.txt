@@ -15,7 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(NOT BUILD_TESTS)
-    set(BUILD_TESTS FALSE)
+    set(BUILD_TESTS FALSE BOOL)
 endif()
 
 string(
