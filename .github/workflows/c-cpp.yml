@@ -16,6 +16,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       
+      - name: Setup OpenGL
+        uses: openrndr/setup-opengl@v1.1
+      
       - name: install dependencies
         run: |
           sudo apt update
