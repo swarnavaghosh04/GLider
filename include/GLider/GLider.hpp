@@ -34,7 +34,7 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "GLider/Window.hpp"
 #include "GLider/VertexArray.hpp"
 #include "GLider/Buffer.hpp"
-#include "GLider/Shaders.hpp"
+#include "GLider/ShaderProgram.hpp"
 #include "GLider/FrameRate.hpp"
 
 #include <array>

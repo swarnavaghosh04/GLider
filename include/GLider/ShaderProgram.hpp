@@ -25,16 +25,16 @@ namespace gli{
         #endif
     };
 
-    class Shaders : public OpenGLBase<Shaders>{
+    class ShaderProgram : public OpenGLBase<ShaderProgram>{
     private:
-        friend class OpenGLBase<Shaders>;
+        friend class OpenGLBase<ShaderProgram>;
         // std::unordered_map<const char*, unsigned int> uniformLocCache;
-        Shaders(unsigned int id) noexcept;
+        ShaderProgram(unsigned int id) noexcept;
         static void bindID(unsigned int id) noexcept;
         static unsigned int getBoundID() noexcept;
     public:
-        Shaders() noexcept;
-        ~Shaders() noexcept;
+        ShaderProgram() noexcept;
+        ~ShaderProgram() noexcept;
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link();
@@ -49,6 +49,6 @@ namespace gli{
 
 }
 
-#include "GLider/impl/Shaders.inl"
+#include "GLider/impl/ShaderProgram.inl"
 
 #endif

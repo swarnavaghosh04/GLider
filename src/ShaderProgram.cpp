@@ -1,40 +1,67 @@
-#include "GLider/Shaders.hpp"
+#include "GLider/ShaderProgram.hpp"
 
 namespace gli
 {
 
-    Shaders::Shaders() noexcept
+    ShaderProgram::ShaderProgram() noexcept
     {
         GL_CALL(this->id = glCreateProgram());
     }
 
-    Shaders::~Shaders() noexcept
+    ShaderProgram::~ShaderProgram() noexcept
     {
         GL_CALL(glDeleteProgram(this->id));
     }
 
-    void Shaders::compileString(ShaderType shaderType, const char *sourceCode)
-    {
+    class Shader{
+    private:
 
-        GL_CALL(unsigned int shader = glCreateShader((unsigned int)shaderType));
-        GL_CALL(glShaderSource(shader, 1, &sourceCode, NULL));
-        GL_CALL(glCompileShader(shader));
+        const unsigned int id;
 
-        int res;
-        GL_CALL(glGetShaderiv(shader, GL_COMPILE_STATUS, &res));
-        if (res == GL_FALSE)
-        {
-            GL_CALL(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &res));
-            char message[res];
-            GL_CALL(glGetShaderInfoLog(shader, res, NULL, message));
-            GL_CALL(glDeleteShader(shader));
+        inline int get(unsigned int value){
+            int res;
+            GL_CALL(glGetShaderiv(id, value, &res));
+            return res;
+        }
+        void throwErrorMessage(){
+            int messageLength = get(GL_INFO_LOG_LENGTH);
+            char message[messageLength];
+            GL_CALL(glGetShaderInfoLog(id, messageLength, NULL, message));
             throw std::runtime_error(message);
         }
-        GL_CALL(glAttachShader(this->id, shader));
-        GL_CALL(glDeleteShader(shader));
+        void checkIfCompileSuccessful(){
+            if(get(GL_COMPILE_STATUS) == GL_FALSE)
+                throwErrorMessage();
+        }
+    public:
+        Shader(ShaderType type, const char* source) noexcept:
+            id{glCreateShader((unsigned int)type)}
+        {
+            GL_CALL();
+            GL_CALL(glShaderSource(id, 1, &source, NULL));
+        }
+        ~Shader() noexcept{
+            GL_CALL(glDeleteShader(id));
+        }
+        void compile(){
+            GL_CALL(glCompileShader(id));
+            checkIfCompileSuccessful();
+        }
+        void attachToProgram(ShaderProgram* p) noexcept{
+            GL_CALL(glAttachShader(p->getID(), this->id));
+        }
+    };
+
+    void ShaderProgram::compileString(ShaderType shaderType, const char *sourceCode)
+    {
+
+        Shader shader(shaderType, sourceCode);
+        shader.compile();
+        shader.attachToProgram(this);
+
     }
 
-    void Shaders::compileFile(ShaderType shaderType, const char *sourceFilePath)
+    void ShaderProgram::compileFile(ShaderType shaderType, const char *sourceFilePath)
     {
 
         if (
@@ -54,7 +81,7 @@ namespace gli
         }
     }
 
-    void Shaders::link()
+    void ShaderProgram::link()
     {
 
         GL_CALL(glLinkProgram(this->id));
@@ -70,7 +97,7 @@ namespace gli
         }
     }
 
-    void Shaders::validate() const
+    void ShaderProgram::validate() const
     {
 
         GL_CALL(glValidateProgram(this->id));
@@ -86,7 +113,7 @@ namespace gli
         }
     }
 
-    unsigned int Shaders::getUniformLocation(const char *name)
+    unsigned int ShaderProgram::getUniformLocation(const char *name)
     {
 
         // if(uniformLocCache.find(name) != uniformLocCache.end())

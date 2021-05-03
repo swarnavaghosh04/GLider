@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
 
         gli::VertexArray va;
         gli::Buffer<gli::VertexBuffer> vb;
-        gli::Shaders shaders;
+        gli::ShaderProgram shaders;
 
         // shaders.bindAttribLocation(0, "vertexPos");
         // shaders.bindAttribLocation(1, "vertexColor");

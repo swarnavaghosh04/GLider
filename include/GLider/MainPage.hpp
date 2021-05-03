@@ -27,7 +27,7 @@
  * 2. Creates an array of vertices
  * 3. Creates a window that has 3/4 dimensions of the
  *    screen
- * 4. Declared @ref VertexArray, @ref VertexBuffer, and @ref Shaders objects
+ * 4. Declared @ref VertexArray, @ref VertexBuffer, and @ref ShaderProgram objects
  * 5. feeds the data of the vertices to the GPU through VertexBuffer
  * 6. VertexArray makes sense of the VertexBuffer data by reading it in a specific 
  *    structure defined by an array of @ref LayoutElement

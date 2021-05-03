@@ -194,7 +194,7 @@ struct Cube{
     const std::array<gli::LayoutElement,1>  verBufLayout;
     gli::Buffer<gli::VertexBuffer>          vertexBuffer;
     gli::Buffer<gli::IndexBuffer>           indexBuffer;
-    gli::Shaders                            shaders;
+    gli::ShaderProgram                            shaders;
 
     const MotionVar::Bounds translationBounds;
     const MotionVar::Bounds rotationBounds;

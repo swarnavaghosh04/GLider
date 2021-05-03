@@ -1,19 +1,19 @@
 #ifndef GLI_SHADERS__I_
 #define GLI_SHADERS__I_
 
-#include "GLider/Shaders.hpp"
+#include "GLider/ShaderProgram.hpp"
 
 namespace gli{
 
-    inline Shaders::Shaders(unsigned int id) noexcept:
+    inline ShaderProgram::ShaderProgram(unsigned int id) noexcept:
         OpenGLBase(id)
     {}
 
-    inline void Shaders::bindID(unsigned int anotherID) noexcept{
+    inline void ShaderProgram::bindID(unsigned int anotherID) noexcept{
         GL_CALL(glUseProgram(anotherID));
     }
 
-    inline unsigned int Shaders::getBoundID() noexcept{
+    inline unsigned int ShaderProgram::getBoundID() noexcept{
         int r;
         glGetIntegerv(GL_CURRENT_PROGRAM, &r);
         return static_cast<unsigned int>(r);
@@ -34,7 +34,7 @@ namespace gli{
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int L, typename T, glm::qualifier Q>
-    void Shaders::setUniform(const char* name, const glm::vec<L,T,Q>& v){
+    void ShaderProgram::setUniform(const char* name, const glm::vec<L,T,Q>& v){
 
         if(GLVersion.major == 4 && GLVersion.minor >= 0){
 
@@ -100,7 +100,7 @@ namespace gli{
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int R, int C, typename T, glm::qualifier Q>
-    void Shaders::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
+    void ShaderProgram::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
 
         if(GLVersion.major == 4 && GLVersion.minor >= 0){
 
@@ -217,7 +217,7 @@ namespace gli{
 
     #undef COMMA
 
-    inline void Shaders::bindAttribLocation(unsigned int index, const char* name) const noexcept{
+    inline void ShaderProgram::bindAttribLocation(unsigned int index, const char* name) const noexcept{
         GL_CALL(glBindAttribLocation(this->id, index, name));
     }
 
