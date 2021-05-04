@@ -63,6 +63,7 @@ int main(int argc, char* argv[]){
 
         gli::OpenGLWindow win{"Triangle", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
         
+        std::printf("OpenGL GLAD verision   : %d.%d\n", GLVersion.major, GLVersion.minor);
         std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
         std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
         std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));

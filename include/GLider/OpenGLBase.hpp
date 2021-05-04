@@ -41,7 +41,6 @@ namespace gli{
     };
 
     enum DrawType : unsigned int{
-        #if GL_VERSION_2_0
         DrawPoints          = GL_POINTS,
         DrawLineStrip       = GL_LINE_STRIP,
         DrawLineLoop        = GL_LINE_LOOP,
@@ -49,20 +48,14 @@ namespace gli{
         DrawTriangleStrip   = GL_TRIANGLE_STRIP,
         DrawTriangleFan     = GL_TRIANGLE_FAN,
         DrawTriangles       = GL_TRIANGLES,
-        #if !GL_VERSION_3_0
-        DrawQuadStrip       = GL_QUAD_STRIP,
-        DrawQuads           = GL_QUADS,
-        DrawPolygon         = GL_POLYGON,
-        #endif
-        #endif
         #if GL_VERSION_3_2
         DrawLineStripAdjacency      = GL_LINE_STRIP_ADJACENCY,
         DrawLinesAdjacency          = GL_LINES_ADJACENCY,
         DrawTriangleStripAdjacency  = GL_TRIANGLE_STRIP_ADJACENCY,
         DrawTrianglesAdjacency      = GL_TRIANGLES_ADJACENCY,
-        #endif
         #if GL_VERSION_4_0
         DrawPatches                 = GL_PATCHES,
+        #endif
         #endif
     };
 
@@ -93,14 +86,14 @@ namespace gli{
         ProgramPointSize = GL_PROGRAM_POINT_SIZE,
         #if GL_VERSION_3_1
         PrimitiveRestart = GL_PRIMITIVE_RESTART,
-        #endif
         #if GL_VERSION_3_2
         TextureCubeMapSeamless = GL_TEXTURE_CUBE_MAP_SEAMLESS,
-        #endif
         #if GL_VERSION_4_3
         PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX,
         DebugOutput = GL_DEBUG_OUTPUT,
         DebugOutputSynchronous = GL_DEBUG_OUTPUT_SYNCHRONOUS,
+        #endif
+        #endif
         #endif
     };
 

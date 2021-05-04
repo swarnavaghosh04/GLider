@@ -221,5 +221,15 @@ namespace gli{
         GL_CALL(glBindAttribLocation(this->id, index, name));
     }
 
+    inline int ShaderProgram::getParameter(ProgramParameter param) const noexcept{
+        int res;
+        GL_CALL(glGetProgramiv(this->id, static_cast<unsigned int>(param), &res));
+        return res;
+    }
+
+    inline void ShaderProgram::getInfoLog(char* buffer, unsigned int size) const{
+        GL_CALL(glGetProgramInfoLog(this->id, size, NULL, buffer));
+    }
+
 }
 #endif

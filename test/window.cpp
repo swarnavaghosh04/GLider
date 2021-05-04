@@ -2,7 +2,7 @@
 constexpr int t = 2000;
 
 #include "GLider/GLider.hpp"
-#include <iostream>
+#include <cstdio>
 #include <exception>
 #include <chrono>
 #include <cstdlib>
@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     try{
         gli::initialize(3,0);
     }catch(const std::exception& ex){
-        std::cout << "Initialization Error Occured: " << ex.what() << std::endl;
+        std::printf("Initialization Error Occured: %s\n", ex.what());
         return 2;
     }
 
@@ -33,6 +33,12 @@ int main(int argc, char* argv[]){
             throw std::runtime_error(SDL_GetError());
 
         gli::OpenGLWindow win{"TestWindow", int(float(dm.w)*3.f/4.f), int(float(dm.h)*3.f/4.f)};
+
+        std::printf("OpenGL GLAD verision   : %d.%d\n", GLVersion.major, GLVersion.minor);
+        std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
+        std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));
+        std::printf("OpenGL Renderer        : %s \n", glGetString(GL_RENDERER));
 
         auto start = std::chrono::steady_clock::now();
 
@@ -47,7 +53,7 @@ int main(int argc, char* argv[]){
         }
 
     }catch(const std::exception& ex){
-        std::cout << "Exception Occured: " << ex.what() << std::endl;
+        std::printf("Exception Occured: %s\n", ex.what());
         return 3;
     }
 

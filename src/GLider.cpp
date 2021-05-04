@@ -1,6 +1,11 @@
 #include "GLider/GLider.hpp"
 
 void gli::checkVersion(int major, int minor){
+
+    #if !GL_VERSION_3_0
+        static_assert(false, "GLAD must load AT LEAST OpenGL 3.0");
+    #endif
+
     switch(major){
     case 3:
         if(minor < 0 || minor > 3)

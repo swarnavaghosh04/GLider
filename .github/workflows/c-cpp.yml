@@ -32,8 +32,8 @@ jobs:
       - name: Build
         run: cmake --build build --verbose
         
-      - name: Run Tests
-        run: ctest -C Debug -T test --output-on-failure --test-dir build
+      # - name: Run Tests
+      #   run: ctest -C Debug -T test --output-on-failure --test-dir build
   
   # build-relese:
 

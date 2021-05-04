@@ -1,39 +1,35 @@
 #include "GLider/ShaderProgram.hpp"
+#include <optional>
 
 namespace gli
 {
-
-    ShaderProgram::ShaderProgram() noexcept
-    {
-        GL_CALL(this->id = glCreateProgram());
-    }
-
-    ShaderProgram::~ShaderProgram() noexcept
-    {
-        GL_CALL(glDeleteProgram(this->id));
-    }
-
     class Shader{
+
     private:
 
         const unsigned int id;
 
-        inline int get(unsigned int value){
+        inline int getShaderParameter(unsigned int param) const{
             int res;
-            GL_CALL(glGetShaderiv(id, value, &res));
+            GL_CALL(glGetShaderiv(id, param, &res));
             return res;
         }
-        void throwErrorMessage(){
-            int messageLength = get(GL_INFO_LOG_LENGTH);
+        void getInfoLog (char* buffer, unsigned int size) const{
+            GL_CALL(glGetShaderInfoLog(id, size, NULL, buffer));
+        }
+        void throwErrorMessage() const{
+            int messageLength = getShaderParameter(GL_INFO_LOG_LENGTH);
             char message[messageLength];
-            GL_CALL(glGetShaderInfoLog(id, messageLength, NULL, message));
+            getInfoLog(message, messageLength);
             throw std::runtime_error(message);
         }
-        void checkIfCompileSuccessful(){
-            if(get(GL_COMPILE_STATUS) == GL_FALSE)
+        void checkIfCompileSuccessful() const{
+            if(getShaderParameter(GL_COMPILE_STATUS) == GL_FALSE)
                 throwErrorMessage();
         }
+
     public:
+
         Shader(ShaderType type, const char* source) noexcept:
             id{glCreateShader((unsigned int)type)}
         {
@@ -52,79 +48,71 @@ namespace gli
         }
     };
 
+    ShaderProgram::ShaderProgram() noexcept
+    {
+        GL_CALL(this->id = glCreateProgram());
+    }
+
+    ShaderProgram::~ShaderProgram() noexcept
+    {
+        GL_CALL(glDeleteProgram(this->id));
+    }
+
     void ShaderProgram::compileString(ShaderType shaderType, const char *sourceCode)
     {
-
         Shader shader(shaderType, sourceCode);
         shader.compile();
         shader.attachToProgram(this);
+    }
+
+    inline std::string convertFileToString(std::ifstream& file){
+        return std::string{
+            std::istreambuf_iterator<char>(file),
+            std::istreambuf_iterator<char>()
+        };
+    }
+
+    std::optional<std::string> convertFileToString(const char* filePath){
+
+        std::ifstream file(filePath);
+        if( ! file.is_open() ) return std::nullopt;
+        std::string str(convertFileToString(file));
+        file.close();
+        return str;
+        
+    }
+
+    void ShaderProgram::compileFile(ShaderType shaderType, const char *sourceFilePath){
+
+        std::optional<std::string> sourceCode{convertFileToString(sourceFilePath)};
+        if(sourceCode) compileString(shaderType, (*sourceCode).c_str());
+        else throw std::runtime_error("Cannot Open Shader Source File");
 
     }
 
-    void ShaderProgram::compileFile(ShaderType shaderType, const char *sourceFilePath)
-    {
-
-        if (
-            std::ifstream sourceFile(sourceFilePath);
-            sourceFile.is_open())
-        {
-            std::string line, text;
-            while (std::getline(sourceFile, line))
-            {
-                text += line + '\n';
-            }
-            compileString(shaderType, text.c_str());
-        }
-        else
-        {
-            throw std::runtime_error("Cannot Open Shader Source File");
-        }
+    void ShaderProgram::throwErrorMessage() const{
+        int messageLength = getParameter(InfoLogLength);
+        char message[messageLength];
+        getInfoLog(message, messageLength);
+        throw std::runtime_error(message);
     }
 
-    void ShaderProgram::link()
-    {
-
+    void ShaderProgram::link() const{
         GL_CALL(glLinkProgram(this->id));
-
-        int res;
-        GL_CALL(glGetProgramiv(this->id, GL_LINK_STATUS, &res));
-        if (res == GL_FALSE)
-        {
-            GL_CALL(glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &res));
-            char message[res];
-            GL_CALL(glGetProgramInfoLog(this->id, res, NULL, message));
-            throw std::runtime_error(message);
-        }
+        if(getParameter(LinkStatus) == GL_FALSE)
+            throwErrorMessage();
     }
 
-    void ShaderProgram::validate() const
-    {
-
+    void ShaderProgram::validate() const{
         GL_CALL(glValidateProgram(this->id));
-
-        int res;
-        GL_CALL(glGetProgramiv(this->id, GL_VALIDATE_STATUS, &res));
-        if (res == GL_FALSE)
-        {
-            GL_CALL(glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &res));
-            char message[res];
-            GL_CALL(glGetProgramInfoLog(this->id, res, NULL, message));
-            throw std::runtime_error(message);
-        }
+        if(getParameter(ValidateStatus) == GL_FALSE)
+            throwErrorMessage();
     }
 
-    unsigned int ShaderProgram::getUniformLocation(const char *name)
-    {
-
-        // if(uniformLocCache.find(name) != uniformLocCache.end())
-        //     return uniformLocCache[name];
-
+    unsigned int ShaderProgram::getUniformLocation(const char *name) const{
         GL_CALL(int loc = glGetUniformLocation(this->id, name));
-
         if (loc == -1)
             throw std::runtime_error("Uniform not found");
-
-        // uniformLocCache[name] = loc;
         return loc;
     }
 

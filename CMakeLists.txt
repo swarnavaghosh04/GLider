@@ -14,8 +14,6 @@ if(NOT CMAKE_BUILD_TYPE)
     )
 endif()
 
-set(GLAD_EXTENSIONS "GL_ARB_shader_objects")
-
 if(NOT BUILD_TESTS)
     set(BUILD_TESTS FALSE BOOL)
 endif()
