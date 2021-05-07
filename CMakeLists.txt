@@ -7,16 +7,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(
-        CMAKE_BUILD_TYPE "Release" CACHE
-        STRING "Choose the type of build." FORCE
-    )
-endif()
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build")
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 
-if(NOT BUILD_TESTS)
-    set(BUILD_TESTS FALSE BOOL)
-endif()
+set(BUILD_GLIDER_TESTS FALSE CACHE BOOL "Builds the unit tests (inside `test` directory)")
 
 string(
     APPEND _opts
@@ -101,7 +95,7 @@ endif()
 # build library
 
 add_subdirectory(src)
-if(BUILD_TESTS)
+if(BUILD_GLIDER_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()
@@ -118,9 +112,9 @@ install(
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT GLider_Development
 )
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+if(BUILD_GLIDER_TESTS)
     install(
-        TARGETS cube triangle
+        TARGETS cube triangle init window
         EXPORT GLiderTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             COMPONENT GLider_Runtime

@@ -6,7 +6,7 @@
 #include "GLider/GLErrorHandling.hpp"
 
 #if GL_VERSION_4_0
-    #define INCORPORATE_DOUBLE
+    #define INCORPORATE_DOUBLE 1
 #endif
 
 namespace gli{

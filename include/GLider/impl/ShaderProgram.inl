@@ -18,19 +18,25 @@ namespace gli{
         glGetIntegerv(GL_CURRENT_PROGRAM, &r);
         return static_cast<unsigned int>(r);
     }
-    
 
-    #define COMMA ,
-
-    #define SET_PROGRAM_UNIFORM(n, Program, thisID, ...)\
+    #define SET_PROGRAM_UNIFORM(n)\
         if constexpr(std::is_same<T, int>())\
-            gl##Program##Uniform##n##i(thisID getUniformLocation(name), __VA_ARGS__);\
-        else if(std::is_same<T, unsigned int>())\
-            gl##Program##Uniform##n##ui(thisID getUniformLocation(name), __VA_ARGS__);\
-        else if(std::is_same<T, float>())\
-            gl##Program##Uniform##n##f(thisID getUniformLocation(name), __VA_ARGS__);\
-        else if(std::is_same<T, double>() && GLVersion.major == 4)\
-            gl##Program##Uniform##n##d(thisID getUniformLocation(name), __VA_ARGS__);\
+            glProgramUniform##n##iv(this->id, getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(std::is_same<T, unsigned int>())\
+            glProgramUniform##n##uiv(this->id, getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(std::is_same<T, float>())\
+            glProgramUniform##n##fv(this->id, getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(std::is_same<T, double>())\
+            glProgramUniform##n##dv(this->id, getUniformLocation(name), 1, (T*)(&v[0]));\
+        else throw std::logic_error("Invalid datatype for uniform");
+
+    #define SET_UNIFORM(n)\
+        if constexpr(std::is_same<T, int>())\
+            glUniform##n##iv(getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(std::is_same<T, unsigned int>())\
+            glUniform##n##uiv(getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(std::is_same<T, float>())\
+            glUniform##n##fv(getUniformLocation(name), 1, (T*)(&v[0]));\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int L, typename T, glm::qualifier Q>
@@ -40,16 +46,16 @@ namespace gli{
 
             switch(L){
             case 1:
-                SET_PROGRAM_UNIFORM(1, Program, this->id COMMA, v[0]);
+                SET_PROGRAM_UNIFORM(1);
                 break;
             case 2:
-                SET_PROGRAM_UNIFORM(2, Program, this->id COMMA, v[0], v[1]);
+                SET_PROGRAM_UNIFORM(2);
                 break;
             case 3:
-                SET_PROGRAM_UNIFORM(3, Program, this->id COMMA, v[0], v[1], v[2]);
+                SET_PROGRAM_UNIFORM(3);
                 break;
             case 4:
-                SET_PROGRAM_UNIFORM(4, Program, this->id COMMA, v[0], v[1], v[2], v[3]);
+                SET_PROGRAM_UNIFORM(4);
                 break;
             default:
                 throw std::logic_error("Invalid dimension for uniform");
@@ -64,16 +70,16 @@ namespace gli{
 
         switch(L){
         case 1:
-            SET_PROGRAM_UNIFORM(1,,, v[0]);
+            SET_UNIFORM(1);
             break;
         case 2:
-            SET_PROGRAM_UNIFORM(2,,, v[0], v[1]);
+            SET_UNIFORM(2);
             break;
         case 3:
-            SET_PROGRAM_UNIFORM(3,,, v[0], v[1], v[2]);
+            SET_UNIFORM(3);
             break;
         case 4:
-            SET_PROGRAM_UNIFORM(4,,, v[0], v[1], v[2], v[3]);
+            SET_UNIFORM(4);
             break;
         default:
             throw std::logic_error("Invalid dimension for uniform");
@@ -84,19 +90,34 @@ namespace gli{
     }
 
     #undef SET_PROGRAM_UNIFORM
+    #undef SET_UNIFORM
 
-    #define SET_PROGRAM_UNIFORM_MATRIX_N(N, Program, thisID)\
+    #define SET_PROGRAM_UNIFORM_MATRIX_N(N)\
         if constexpr(std::is_same<T, float>())\
-            gl##Program##UniformMatrix##N##fv(thisID getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
-        else if(std::is_same<T, double>() && GLVersion.major == 4)\
-            gl##Program##UniformMatrix##N##dv(thisID getUniformLocation(name), 1, transpose, (double*)&m[0][0]);\
+            glProgramUniformMatrix##N##fv(this->id, getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else if constexpr(std::is_same<T, double>())\
+            glProgramUniformMatrix##N##dv(this->id, getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
         else throw std::logic_error("Invalid datatype for uniform");
-
-    #define SET_PROGRAM_UNIFORM_MATRIX_RC(R,C,Program, thisID)\
-        if(std::is_same<T, float>())\
-            gl##Program##UniformMatrix##R##x##C##fv(thisID getUniformLocation(name), 1, transpose, (float*)&m[0][0]);\
-        else if(std::is_same<T, double>() && GLVersion.major == 4)\
-            gl##Program##UniformMatrix##R##x##C##dv(thisID getUniformLocation(name), 1, transpose, (double*)&m[0][0]);\
+    
+    #define SET_PROGRAM_UNIFORM_MATRIX_RC(R,C)\
+        if constexpr(std::is_same<T, float>())\
+            glProgramUniformMatrix##R##x##C##fv(this->id, getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else if constexpr(std::is_same<T, double>())\
+            glProgramUniformMatrix##R##x##C##dv(this->id, getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else throw std::logic_error("Invalid datatype for uniform");
+    
+    #define SET_UNIFORM_MATRIX_N(N)\
+        if constexpr(std::is_same<T, float>())\
+            glUniformMatrix##N##fv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else if constexpr(std::is_same<T, double>())\
+            glUniformMatrix##N##dv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else throw std::logic_error("Invalid datatype for uniform");
+    
+    #define SET_UNIFORM_MATRIX_RC(R,C)\
+        if constexpr(std::is_same<T, float>())\
+            glUniformMatrix##R##x##C##fv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
+        else if constexpr(std::is_same<T, double>())\
+            glUniformMatrix##R##x##C##dv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int R, int C, typename T, glm::qualifier Q>
@@ -108,13 +129,13 @@ namespace gli{
                 
                 switch(R){
                 case 2:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(2,Program, this->id COMMA);
+                    SET_PROGRAM_UNIFORM_MATRIX_N(2);
                     break;
                 case 3:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(3,Program, this->id COMMA);
+                    SET_PROGRAM_UNIFORM_MATRIX_N(3);
                     break;
                 case 4:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(4,Program, this->id COMMA);
+                    SET_PROGRAM_UNIFORM_MATRIX_N(4);
                     break;
                 }
 
@@ -123,30 +144,30 @@ namespace gli{
                 case 2:
                     switch(C){
                     case 3:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,3,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,3);
                         break;
                     case 4:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,4,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,4);
                         break;
                     }
                     break;
                 case 3:
                     switch(C){
                     case 2:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,2,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,2);
                         break;
                     case 4:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,4,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,4);
                         break;
                     }
                     break;
                 case 4:
                     switch(C){
                     case 2:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,2,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,2);
                         break;
                     case 3:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,3,Program, this->id COMMA);
+                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,3);
                         break;
                     }
                     break;
@@ -163,13 +184,13 @@ namespace gli{
             
             switch(R){
             case 2:
-                SET_PROGRAM_UNIFORM_MATRIX_N(2,,);
+                SET_UNIFORM_MATRIX_N(2);
                 break;
             case 3:
-                SET_PROGRAM_UNIFORM_MATRIX_N(3,,);
+                SET_UNIFORM_MATRIX_N(3);
                 break;
             case 4:
-                SET_PROGRAM_UNIFORM_MATRIX_N(4,,);
+                SET_UNIFORM_MATRIX_N(4);
                 break;
             }
 
@@ -178,30 +199,30 @@ namespace gli{
             case 2:
                 switch(C){
                 case 3:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(2,3,,);
+                    SET_UNIFORM_MATRIX_RC(2,3);
                     break;
                 case 4:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(2,4,,);
+                    SET_UNIFORM_MATRIX_RC(2,4);
                     break;
                 }
                 break;
             case 3:
                 switch(C){
                 case 2:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(3,2,,);
+                    SET_UNIFORM_MATRIX_RC(3,2);
                     break;
                 case 4:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(3,4,,);
+                    SET_UNIFORM_MATRIX_RC(3,4);
                     break;
                 }
                 break;
             case 4:
                 switch(C){
                 case 2:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(4,2,,);
+                    SET_UNIFORM_MATRIX_RC(4,2);
                     break;
                 case 3:
-                    SET_PROGRAM_UNIFORM_MATRIX_RC(4,3,,);
+                    SET_UNIFORM_MATRIX_RC(4,3);
                     break;
                 }
                 break;
@@ -214,8 +235,8 @@ namespace gli{
 
     #undef SET_PROGRAM_UNIFORM_MATRIX_N
     #undef SET_PROGRAM_UNIFORM_MATRIX_RC
-
-    #undef COMMA
+    #undef SET_UNIFORM_MATRIX_N
+    #undef SET_UNIFORM_MATRIX_RC
 
     inline void ShaderProgram::bindAttribLocation(unsigned int index, const char* name) const noexcept{
         GL_CALL(glBindAttribLocation(this->id, index, name));
