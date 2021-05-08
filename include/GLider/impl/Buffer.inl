@@ -19,33 +19,35 @@ namespace gli{
             return GL_COPY_WRITE_BUFFER_BINDING;
         case TransformFeedbackBuffer:
             return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
-        // #if GL_VERSION_3_1
+        #if GL_VERSION_3_1
         case CopyReadBuffer:
             return GL_COPY_READ_BUFFER_BINDING;
         case TextureBuffer:
             return GL_TEXTURE_BUFFER_BINDING;
         case UniformBuffer:
             return GL_UNIFORM_BUFFER_BINDING;
-        // #endif
-        // #ifdef GL_VERSION_4_0
+        #if GL_VERSION_4_0
         case DrawIndirectBuffer:
             return GL_DRAW_INDIRECT_BUFFER_BINDING;
-        // #endif
-        // #if GL_VERSION_4_2
+        #if GL_VERSION_4_2
         case AtomicCounterBuffer:
             return GL_ATOMIC_COUNTER_BUFFER_BINDING;
-        // #endif
-        // #if GL_VERSION_4_3
+        #if GL_VERSION_4_3
         case DispatchIndirectBuffer:
             return GL_DISPATCH_INDIRECT_BUFFER_BINDING;
         case ShaderStorageBuffer:
             return GL_SHADER_STORAGE_BUFFER_BINDING;
-        // #endif
-        // #if GL_VERSION_4_4
+        #if GL_VERSION_4_4
         case QueryBuffer:
             return GL_QUERY_BUFFER_BINDING;
-        // #endif
+        #endif
+        #endif
+        #endif
+        #endif
+        #endif
         }
+
+        return 0u;
     }
 
     template<BufferTarget target>

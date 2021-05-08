@@ -37,12 +37,14 @@ namespace gli{
             glUniform##n##uiv(getUniformLocation(name), 1, (T*)(&v[0]));\
         else if constexpr(std::is_same<T, float>())\
             glUniform##n##fv(getUniformLocation(name), 1, (T*)(&v[0]));\
+        else if constexpr(INCORPORATE_DOUBLE && std::is_same<T, double>())\
+            glUniform##n##dv(getUniformLocation(name), 1, (T*)(&v[0]));\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int L, typename T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::vec<L,T,Q>& v){
 
-        if(GLVersion.major == 4 && GLVersion.minor >= 0){
+        if(GLVersion.major == 4 && GLVersion.minor >= 1){
 
             switch(L){
             case 1:
@@ -109,21 +111,21 @@ namespace gli{
     #define SET_UNIFORM_MATRIX_N(N)\
         if constexpr(std::is_same<T, float>())\
             glUniformMatrix##N##fv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
-        else if constexpr(std::is_same<T, double>())\
+        else if constexpr(INCORPORATE_DOUBLE && std::is_same<T, double>())\
             glUniformMatrix##N##dv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
         else throw std::logic_error("Invalid datatype for uniform");
     
     #define SET_UNIFORM_MATRIX_RC(R,C)\
         if constexpr(std::is_same<T, float>())\
             glUniformMatrix##R##x##C##fv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
-        else if constexpr(std::is_same<T, double>())\
+        else if constexpr(INCORPORATE_DOUBLE && std::is_same<T, double>())\
             glUniformMatrix##R##x##C##dv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
         else throw std::logic_error("Invalid datatype for uniform");
 
     template<int R, int C, typename T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
 
-        if(GLVersion.major == 4 && GLVersion.minor >= 0){
+        if(GLVersion.major == 4 && GLVersion.minor >= 1){
 
             if constexpr(R == C){
                 

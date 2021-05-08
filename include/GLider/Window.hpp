@@ -63,4 +63,7 @@ namespace gli{
     
 }
 
+
+#include "GLider/impl/Window.inl"
+
 #endif

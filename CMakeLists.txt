@@ -114,7 +114,7 @@ install(
 )
 if(BUILD_GLIDER_TESTS)
     install(
-        TARGETS cube triangle init window
+        TARGETS cube triangle init
         EXPORT GLiderTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             COMPONENT GLider_Runtime

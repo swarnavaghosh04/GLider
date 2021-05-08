@@ -66,14 +66,14 @@ namespace gli{
 
     template<class Derived>
     inline Binder<Derived>::Binder(const OpenGLBase<Derived>& base) noexcept:
-        prev(base)
+        prevID{OpenGLBase<Derived>::getBoundID()}
     {
         base.bind();
     }
 
     template<class Derived>
     inline Binder<Derived>::~Binder() noexcept{
-        prev.bind();
+        OpenGLBase<Derived>::bindID(prevID);
     }
 
     inline void clear(BufferBit mask) noexcept{

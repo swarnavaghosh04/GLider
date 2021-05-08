@@ -95,19 +95,15 @@ namespace gli{
         unsigned int windowFlags,
         unsigned int rendererFlags)
     :
-        Window{title, width, height, windowFlags},
-        renderer{*(Window*)(&(this->window)), rendererFlags | SDL_WINDOW_OPENGL},
-        glContext{*(Window*)(&(this->window))}
+        Window(title, width, height, windowFlags),
+        renderer(*(Window*)(&(this->window)), rendererFlags | SDL_WINDOW_OPENGL),
+        glContext(*(Window*)(&(this->window)))
     {
         if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
             throw std::runtime_error("GLAD Unable to load OpenGL");
 
         // enable(Multisample);
         // enable(DepthTest);
-    }
-
-    void OpenGLWindow::swap() noexcept{
-        SDL_GL_SwapWindow(this->window);
     }
 
 }

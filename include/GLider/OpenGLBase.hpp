@@ -129,7 +129,7 @@ namespace gli{
     template<class Derived>
     class Binder{
     private:
-        const OpenGLBase<Derived>& prev;
+        unsigned int prevID;
     public:
         Binder(const OpenGLBase<Derived>& base) noexcept;
         ~Binder() noexcept;
