@@ -6,8 +6,8 @@
 #   cd .. && rm -rf build
 build/
 
-# doxygen/ can be generate using doxygen documentaiton generator:
-#   doxygen dconfig
+# documentation/ can be generate using doxygen documentaiton generator:
+#   doxygen Doxyfile
 documentation/
 
 # if needed, glad sources will be generated
