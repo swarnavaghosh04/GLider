@@ -1,5 +1,6 @@
 /**
  * @mainpage GLider - OpenGL C++ Class Abstraction
+ * @author Swarnava Ghosh
  * 
  * @section intro_sec Introduction
  * 
