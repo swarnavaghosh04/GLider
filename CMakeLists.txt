@@ -10,7 +10,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 
-set(BUILD_GLIDER_TESTS FALSE CACHE BOOL "Builds the unit tests (inside `test` directory)")
+set(BUILD_GLIDER_TESTS FALSE CACHE BOOL "Build the unit tests (inside `test` directory)")
 
 string(
     APPEND _opts
@@ -57,15 +57,18 @@ endif()
 # build dependency libraries
 
 find_package(OpenGL REQUIRED)
-find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2 CONFIG)
 find_package(glm CONFIG REQUIRED)
 find_package(glad CONFIG)
-add_subdirectory(lib/glad)
 
-# Library fixes
+# Dependency fixes
 
 if(NOT TARGET SDL2::SDL2 OR NOT TARGET SDL2::SDL2-static)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SDL2ConfigBackup.cmake)
+endif()
+
+if(NOT glad_FOUND)
+    add_subdirectory(lib/glad)
 endif()
 
 if(NOT TARGET glm::glm)

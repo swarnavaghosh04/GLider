@@ -12,16 +12,16 @@ namespace gli{
         #if GL_VERSION_2_0
         VertexShader            = GL_VERTEX_SHADER,
         FragmentShader          = GL_FRAGMENT_SHADER,
-        #endif
-        #if GL_VERSION_3_0
+        #if GL_VERSION_3_2
         GeometryShader          = GL_GEOMETRY_SHADER,
-        #endif
         #if GL_VERSION_4_0
         TessControlShader       = GL_TESS_CONTROL_SHADER,
         TessEvaluationShader    = GL_TESS_EVALUATION_SHADER,
-        #endif
         #if GL_VERSION_4_3
         ComputeShader           = GL_COMPUTE_SHADER,
+        #endif
+        #endif
+        #endif
         #endif
     };
 
@@ -34,19 +34,25 @@ namespace gli{
         ActiveAttributes = GL_ACTIVE_ATTRIBUTES,
         ActiveAttributeMaxLength = GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
         ActiveUniforms = GL_ACTIVE_UNIFORMS,
-        ActiveUniformBlocks = GL_ACTIVE_UNIFORM_BLOCKS,
-        ActiveUniformBlockMaxNameLength = GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH,
         ActiveUniformMaxLength = GL_ACTIVE_UNIFORM_MAX_LENGTH,
         TransformFeedbackBufferMode = GL_TRANSFORM_FEEDBACK_BUFFER_MODE,
         TransformFeedbackVaryings = GL_TRANSFORM_FEEDBACK_VARYINGS,
         TransformFeedbackVaryingMaxLength = GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH,
+        #if GL_VERSION_3_1
+        ActiveUniformBlocks = GL_ACTIVE_UNIFORM_BLOCKS,
+        ActiveUniformBlockMaxNameLength = GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH,
+        #if GL_VERSION_3_2
         GeometryVerticesOut = GL_GEOMETRY_VERTICES_OUT,
         GeometryInputType = GL_GEOMETRY_INPUT_TYPE,
         GeometryOutputType = GL_GEOMETRY_OUTPUT_TYPE,
-        #ifdef GL_VERSION_4_0
+        #if GL_VERSION_4_2
         ActiveAtomicCounterBuffers = GL_ACTIVE_ATOMIC_COUNTER_BUFFERS,
-        ComputeWorkGroupSize = GL_COMPUTE_WORK_GROUP_SIZE,
         ProgramBinaryLength = GL_PROGRAM_BINARY_LENGTH,
+        #if GL_VERSION_4_3
+        ComputeWorkGroupSize = GL_COMPUTE_WORK_GROUP_SIZE,
+        #endif
+        #endif
+        #endif
         #endif
     };
 

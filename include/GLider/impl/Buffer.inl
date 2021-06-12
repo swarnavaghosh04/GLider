@@ -15,11 +15,11 @@ namespace gli{
             return GL_PIXEL_PACK_BUFFER_BINDING;
         case PixelUnpackBuffer:
             return GL_PIXEL_UNPACK_BUFFER_BINDING;
-        case CopyWriteBuffer:
-            return GL_COPY_WRITE_BUFFER_BINDING;
         case TransformFeedbackBuffer:
             return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
         #if GL_VERSION_3_1
+        case CopyWriteBuffer:
+            return GL_COPY_WRITE_BUFFER_BINDING;
         case CopyReadBuffer:
             return GL_COPY_READ_BUFFER_BINDING;
         case TextureBuffer:
@@ -45,9 +45,9 @@ namespace gli{
         #endif
         #endif
         #endif
+        default:
+            return 0u;
         }
-
-        return 0u;
     }
 
     template<BufferTarget target>

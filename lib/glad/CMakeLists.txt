@@ -1,61 +1,56 @@
 cmake_minimum_required(VERSION 3.10)
 
-if(NOT glad_FOUND)
-
-    message(STATUS "glad not found, generating sources using python pip")
-
-    project(glad LANGUAGES C)
-
-    set(GLAD_PROFILE "core" CACHE STRING "OpenGL profile (defaults to compatibility)")
-    set(GLAD_API "" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
-    set(GLAD_SPEC "" CACHE STRING "Name of spec (gl, egl, glx or wgl)")
-    set(GLAD_EXTENSIONS "" CACHE STRING "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
-
-    if(NOT (GLAD_PROFILE STREQUAL ""))
-        string(PREPEND GLAD_PROFILE "--profile;")
+function(SET_GLAD_OPTION option default_value doc_string)
+    string(TOUPPER ${option} var_name)
+    string(PREPEND var_name "GLAD_")
+    if(DEFINED "${var_name}")
+        set(${var_name} ${${var_name}} CACHE STRING ${doc_string} FORCE)
+    else()
+        set(${var_name} ${default_value} CACHE STRING ${doc_string} FORCE)
     endif()
-
-    if(NOT (GLAD_API STREQUAL ""))
-        string(PREPEND GLAD_API "--api;")
+    if(NOT ("${${var_name}}" STREQUAL ""))
+        string(PREPEND ${var_name} "--${option};")
+        set(${var_name} ${${var_name}} PARENT_SCOPE)
     endif()
+endfunction()
 
-    if(NOT (GLAD_SPEC STREQUAL ""))
-        string(PREPEND GLAD_SPEC "--spec;")
-    endif()
+message(STATUS "Generating Glad sources using python pip")
 
-    if(NOT (GLAD_EXTENSIONS STREQUAL ""))
-        string(PREPEND GLAD_EXTENSIONS "--extensions;")
-    endif()
+project(glad LANGUAGES C)
 
-    add_library(glad OBJECT)
+SET_GLAD_OPTION("profile" "core" "OpenGL profile (defaults to compatibility)")
+SET_GLAD_OPTION("api" "" "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
+SET_GLAD_OPTION("spec" "" "Name of spec (gl, egl, glx or wgl)")
+SET_GLAD_OPTION("extensions" "" "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
 
-    execute_process(
-        COMMAND python3 -m pip install glad
-    )
-    execute_process(
-        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
-    )
+add_library(glad OBJECT)
 
-    file(
-        GLOB glad_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h
-    )
+execute_process(
+    COMMAND python3 -m pip install glad
+)
+execute_process(
+    COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
+)
 
-    target_sources(glad PRIVATE ${glad_SOURCES})
-    target_link_libraries(glad INTERFACE ${CMAKE_DL_LIBS})
+file(
+    GLOB glad_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h
+)
 
-    include(GNUInstallDirs)
+target_sources(glad PRIVATE ${glad_SOURCES})
+target_link_libraries(glad INTERFACE ${CMAKE_DL_LIBS})
 
-    target_include_directories(
-        glad PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider>
-    )
+include(GNUInstallDirs)
 
-    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider)
+target_include_directories(
+    glad PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider>
+)
 
-    add_library(glad::glad ALIAS glad)
+install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider)
 
-endif()
+add_library(glad::glad ALIAS glad)
+

@@ -7,6 +7,8 @@
 
 #if GL_VERSION_4_0
     #define INCORPORATE_DOUBLE 1
+#else
+    #define INCORPORATE_DOUBLE 0
 #endif
 
 namespace gli{
@@ -28,7 +30,7 @@ namespace gli{
             std::is_same<T, int>()              ? GL_INT :
             std::is_same<T, unsigned int>()     ? GL_UNSIGNED_INT :
             std::is_same<T, float>()            ? GL_FLOAT :
-            #ifdef INCORPORATE_DOUBLE
+            #if INCORPORATE_DOUBLE
             std::is_same<T, double>()           ? GL_DOUBLE :
             #endif
             0;
@@ -66,10 +68,16 @@ namespace gli{
     };
 
     enum Capability_NI : unsigned int{
-        ClipDistance = GL_CLIP_DISTANCE0,
+        ClipDistance0 = GL_CLIP_DISTANCE0,
+        ClipDistance1 = GL_CLIP_DISTANCE1,
+        ClipDistance2 = GL_CLIP_DISTANCE2,
+        ClipDistance3 = GL_CLIP_DISTANCE3,
+        ClipDistance4 = GL_CLIP_DISTANCE4,
+        ClipDistance5 = GL_CLIP_DISTANCE5,
+        ClipDistance6 = GL_CLIP_DISTANCE6,
+        ClipDistance7 = GL_CLIP_DISTANCE7,
         ColorLogicOp = GL_COLOR_LOGIC_OP,
         CullFace = GL_CULL_FACE,
-        DepthClamp = GL_DEPTH_CLAMP,
         DepthTest = GL_DEPTH_TEST,
         Dither = GL_DITHER,
         FramebufferSRGB = GL_FRAMEBUFFER_SRGB,
@@ -83,10 +91,11 @@ namespace gli{
         SampleAlpheToOne = GL_SAMPLE_ALPHA_TO_ONE,
         SampleCoverage = GL_SAMPLE_COVERAGE,
         StencilTest = GL_STENCIL_TEST,
-        ProgramPointSize = GL_PROGRAM_POINT_SIZE,
         #if GL_VERSION_3_1
         PrimitiveRestart = GL_PRIMITIVE_RESTART,
         #if GL_VERSION_3_2
+        DepthClamp = GL_DEPTH_CLAMP,
+        ProgramPointSize = GL_PROGRAM_POINT_SIZE,
         TextureCubeMapSeamless = GL_TEXTURE_CUBE_MAP_SEAMLESS,
         #if GL_VERSION_4_3
         PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX,

@@ -44,29 +44,28 @@ namespace gli{
     template<int L, typename T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::vec<L,T,Q>& v){
 
-        if(GLVersion.major == 4 && GLVersion.minor >= 1){
+        #ifdef GL_VERSION_4_1
 
-            switch(L){
-            case 1:
-                SET_PROGRAM_UNIFORM(1);
-                break;
-            case 2:
-                SET_PROGRAM_UNIFORM(2);
-                break;
-            case 3:
-                SET_PROGRAM_UNIFORM(3);
-                break;
-            case 4:
-                SET_PROGRAM_UNIFORM(4);
-                break;
-            default:
-                throw std::logic_error("Invalid dimension for uniform");
-            }
-
-            GL_CALL();
-
-            return;
+        switch(L){
+        case 1:
+            SET_PROGRAM_UNIFORM(1);
+            break;
+        case 2:
+            SET_PROGRAM_UNIFORM(2);
+            break;
+        case 3:
+            SET_PROGRAM_UNIFORM(3);
+            break;
+        case 4:
+            SET_PROGRAM_UNIFORM(4);
+            break;
+        default:
+            throw std::logic_error("Invalid dimension for uniform");
         }
+
+        GL_CALL();
+
+        #else
 
         Binder b(*this);
 
@@ -88,6 +87,8 @@ namespace gli{
         }
 
         GL_CALL();
+
+        #endif
         
     }
 
@@ -124,61 +125,61 @@ namespace gli{
 
     template<int R, int C, typename T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
+        
+        #ifdef GL_VERSION_4_1
 
-        if(GLVersion.major == 4 && GLVersion.minor >= 1){
-
-            if constexpr(R == C){
-                
-                switch(R){
-                case 2:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(2);
-                    break;
-                case 3:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(3);
-                    break;
-                case 4:
-                    SET_PROGRAM_UNIFORM_MATRIX_N(4);
-                    break;
-                }
-
-            }else{
-                switch(R){
-                case 2:
-                    switch(C){
-                    case 3:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,3);
-                        break;
-                    case 4:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(2,4);
-                        break;
-                    }
-                    break;
-                case 3:
-                    switch(C){
-                    case 2:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,2);
-                        break;
-                    case 4:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(3,4);
-                        break;
-                    }
-                    break;
-                case 4:
-                    switch(C){
-                    case 2:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,2);
-                        break;
-                    case 3:
-                        SET_PROGRAM_UNIFORM_MATRIX_RC(4,3);
-                        break;
-                    }
-                    break;
-                }
+        if constexpr(R == C){
+            
+            switch(R){
+            case 2:
+                SET_PROGRAM_UNIFORM_MATRIX_N(2);
+                break;
+            case 3:
+                SET_PROGRAM_UNIFORM_MATRIX_N(3);
+                break;
+            case 4:
+                SET_PROGRAM_UNIFORM_MATRIX_N(4);
+                break;
             }
 
-            GL_CALL();
-            return;
+        }else{
+            switch(R){
+            case 2:
+                switch(C){
+                case 3:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(2,3);
+                    break;
+                case 4:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(2,4);
+                    break;
+                }
+                break;
+            case 3:
+                switch(C){
+                case 2:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(3,2);
+                    break;
+                case 4:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(3,4);
+                    break;
+                }
+                break;
+            case 4:
+                switch(C){
+                case 2:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(4,2);
+                    break;
+                case 3:
+                    SET_PROGRAM_UNIFORM_MATRIX_RC(4,3);
+                    break;
+                }
+                break;
+            }
         }
+
+        GL_CALL();
+        
+        #else
 
         Binder b(*this);
 
@@ -232,6 +233,8 @@ namespace gli{
         }
 
         GL_CALL();
+
+        #endif
 
     }
 

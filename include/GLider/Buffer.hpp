@@ -7,18 +7,19 @@
 
 namespace gli{
 
+    // valid inputs to glBindBuffer()
     enum BufferTarget : unsigned int{
         VertexBuffer            = GL_ARRAY_BUFFER,
         IndexBuffer             = GL_ELEMENT_ARRAY_BUFFER,
         PixelPackBuffer         = GL_PIXEL_PACK_BUFFER,
         PixelUnpackBuffer       = GL_PIXEL_UNPACK_BUFFER,
-        CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
         TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
         #if GL_VERSION_3_1
+        CopyWriteBuffer         = GL_COPY_WRITE_BUFFER,
         CopyReadBuffer          = GL_COPY_READ_BUFFER,
         TextureBuffer           = GL_TEXTURE_BUFFER,
         UniformBuffer           = GL_UNIFORM_BUFFER,
-        #ifdef GL_VERSION_4_0
+        #if GL_VERSION_4_0
         DrawIndirectBuffer      = GL_DRAW_INDIRECT_BUFFER,
         #if GL_VERSION_4_2
         AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
