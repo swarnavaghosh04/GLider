@@ -44,6 +44,7 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /**
  * @brief Main namepsace for GLider
+ * @author Swarnava Ghosh
 */
 namespace gli{
 
