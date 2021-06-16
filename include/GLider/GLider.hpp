@@ -43,26 +43,25 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <functional>
 
 /**
- * @brief Main namepsace for GLider
- * @author Swarnava Ghosh
-*/
+ * GLider namespace
+ */
 namespace gli{
 
-    template<std::size_t N>
-    using SDLAttributeArray = std::array<std::pair<SDL_GLattr, int>, N>;
-    using SDLAttributeList = std::list<std::pair<SDL_GLattr, int>>;
-    using SDLAttributeVector = std::vector<std::pair<SDL_GLattr, int>>;
-
-    /// @private
+    //! @private
     void checkVersion(int major, int minor);
 
     /**
      * @{
      * @name initializers
      * @anchor initializers
-    */
+     */
 
-    /// @private
+    template<std::size_t N>
+    using SDLAttributeArray = std::array<std::pair<SDL_GLattr, int>, N>;
+    using SDLAttributeList = std::list<std::pair<SDL_GLattr, int>>;
+    using SDLAttributeVector = std::vector<std::pair<SDL_GLattr, int>>;
+
+    //! @private
     void initialize_base(int major, int minor, const std::function<void(int&)>& attributeSetter);
 
     /**
@@ -73,10 +72,11 @@ namespace gli{
      * It initlializes all the subsystems for SDL2
      * and sets important attributes.
      * 
-     * @note When `GLI_DEBUG` is defined, this function
+     * @remark When `GLI_DEBUG` is defined, this function
      * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
      * to `SDL_LOG_PRIORITY_DEBUG`.
-     * @note This function will initate SDL2 with  the following
+     * 
+     * @remark This function will initate SDL2 with  the following
      * attributes:
      *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
      *  - `SDL_GL_CONTEXT_MAJOR_VERSION =` @p major
@@ -87,7 +87,7 @@ namespace gli{
      *  - `SDL_GL_MULTISAMPLESAMPLES = 4`
      *  - `SDL_GL_ACCELERATED_VISUAL = 1`
      * 
-     * @note if you want to have different attributes, use one of the
+     * @remark if you want to have different attributes, use one of the
      * overloads of this function.
      * 
      * @param[in] major the major version for OpenGL to be initialized. should be greater than 3.
@@ -103,6 +103,8 @@ namespace gli{
      */
     void initialize(int major=3, int minor=0);
 
+    
+
     /**
      * @overload
      * @brief Initializes all subsystems for SDL2
@@ -112,10 +114,11 @@ namespace gli{
      * It initlializes all the subsystems for SDL2
      * and sets important attributes.
      * 
-     * @note When `GLI_DEBUG` is defined, this function
+     * @remark When `GLI_DEBUG` is defined, this function
      * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
      * to `SDL_LOG_PRIORITY_DEBUG`.
-     * @note The following 3 attributes will always take up the 
+     * 
+     * @remark The following 3 attributes will always take up the 
      * following values after this function call regardless
      * of the value passed in through @p attributes:
      *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
@@ -149,10 +152,11 @@ namespace gli{
      * It initlializes all the subsystems for SDL2
      * and sets important attributes.
      * 
-     * @note When `GLI_DEBUG` is defined, this function
+     * @remark When `GLI_DEBUG` is defined, this function
      * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
      * to `SDL_LOG_PRIORITY_DEBUG`.
-     * @note The following 3 attributes will always take up the 
+     * 
+     * @remark The following 3 attributes will always take up the 
      * following values after this function call regardless
      * of the value passed in through @p attributes:
      *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
@@ -168,7 +172,7 @@ namespace gli{
      * 
      * @see
      * @ref gli::SDLAttributeList
-    */
+     */
     extern template void initialize(int major, int minor, const SDLAttributeList& attributes);
 
     /**
@@ -180,10 +184,11 @@ namespace gli{
      * It initlializes all the subsystems for SDL2
      * and sets important attributes.
      * 
-     * @note When `GLI_DEBUG` is defined, this function
+     * @remark When `GLI_DEBUG` is defined, this function
      * will set the priority of `SDL_LOG_CATEGORY_APPLICATION`
      * to `SDL_LOG_PRIORITY_DEBUG`.
-     * @note The following 3 attributes will always take up the 
+     * 
+     * @remark The following 3 attributes will always take up the 
      * following values after this function call regardless
      * of the value passed in through @p attributes:
      *  - `SDL_GL_CONTEXT_PROFILE_MASK = SDL_GL_CONTEXT_PROFILE_CORE`
@@ -199,7 +204,7 @@ namespace gli{
      * 
      * @see
      * @ref gli::SDLAttributeVector
-    */
+     */
     extern template void initialize(int major, int minor, const SDLAttributeVector& attributes);
 
     /// @}
@@ -209,7 +214,7 @@ namespace gli{
      * 
      * Should be called after at the very end of your program
      * (and after one of the @ref initializers have been called)
-    */
+     */
     void quit() noexcept;
 
 }

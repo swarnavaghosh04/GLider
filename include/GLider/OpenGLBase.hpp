@@ -111,6 +111,7 @@ namespace gli{
         ScissorTest = GL_SCISSOR_TEST,
     };
 
+    //! @private
     template<class Derived>
     class OpenGLBase{
         template<class Derived2>
