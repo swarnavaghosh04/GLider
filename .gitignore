@@ -6,10 +6,6 @@
 #   cd .. && rm -rf build
 build/
 
-# documentation can be generate using doxygen:
-#   cd docs && doxygen Doxyfile
-docs/generated
-
 # if needed, glad sources will be generated
 lib/glad/include/
 lib/glad/src/
