@@ -1,0 +1,5 @@
+var _g_lider__core_8hpp =
+[
+    [ "GLI_PRINT_DEBUG", "_g_lider__core_8hpp.html#ade9f74fa50edad239915c71f34809a2d", null ],
+    [ "SDL_MAIN_HANDLED", "_g_lider__core_8hpp.html#a51f528deaaeb973f417b46a2ec36f850", null ]
+];
