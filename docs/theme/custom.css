@@ -1,0 +1,13 @@
+:root{
+    --note-color: rgba(255,229,100,.3);
+    --note-color-dark: #c39900;
+    --note-color-darker: #8d7400;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root{
+        --note-color: rgb(185, 142, 33);
+        --note-color-dark: #664900;
+        --note-color-darker: #1a1815;
+    }
+}
