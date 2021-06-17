@@ -212,7 +212,7 @@ namespace gli{
     /**
      * @brief Quits SDL2
      * 
-     * Should be called after at the very end of your program
+     * Should be called at the very end of your program
      * (and after one of the @ref initializers have been called)
      */
     void quit() noexcept;
