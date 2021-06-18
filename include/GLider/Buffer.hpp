@@ -35,6 +35,7 @@ namespace gli{
         #endif
     };
 
+    //! @private
     constexpr unsigned int getBufferTargetBinding(BufferTarget target);
 
     enum BufferUsage : unsigned int{
