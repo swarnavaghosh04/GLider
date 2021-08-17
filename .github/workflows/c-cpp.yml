@@ -30,12 +30,10 @@ jobs:
           cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++-10
       
       - name: Build
-        run: |
-          gcc --version
-          cmake --build build --verbose
+        run: cmake --build build --verbose
         
-      # - name: Run Tests
-      #   run: ctest -C Debug -T test --output-on-failure --test-dir build
+      - name: Run Tests
+        run: ctest -C Debug -T test --output-on-failure --test-dir build
   
   # build-relese:
 
