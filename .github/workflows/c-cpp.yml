@@ -33,7 +33,9 @@ jobs:
         run: cmake --build build --verbose
         
       - name: Run Tests
-        run: ctest -C Debug -T test --output-on-failure --test-dir build
+        run: |
+          pwd
+          ctest -C Debug -T test --output-on-failure
   
   # build-relese:
 
