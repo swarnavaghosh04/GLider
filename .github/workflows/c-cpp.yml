@@ -35,6 +35,7 @@ jobs:
       - name: Run Tests
         run: |
           pwd
+          ls
           ctest -C Debug -T test --output-on-failure
   
   # build-relese:
