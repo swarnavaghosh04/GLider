@@ -18,7 +18,7 @@ message(STATUS "Generating Glad sources using python pip")
 
 project(glad LANGUAGES C)
 
-SET_GLAD_OPTION("profile" "core" "OpenGL profile (defaults to compatibility)")
+SET_GLAD_OPTION("profile" "core" "OpenGL profile (defaults to core)")
 SET_GLAD_OPTION("api" "" "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
 SET_GLAD_OPTION("spec" "" "Name of spec (gl, egl, glx or wgl)")
 SET_GLAD_OPTION("extensions" "" "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
