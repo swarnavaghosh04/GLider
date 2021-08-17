@@ -14,18 +14,19 @@ namespace gli{
     public:
         VertexArray() noexcept;
         ~VertexArray() noexcept;
-        template<typename T>
+        template<OpenGLType T>
         void readBufferData(
             const Buffer<VertexBuffer>& vb,
             const LayoutElement*        layout,
             unsigned int                layoutCount,
             unsigned int                startingAttribIndex = 0
         );
-        template<typename T, class stdContainer>
+        template<OpenGLType T, template<typename, auto...> class stdContainer, auto... args>
+            requires StdContainer<stdContainer, gli::LayoutElement, args...> && OpenGLType<T>
         void readBufferData(
-            const Buffer<VertexBuffer>& vb,
-            const stdContainer&         layout,
-            unsigned int                startingAttribIndex = 0
+            const Buffer<VertexBuffer>&                         vb,
+            const stdContainer<gli::LayoutElement, args...>&    layout,
+            unsigned int                                        startingAttribIndex = 0
         );
         void draw(DrawType mode, int first, int count) const noexcept;
     };

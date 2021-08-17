@@ -41,7 +41,7 @@ namespace gli{
             glUniform##n##dv(getUniformLocation(name), 1, (T*)(&v[0]));\
         else throw std::logic_error("Invalid datatype for uniform");
 
-    template<int L, typename T, glm::qualifier Q>
+    template<int L, OpenGLType T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::vec<L,T,Q>& v){
 
         #ifdef GL_VERSION_4_1
@@ -123,7 +123,7 @@ namespace gli{
             glUniformMatrix##R##x##C##dv(getUniformLocation(name), 1, transpose, (T*)&m[0][0]);\
         else throw std::logic_error("Invalid datatype for uniform");
 
-    template<int R, int C, typename T, glm::qualifier Q>
+    template<int R, int C, OpenGLType T, glm::qualifier Q>
     void ShaderProgram::setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose){
         
         #ifdef GL_VERSION_4_1

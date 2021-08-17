@@ -68,28 +68,21 @@ namespace gli{
     public:
         Buffer() noexcept;
         ~Buffer() noexcept;
-        template<typename T>
+        template<OpenGLType T>
         void feedData(
             const T* data,
             unsigned int dataCount,
             BufferUsage usage);
-        template<typename T>
+        template<template<OpenGLType, auto...> class stdContainer, OpenGLType T, auto... args>
+            requires StdContainer<stdContainer, T, args...>
         void feedData(
-            const std::vector<T>& data,
+            const stdContainer<T, args...>& data,
             BufferUsage usage
         );
-        template<typename T, std::size_t N>
-        void feedData(
-            const std::array<T,N>& data,
-            BufferUsage usage
-        );
-        template<typename T>
+        template<OpenGLType T>
         void draw(DrawType mode, unsigned int count, int offset = 0) noexcept;
     };
-
-    template<typename T>
-    void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset = 0) noexcept;
-
+    
 }
 
 #include "GLider/impl/Buffer.inl"

@@ -255,8 +255,8 @@ struct Cube{
     {
         GLI_PRINT_DEBUG("Cube Init\n");
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
-        vertexBuffer.feedData<float>(vertexBufData, gli::UseStaticDraw);
-        indexBuffer.feedData<unsigned char>(indexBufData, gli::UseStaticDraw);
+        vertexBuffer.feedData(vertexBufData, gli::UseStaticDraw);
+        indexBuffer.feedData(indexBufData, gli::UseStaticDraw);
         vertexArray.readBufferData<float>(vertexBuffer, verBufLayout);
         shaders.compileString(gli::VertexShader, vertexShader);
         shaders.compileString(gli::FragmentShader, fragmentShader);

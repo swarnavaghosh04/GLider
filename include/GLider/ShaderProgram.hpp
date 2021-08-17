@@ -73,9 +73,9 @@ namespace gli{
         void validate() const;
         int getParameter(ProgramParameter param) const noexcept;
         unsigned int getUniformLocation(const char* name) const;
-        template<int L, typename T, glm::qualifier Q>
+        template<int L, OpenGLType T, glm::qualifier Q>
         void setUniform(const char* name, const glm::vec<L,T,Q>& v);
-        template<int R, int C, typename T, glm::qualifier Q>
+        template<int R, int C, OpenGLType T, glm::qualifier Q>
         void setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose);
         void bindAttribLocation(unsigned int index, const char* name) const noexcept;
     };

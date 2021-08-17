@@ -5,6 +5,8 @@
 #include "GLider/GLider_core.hpp"
 #include "GLider/GLErrorHandling.hpp"
 
+#include <concepts>
+
 #if GL_VERSION_4_0
     #define INCORPORATE_DOUBLE 1
 #else
@@ -13,17 +15,37 @@
 
 namespace gli{
 
+    /** 
+     * @private
+     * credits: https://en.cppreference.com/w/cpp/concepts/same_as
+    */
+    template<typename T, typename ... U>
+    concept IsAnyOf = (std::same_as<T, U> || ...);
+
+    /**
+     * Types that are acceptable to OpenGL.
+    */
+    template<typename T>
+    concept OpenGLType = 
+        (std::integral<T> && !IsAnyOf<T, long, unsigned long>) ||
+        (std::floating_point<T>
+        #if !INCORPORATE_DOUBLE
+        && !std::same_as<T,double>
+        #endif
+        );
+
     /**
      * @brief Converts primitive datatypes to OpenGL definitions
      * 
      * @tparam T is the specified primitive type. can only be `char`, `short` or `int` along with their unsigned variants, or `float` or `double`
-     * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc. If the input is not valid, a value of 0 is returned
+     * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc.
     */
-    template<typename T>
+    template<OpenGLType T>
     constexpr unsigned int getOpenGLTypeEnum() noexcept{
 
         constexpr int returnValue = 
-            std::is_same<T, char>()             ? GL_BYTE :
+            std::is_same<T, char>() ||
+            std::is_same<T, signed char>()      ? GL_BYTE :
             std::is_same<T, unsigned char>()    ? GL_UNSIGNED_BYTE :
             std::is_same<T, short>()            ? GL_SHORT :
             std::is_same<T, unsigned short>()   ? GL_UNSIGNED_SHORT:
@@ -34,7 +56,6 @@ namespace gli{
             std::is_same<T, double>()           ? GL_DOUBLE :
             #endif
             0;
-        static_assert(returnValue, "Invalid data type");
         return returnValue;
     }
 
@@ -154,6 +175,13 @@ namespace gli{
     void disable(Capability_I cap, unsigned int index) noexcept;
     template<typename FLOAT_OR_DOUBLE>
     void depthRange(FLOAT_OR_DOUBLE near, FLOAT_OR_DOUBLE far) noexcept;
+
+    //! @private
+    template<template <typename, auto...> class T, typename U, auto... Args>
+    concept StdContainer = requires(T<U, Args...> x){
+        { x.size() } -> std::same_as<typename T<U, Args...>::size_type>;
+        { x.data() } -> std::convertible_to<const void*>;
+    };
 }
 
 #include "GLider/impl/OpenGLBase.inl"

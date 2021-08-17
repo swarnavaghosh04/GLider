@@ -18,18 +18,16 @@ namespace gli{
         case TransformFeedbackBuffer:
             return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
         #if GL_VERSION_3_1
-        case CopyWriteBuffer:
-            return GL_COPY_WRITE_BUFFER_BINDING;
-        case CopyReadBuffer:
-            return GL_COPY_READ_BUFFER_BINDING;
-        case TextureBuffer:
-            return GL_TEXTURE_BUFFER_BINDING;
         case UniformBuffer:
             return GL_UNIFORM_BUFFER_BINDING;
         #if GL_VERSION_4_0
         case DrawIndirectBuffer:
             return GL_DRAW_INDIRECT_BUFFER_BINDING;
         #if GL_VERSION_4_2
+        case CopyWriteBuffer:
+            return GL_COPY_WRITE_BUFFER_BINDING;
+        case CopyReadBuffer:
+            return GL_COPY_READ_BUFFER_BINDING;
         case AtomicCounterBuffer:
             return GL_ATOMIC_COUNTER_BUFFER_BINDING;
         #if GL_VERSION_4_3
@@ -38,6 +36,8 @@ namespace gli{
         case ShaderStorageBuffer:
             return GL_SHADER_STORAGE_BUFFER_BINDING;
         #if GL_VERSION_4_4
+        case TextureBuffer:
+            return GL_TEXTURE_BUFFER_BINDING;
         case QueryBuffer:
             return GL_QUERY_BUFFER_BINDING;
         #endif
@@ -78,7 +78,7 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    template<typename T>
+    template<OpenGLType T>
     inline void Buffer<target>::feedData(
         const T* data,
         unsigned int dataCount,
@@ -89,9 +89,10 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    template<typename T>
+    template<template<OpenGLType, auto...> class stdContainer, OpenGLType T, auto... args>
+        requires StdContainer<stdContainer, T, args...>
     inline void Buffer<target>::feedData(
-        const std::vector<T>& data,
+        const stdContainer<T,args...>& data,
         BufferUsage usage
     ){
         Binder b(*this);
@@ -99,28 +100,12 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    template<typename T, std::size_t N>
-    inline void Buffer<target>::feedData(
-        const std::array<T,N>& data,
-        BufferUsage usage
-    ){
-        Binder b(*this);
-        GL_CALL(glBufferData(target, N*sizeof(T), data.data(), usage));
-    }
-
-    template<BufferTarget target>
-    template<typename T>
+    template<OpenGLType T>
     inline void Buffer<target>::draw(
         DrawType mode, unsigned int count, int offset
     ) noexcept {
         static_assert((target == IndexBuffer), "Invalid draw call!");
         Binder b(*this);
-        GL_CALL(glDrawElements(mode, count, getOpenGLTypeEnum<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
-    }
-
-    template<typename T>
-    inline void draw(const Buffer<IndexBuffer>& ib, DrawType mode, unsigned int count, int offset) noexcept{
-        Binder b(ib);
         GL_CALL(glDrawElements(mode, count, getOpenGLTypeEnum<T>(), reinterpret_cast<void*>(offset*sizeof(T))));
     }
 

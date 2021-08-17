@@ -34,7 +34,7 @@ namespace gli{
         return static_cast<unsigned int>(r);
     }
 
-    template<typename T>
+    template<OpenGLType T>
     void VertexArray::readBufferData(
         const Buffer<VertexBuffer>& vb,
         const LayoutElement*        layout,
@@ -67,10 +67,11 @@ namespace gli{
 
     }
 
-    template<typename T, class stdContainer>
+    template<OpenGLType T, template<typename, auto...> class stdContainer, auto... args>
+        requires StdContainer<stdContainer, gli::LayoutElement, args...> && OpenGLType<T>
     inline void VertexArray::readBufferData(
         const Buffer<VertexBuffer>& vb,
-        const stdContainer&         layout,
+        const stdContainer<gli::LayoutElement, args...>&    layout,
         unsigned int                startingAttribIndex
     ){
         readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
