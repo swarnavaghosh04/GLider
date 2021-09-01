@@ -24,9 +24,6 @@ jobs:
       - name: Setup OpenGL
         run: |
           sudo apt install mesa-utils linux-generic xserver-xorg-core xserver-xorg xserver-xorg-video-all xserver-xorg-input-all libwayland-egl1-mesa
-          /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 800x600x24 -ac +extension GLX
-          export SDL_VIDEODRIVER=x11
-          export DISPLAY=:99.0
 
       - name: CMake Configure
         run: |
@@ -38,7 +35,9 @@ jobs:
         
       - name: Run Tests
         run: |
-          ls build
+          /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 800x600x24 -ac +extension GLX
+          export SDL_VIDEODRIVER=x11
+          export DISPLAY=:99.0
           ctest --test-dir build -C Debug --output-on-failure
   
   # build-relese:
