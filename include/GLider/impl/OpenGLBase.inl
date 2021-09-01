@@ -104,15 +104,10 @@ namespace gli{
         GL_CALL(glDisablei(cap, index));
     }
 
-    template<typename FLOAT_OR_DOUBLE>
-    void depthRange(FLOAT_OR_DOUBLE near, FLOAT_OR_DOUBLE far) noexcept{
+    template<std::floating_point T>
+    void depthRange(T near, T far) noexcept{
 
-        constexpr bool isFloat = std::is_same<FLOAT_OR_DOUBLE, float>();
-        constexpr bool isDouble = std::is_same<FLOAT_OR_DOUBLE, double>();
-
-        static_assert(isFloat || isDouble, "Type must be either float or double");
-
-        if constexpr(isFloat){
+        if constexpr(std::is_same<T, float>::value){
             GL_CALL(glDepthRangef(near, far));
         }else{
             GL_CALL(glDepthRange(near,far));

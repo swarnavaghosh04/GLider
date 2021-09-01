@@ -173,8 +173,8 @@ namespace gli{
     void disable(Capability_NI cap) noexcept;
     void disable(Capability_I cap) noexcept;
     void disable(Capability_I cap, unsigned int index) noexcept;
-    template<typename FLOAT_OR_DOUBLE>
-    void depthRange(FLOAT_OR_DOUBLE near, FLOAT_OR_DOUBLE far) noexcept;
+    template<std::floating_point T>
+    void depthRange(T near, T far) noexcept;
 
     //! @private
     template<template <typename, auto...> class T, typename U, auto... Args>
