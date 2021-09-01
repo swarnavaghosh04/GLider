@@ -16,13 +16,17 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       
-      - name: Setup OpenGL
-        uses: openrndr/setup-opengl@v1.1
-      
       - name: install dependencies
         run: |
           sudo apt update
           sudo apt install gcc-10 g++-10 git cmake python3-pip libsdl2-dev libglm-dev
+      
+      - name: Setup OpenGL
+        run: |
+          sudo apt install mesa-utils linux-generic xserver-xorg-core xserver-xorg xserver-xorg-video-all xserver-xorg-input-all libwayland-egl1-mesa
+          /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 800x600x24 -ac +extension GLX
+          export SDL_VIDEODRIVER=x11
+          export DISPLAY=:99.0
 
       - name: CMake Configure
         run: |
