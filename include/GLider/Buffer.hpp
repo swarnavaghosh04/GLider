@@ -54,10 +54,10 @@ namespace gli{
         Norm_FALSE = false, Norm_TRUE = true
     };
 
-    struct LayoutElement{
-        Dimension dimension;
-        Normalized normalized;
-    };
+    // struct LayoutElement{
+    //     Dimension dimension;
+    //     Normalized normalized;
+    // };
 
     template<BufferTarget target>
     class Buffer : public OpenGLBase<Buffer<target>>{
@@ -68,12 +68,12 @@ namespace gli{
     public:
         Buffer() noexcept;
         ~Buffer() noexcept;
-        template<OpenGLType T>
+        template<class T>
         void feedData(
             const T* data,
             unsigned int dataCount,
             BufferUsage usage);
-        template<template<OpenGLType, auto...> class stdContainer, OpenGLType T, auto... args>
+        template<template<class, auto...> class stdContainer, class T, auto... args>
             requires StdContainer<stdContainer, T, args...>
         void feedData(
             const stdContainer<T, args...>& data,

@@ -5,6 +5,11 @@
 
 namespace gli{
 
+    template<OpenGLType T>
+    inline void Layout::push(Dimensions dim, bool normalized){
+        layout.emplace_back(getOpenGLTypeEnum<T>(), dim, normalized);
+    }
+
     inline VertexArray::VertexArray() noexcept
     {
         GL_CALL(glGenVertexArrays(1, &(this->id)));
@@ -34,48 +39,15 @@ namespace gli{
         return static_cast<unsigned int>(r);
     }
 
-    template<OpenGLType T>
-    void VertexArray::readBufferData(
-        const Buffer<VertexBuffer>& vb,
-        const LayoutElement*        layout,
-        unsigned int                layoutCount,
-        unsigned int                startingAttribIndex
-    ){
-
-        Binder b1(*this);
-        Binder b2(vb);
-
-        int stride = 0;
-        for(unsigned int i = 0; i < layoutCount; i++)
-            stride += (int)(layout[i].dimension);
-        stride *= sizeof(T);
-
-        unsigned long long offset = 0;
-        for(unsigned int i = 0; i < layoutCount; i++){
-            GL_CALL(glEnableVertexAttribArray(startingAttribIndex));
-            GL_CALL(glVertexAttribPointer(
-                startingAttribIndex,
-                (int)(layout[i].dimension),
-                getOpenGLTypeEnum<T>(),
-                layout[i].normalized ? GL_TRUE:GL_FALSE,
-                stride,
-                (const void*)offset)
-            );
-            offset += (layout[i].dimension)*sizeof(T);
-            startingAttribIndex++;
-        }
-
-    }
-
-    template<OpenGLType T, template<typename, auto...> class stdContainer, auto... args>
-        requires StdContainer<stdContainer, gli::LayoutElement, args...> && OpenGLType<T>
-    inline void VertexArray::readBufferData(
-        const Buffer<VertexBuffer>& vb,
-        const stdContainer<gli::LayoutElement, args...>&    layout,
-        unsigned int                startingAttribIndex
-    ){
-        readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
-    }
+    // template<OpenGLType T, template<typename, auto...> class stdContainer, auto... args>
+    //     requires StdContainer<stdContainer, gli::LayoutElement, args...> && OpenGLType<T>
+    // inline void VertexArray::readBufferData(
+    //     const Buffer<VertexBuffer>& vb,
+    //     const stdContainer<gli::LayoutElement, args...>&    layout,
+    //     unsigned int                startingAttribIndex
+    // ){
+    //     readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
+    // }
 
 }
 

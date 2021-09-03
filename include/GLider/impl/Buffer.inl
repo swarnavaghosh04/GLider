@@ -78,7 +78,7 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    template<OpenGLType T>
+    template<class T>
     inline void Buffer<target>::feedData(
         const T* data,
         unsigned int dataCount,
@@ -89,7 +89,7 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    template<template<OpenGLType, auto...> class stdContainer, OpenGLType T, auto... args>
+    template<template<class, auto...> class stdContainer, class T, auto... args>
         requires StdContainer<stdContainer, T, args...>
     inline void Buffer<target>::feedData(
         const stdContainer<T,args...>& data,

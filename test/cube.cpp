@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <cstdio>
+#include <iostream>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -191,7 +192,6 @@ struct Cube{
     std::array<unsigned char, 6*6>   indexBufData;
 
     gli::VertexArray                        vertexArray;
-    const std::array<gli::LayoutElement,1>  verBufLayout;
     gli::Buffer<gli::VertexBuffer>          vertexBuffer;
     gli::Buffer<gli::IndexBuffer>           indexBuffer;
     gli::ShaderProgram                            shaders;
@@ -230,6 +230,7 @@ struct Cube{
                 a.y, b.y, c.x,
             };
             memcpy(vertexOutputBuffer.data(), vertices, sizeof(vertices));
+
         }{
             const unsigned char indices[6*6] = {
                 0, 1, 3, 1, 3, 2,
@@ -244,7 +245,6 @@ struct Cube{
     }
 
     Cube():
-        verBufLayout{gli::LayoutElement{gli::D3, gli::Norm_FALSE}},
         translationBounds{-50.f, 50.f},
         rotationBounds{-KEYHITS_PER_ROTATION/2, KEYHITS_PER_ROTATION/2},
         observerPosition{ 0.f, 0.f, 5.f, translationBounds},
@@ -257,7 +257,9 @@ struct Cube{
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
         vertexBuffer.feedData(vertexBufData, gli::UseStaticDraw);
         indexBuffer.feedData(indexBufData, gli::UseStaticDraw);
-        vertexArray.readBufferData<float>(vertexBuffer, verBufLayout);
+        gli::Layout verBufLayout(1);
+        verBufLayout.push<float>(gli::D3, false);
+        vertexArray.readBufferData(vertexBuffer, verBufLayout);
         shaders.compileString(gli::VertexShader, vertexShader);
         shaders.compileString(gli::FragmentShader, fragmentShader);
         shaders.link();
@@ -308,17 +310,27 @@ void test(){
 
 }
 
-int main(int argc, char* argv[]){
-
-    (void)argc;
-    (void)argv[0];
-
+int initGli_exitOnError(){
     try{ gli::initialize(3,1); }
     catch(std::exception& ex){
         std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
         std::printf("%s", ex.what());
         return 1;
     }
+    return 0;
+}
+
+int main(int argc, char* argv[]){
+
+    (void)argc;
+    (void)argv[0];
+
+    {
+        int code = initGli_exitOnError();
+        if(code != 0) return code;
+    }
+
+    // GLI_PRINT_DEBUG("size: %llu\n", sizeof(gli::Layout));
 
     try{
         

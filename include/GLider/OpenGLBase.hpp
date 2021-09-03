@@ -34,6 +34,21 @@ namespace gli{
         #endif
         );
 
+    enum OpenGLTypes : unsigned int{
+        TypeByte = GL_BYTE,
+        TypeUnsignedByte = GL_UNSIGNED_BYTE,
+        TypeShort = GL_SHORT,
+        TypeUnsignedShort = GL_UNSIGNED_SHORT,
+        TypeInt = GL_INT,
+        TypeUnsignedInt = GL_UNSIGNED_INT,
+        TypeFixed = GL_FIXED,
+        TypeHalfFloat = GL_HALF_FLOAT,
+        TypeFloat = GL_FLOAT,
+        #if INCORPORATE_DOUBLE
+        TypeDouble = GL_DOUBLE,
+        #endif
+    };
+
     /**
      * @brief Converts primitive datatypes to OpenGL definitions
      * 
@@ -41,27 +56,42 @@ namespace gli{
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc.
     */
     template<OpenGLType T>
-    constexpr unsigned int getOpenGLTypeEnum() noexcept{
+    constexpr OpenGLTypes getOpenGLTypeEnum() noexcept{
 
-        constexpr int returnValue = 
+        constexpr OpenGLTypes returnValue = 
             std::is_same<T, char>() ||
-            std::is_same<T, signed char>()      ? GL_BYTE :
-            std::is_same<T, unsigned char>()    ? GL_UNSIGNED_BYTE :
-            std::is_same<T, short>()            ? GL_SHORT :
-            std::is_same<T, unsigned short>()   ? GL_UNSIGNED_SHORT:
-            std::is_same<T, int>()              ? GL_INT :
-            std::is_same<T, unsigned int>()     ? GL_UNSIGNED_INT :
-            std::is_same<T, float>()            ? GL_FLOAT :
+            std::is_same<T, signed char>()      ? TypeByte :
+            std::is_same<T, unsigned char>()    ? TypeUnsignedByte :
+            std::is_same<T, short>()            ? TypeShort :
+            std::is_same<T, unsigned short>()   ? TypeUnsignedShort:
+            std::is_same<T, int>()              ? TypeInt :
+            std::is_same<T, unsigned int>()     ? TypeUnsignedInt :
+            std::is_same<T, float>()            ? TypeFloat :
             #if INCORPORATE_DOUBLE
-            std::is_same<T, double>()           ? GL_DOUBLE :
+            std::is_same<T, double>()           ? TypeDouble :
             #endif
-            0;
+            static_cast<OpenGLTypes>(0);
         return returnValue;
     }
 
-    enum Dimension : unsigned char{
-        D1 = 1, D2 = 2, D3 = 3, D4 = 4
-    };
+    constexpr std::size_t getSizeOfOpenGLType(unsigned int type){
+        switch(type){
+            case GL_BYTE:
+            case GL_UNSIGNED_BYTE:
+                return sizeof(char);
+            case GL_SHORT:
+            case GL_UNSIGNED_SHORT:
+                return sizeof(short);
+            case GL_INT:
+            case GL_UNSIGNED_INT:
+                return sizeof(int);
+            case GL_FLOAT:
+                return sizeof(float);
+            case GL_DOUBLE:
+                return sizeof(double);
+        }
+        return 0;
+    }
 
     enum DrawType : unsigned int{
         DrawPoints          = GL_POINTS,

@@ -99,13 +99,15 @@ int main(int argc, char* argv[]){
 
         //! [Store Data in VRAM]
         vb.feedData(vertecies, gli::UseDynamicDraw);
-        va.readBufferData<float>(
-            vb,
-            std::array<gli::LayoutElement, 2>{
-                gli::LayoutElement{gli::D2, gli::Norm_FALSE},   // Position
-                gli::LayoutElement{gli::D3, gli::Norm_FALSE}    // Color
-            }
-        );
+        {
+            gli::Layout layout;
+            layout.push<float>(gli::D2, false);
+            layout.push<float>(gli::D3, false);
+            va.readBufferData(
+                vb,
+                layout
+            );
+        }
         //! [Store Data in VRAM]
 
         //! [Vertex Attribute Locations]
