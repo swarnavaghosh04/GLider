@@ -1,6 +1,12 @@
 #ifndef GLI_CORE__H_
 #define GLI_CORE__H_
 
+#define SDL_MAIN_HANDLED
+
+#include <stdexcept>
+#include "glad/glad.h"
+#include <SDL2/SDL.h>
+
 #ifdef GLI_DEBUG
     /*
     This needs priority of SDL_LOG_CATEGORY_APPLICATION to be set to
@@ -12,11 +18,5 @@
 #else
     #define GLI_PRINT_DEBUG(format, ...)
 #endif
-
-#define SDL_MAIN_HANDLED
-
-#include <SDL2/SDL.h>
-#include <stdexcept>
-#include "glad/glad.h"
 
 #endif

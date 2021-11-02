@@ -1,3 +1,4 @@
+
 #include "GLider/GLider.hpp"
 #include <cstdio>
 #include <stdexcept>
@@ -60,7 +61,7 @@ std::pair<int,int> findMaxOpenGLVersion(){
 
 }
 
-int main(int argc, char* argv[]){
+extern "C" int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];

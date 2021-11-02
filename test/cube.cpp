@@ -1,3 +1,4 @@
+
 #include "GLider/GLider.hpp"
 #include <cmath>
 #include <vector>
@@ -320,7 +321,7 @@ int initGli_exitOnError(){
     return 0;
 }
 
-int main(int argc, char* argv[]){
+extern "C" int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];

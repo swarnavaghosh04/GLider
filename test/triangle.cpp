@@ -35,7 +35,7 @@ const char* fragmentShader = R"CODE(
 
 //! [Shader Sources]
 
-int main(int argc, char* argv[]){
+extern "C" int main(int argc, char* argv[]){
 
     //! [Handle Cmd Args]
 
