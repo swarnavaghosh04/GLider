@@ -1,8 +1,10 @@
 
-#include "GLider/GLider.hpp"
 #include <cstdio>
 #include <stdexcept>
 #include <utility>
+
+#include "GLider/GLider.hpp"
+#include "util.hpp"
 
 void printInfo(){
     std::printf("OpenGL GLAD verision   : %d.%d\n", GLVersion.major, GLVersion.minor);
@@ -16,10 +18,12 @@ bool testVersion(std::pair<int,int> version){
 
     std::printf("\n");
 
-    gli::initialize(version.first, version.second);
+    SDL sdl(version.first, version.second);
+
     bool working;
     {
-        gli::OpenGLWindow win("Test Window", 100, 100);
+        SDL::OpenGLWindow win("Test Window", 100, 100);
+        gli::initialize(SDL_GL_GetProcAddress);
         working = GLVersion.major == version.first && GLVersion.minor == version.second;
         if(working){
             printInfo();
@@ -27,7 +31,6 @@ bool testVersion(std::pair<int,int> version){
             win.swap();
         }
     }
-    gli::quit();
     return working;
 }
 
@@ -61,7 +64,7 @@ std::pair<int,int> findMaxOpenGLVersion(){
 
 }
 
-extern "C" int main(int argc, char* argv[]){
+int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];

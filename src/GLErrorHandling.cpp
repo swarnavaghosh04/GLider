@@ -8,7 +8,7 @@ void gli::checkErrors() noexcept{
     unsigned int error = glGetError();
 
     while(error != GL_NO_ERROR){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[OpenGL Error] (%u)\n", error);
+        std::printf("[OpenGL Error] (%u)\n", error);
         gli::numErrors++;
         error = glGetError();
         return;

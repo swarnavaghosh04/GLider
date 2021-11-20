@@ -25,12 +25,18 @@ SET_GLAD_OPTION("extensions" "" "Path to extensions file or comma separated list
 
 add_library(glad OBJECT)
 
-execute_process(
-    COMMAND python3 -m pip install glad
+if(
+    NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c OR
+    NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h OR
+    NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h
 )
-execute_process(
-    COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
-)
+    execute_process(
+        COMMAND python3 -m pip install glad
+    )
+    execute_process(
+        COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
+    )
+endif()
 
 file(
     GLOB glad_SOURCES

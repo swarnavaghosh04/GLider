@@ -1,8 +1,10 @@
 
-#include "GLider/GLider.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <chrono>
+
+#include "GLider/GLider.hpp"
+#include "util.hpp"
 
 //! [Shader Sources]
 
@@ -35,7 +37,7 @@ const char* fragmentShader = R"CODE(
 
 //! [Shader Sources]
 
-extern "C" int main(int argc, char* argv[]){
+int main(int argc, char* argv[]){
 
     //! [Handle Cmd Args]
 
@@ -49,16 +51,9 @@ extern "C" int main(int argc, char* argv[]){
     
     //! [Handle Cmd Args]
 
-    //! [GLider Init]
     try{
-        gli::initialize(3,0);
-    }catch(std::exception& e){
-        SDL_Log("cannot initialize: %s", e.what());
-        return 1;
-    }
-    //! [GLider Init]
 
-    try{
+        SDL sdl(3,0);
 
         //! [Vertices]
 
@@ -77,7 +72,9 @@ extern "C" int main(int argc, char* argv[]){
         if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
             throw std::runtime_error(SDL_GetError());
 
-        gli::OpenGLWindow win{"Triangle", (dm.w*3)/4, (dm.h*3)/4};
+        SDL::OpenGLWindow win{"Triangle", (dm.w*3)/4, (dm.h*3)/4};
+
+        gli::initialize(SDL_GL_GetProcAddress);
 
         //! [Window Creation]
 
@@ -176,7 +173,7 @@ extern "C" int main(int argc, char* argv[]){
     }
 
     //! [GLider Exit]
-    gli::quit();
+    // gli::quit();
     //! [GLider Exit]
 
     return 0;

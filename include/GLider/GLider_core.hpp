@@ -1,11 +1,8 @@
 #ifndef GLI_CORE__H_
 #define GLI_CORE__H_
 
-#define SDL_MAIN_HANDLED
-
 #include <stdexcept>
 #include "glad/glad.h"
-#include <SDL2/SDL.h>
 
 #ifdef GLI_DEBUG
     /*

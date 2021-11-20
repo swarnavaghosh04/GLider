@@ -1,6 +1,7 @@
 #ifndef GLI_ERROR_HANDLING__H_
 #define GLI_ERROR_HANDLING__H_
 
+#include <cstdio>
 #include "GLider/GLider_core.hpp"
 
 namespace gli{
@@ -16,15 +17,13 @@ namespace gli{
     x;\
     gli::checkErrors();\
     while(gli::numErrors!=0){\
-        SDL_LogError(\
-            SDL_LOG_CATEGORY_APPLICATION,\
+        std::printf(\
             "    (%u) %s:%i:%s()\n",\
             gli::numErrors--,\
             __FILE__,\
             __LINE__,\
             __FUNCTION__);\
-        SDL_LogError(\
-            SDL_LOG_CATEGORY_APPLICATION,\
+        std::printf(\
             "    %s\n",\
             #x);\
     }
@@ -32,5 +31,7 @@ namespace gli{
 /// @private
 #define GL_CALL(x) x
 #endif
+
+// use: SDL_LOG_CATEGORIE_APPLICATION
 
 #endif

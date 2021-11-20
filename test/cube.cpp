@@ -1,10 +1,12 @@
 
-#include "GLider/GLider.hpp"
 #include <cmath>
 #include <vector>
 #include <array>
 #include <cstdio>
 #include <iostream>
+
+#include "GLider/GLider.hpp"
+#include "util.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -311,29 +313,31 @@ void test(){
 
 }
 
-int initGli_exitOnError(){
-    try{ gli::initialize(3,1); }
-    catch(std::exception& ex){
-        std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
-        std::printf("%s", ex.what());
-        return 1;
-    }
-    return 0;
-}
+// int initGli_exitOnError(){
+//     try{ gli::initialize(3,1); }
+//     catch(std::exception& ex){
+//         std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
+//         std::printf("%s", ex.what());
+//         return 1;
+//     }
+//     return 0;
+// }
 
-extern "C" int main(int argc, char* argv[]){
+int main(int argc, char* argv[]){
 
     (void)argc;
     (void)argv[0];
 
-    {
-        int code = initGli_exitOnError();
-        if(code != 0) return code;
-    }
+    // {
+    //     int code = initGli_exitOnError();
+    //     if(code != 0) return code;
+    // }
 
     // GLI_PRINT_DEBUG("size: %llu\n", sizeof(gli::Layout));
 
     try{
+
+        SDL sdl(3,1);
         
         SDL_DisplayMode dm;
 
@@ -343,7 +347,9 @@ extern "C" int main(int argc, char* argv[]){
         int q = std::min(dm.h, dm.w) * 3.f/4.f;
         dm.h = dm.w = q;
 
-        gli::OpenGLWindow window{"Cube", dm.w, dm.h};
+        SDL::OpenGLWindow window{"Cube", dm.w, dm.h};
+
+        gli::initialize(SDL_GL_GetProcAddress);
         
         GLI_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
@@ -508,8 +514,6 @@ extern "C" int main(int argc, char* argv[]){
         std::printf("%s occured!\n", typeid(ex).name());
         std::printf("%s", ex.what());
     }
-
-    gli::quit();
 
     return 0;
 
