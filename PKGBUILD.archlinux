@@ -16,8 +16,8 @@ pkgdesc="OpenGL Class Abstraction"
 arch=('x86_64' 'i686')
 url="https://github.com/swarnavaghosh04/GLider"
 license=('MIT')
-depends=("sdl2" "glm")
-makedepends=("git" "cmake" "python-pip")
+depends=()
+makedepends=("git" "cmake" "ninja" "python-pip")
 provides=("${pkgname}")
 conflicts=("${pkgname}")
 source=("git+${url}.git")
@@ -30,11 +30,11 @@ prepare() {
 build() {
 	cd "${srcdir}/${_realname}"
 	mkdir build && cd build
-	cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-	make
+	cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
+	cmake --build .
 }
 
 package() {
 	cd "${srcdir}/${_realname}/build"
-	DESTDIR=${pkgdir} make install
+	DESTDIR=${pkgdir} cmake --install .
 }

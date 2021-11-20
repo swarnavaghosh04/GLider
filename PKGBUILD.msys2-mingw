@@ -18,13 +18,12 @@ pkgdesc="OpenGL Class Abstraction"
 arch=('x86_64' 'i686')
 url="https://github.com/swarnavaghosh04/GLider"
 license=('MIT')
-depends=(
-	"${MINGW_PACKAGE_PREFIX}-SDL2"
-	"${MINGW_PACKAGE_PREFIX}-glm")
+depends=()
 makedepends=(
 	"git"
 	"${MINGW_PACKAGE_PREFIX}-make"
 	"${MINGW_PACKAGE_PREFIX}-cmake"
+	"${MINGW_PACKAGE_PREFIX}-ninja"
 	"${MINGW_PACKAGE_PREFIX}-python-pip")
 provides=("${pkgname}")
 conflicts=("${pkgname}")
@@ -37,13 +36,17 @@ prepare() {
 
 build() {
 	cd "${srcdir}/${_realname}"
-	mkdir build && cd build
-	MSYS2_ARG_CONV_EXCL=* \
-	cmake .. -G 'MinGW Makefiles' -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX}
-	mingw32-make
+	mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
+	MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+    ${MINGW_PREFIX}/bin/cmake.exe \
+      -GNinja \
+      -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
+      -DCMAKE_BUILD_TYPE=Release \
+      ../${_realname}
+  	${MINGW_PREFIX}/bin/cmake.exe --build .
 }
 
 package() {
-	cd "${srcdir}/${_realname}/build"
-	DESTDIR=${pkgdir} mingw32-make install
+	cd "${srcdir}"/build-${MSYSTEM}
+  	DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install .
 }
