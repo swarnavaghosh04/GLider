@@ -29,11 +29,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInf
     target_compile_definitions(GLider PUBLIC GLI_DEBUG)
 endif()
 
-get_target_property(glm_incl glm::glm INTERFACE_INCLUDE_DIRECTORIES)
-
 target_include_directories(
     GLider PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-        ${glm_incl}
 )

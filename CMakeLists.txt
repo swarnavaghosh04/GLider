@@ -57,22 +57,12 @@ endif()
 # build dependency libraries
 
 find_package(OpenGL REQUIRED)
-# find_package(SDL2 CONFIG)
-find_package(glm CONFIG REQUIRED)
 find_package(glad CONFIG)
 
 # Dependency fixes
 
-# if(NOT TARGET SDL2::SDL2 OR NOT TARGET SDL2::SDL2-static)
-#     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SDL2ConfigBackup.cmake)
-# endif()
-
 if(NOT glad_FOUND)
     add_subdirectory(lib/glad)
-endif()
-
-if(NOT TARGET glm::glm)
-    add_library(glm::glm ALIAS glm)
 endif()
 
 # Set where library is going to be built
