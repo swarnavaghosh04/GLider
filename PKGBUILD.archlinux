@@ -8,8 +8,7 @@
 # 3. run command: makepkg -si
 # 4. once installation is done, delete this directory.
 
-_realname=GLider
-pkgname=${_realname}-git
+pkgname=GLider
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="OpenGL Class Abstraction"
@@ -24,17 +23,17 @@ source=("git+${url}.git")
 md5sums=('SKIP')
 
 prepare() {
-	cd "${srcdir}/${_realname}"
+	cd "${srcdir}/${pkgname}"
 }
 
 build() {
-	cd "${srcdir}/${_realname}"
+	cd "${srcdir}/${pkgname}"
 	mkdir build && cd build
 	cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 	cmake --build .
 }
 
 package() {
-	cd "${srcdir}/${_realname}/build"
+	cd "${srcdir}/${pkgname}/build"
 	DESTDIR=${pkgdir} cmake --install .
 }

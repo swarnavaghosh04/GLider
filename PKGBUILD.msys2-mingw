@@ -10,8 +10,8 @@
 # 4. once installation is done, delete this directory.
 
 _realname=GLider
-pkgbase=mingw-w64-${_realname}-git
-pkgname=${MINGW_PACKAGE_PREFIX}-${_realname}-git
+pkgbase=mingw-w64-${_realname}
+pkgname=${MINGW_PACKAGE_PREFIX}-${_realname}
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="OpenGL Class Abstraction"
