@@ -12,3 +12,6 @@ lib/glad/src/
 
 # ain't nobody need this
 .vscode/
+
+# documentation
+docs/html
