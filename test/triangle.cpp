@@ -53,30 +53,20 @@ int main(int argc, char* argv[]){
 
     try{
 
+        //! [SDL Init]
         SDL sdl(3,0);
-
-        //! [Vertices]
-
-        std::array<float, 5*3> vertecies = {
-        //---Positions---||-----Colors-----||
-            -.75, -.75,     1.f, 0.f, 0.f,
-               0,  .75,     0.f, 1.f, 0.f,
-             .75, -.75,     0.f, 0.f, 1.f
-        };
-
-        //! [Vertices]
-
-        //! [Window Creation]
 
         SDL_DisplayMode dm;
         if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
             throw std::runtime_error(SDL_GetError());
 
         SDL::OpenGLWindow win{"Triangle", (dm.w*3)/4, (dm.h*3)/4};
+        //! [SDL Init]
 
+        //! [GLider Init]
         gli::initialize(SDL_GL_GetProcAddress);
+        //! [GLider Init]
 
-        //! [Window Creation]
 
         //! [Print OpenGL Info]
         
@@ -93,6 +83,17 @@ int main(int argc, char* argv[]){
         gli::Buffer<gli::VertexBuffer> vb;
         gli::ShaderProgram shaders;
         //! [GLider Variable Declarations]
+
+        //! [Vertices]
+
+        std::array<float, 5*3> vertecies = {
+        //---Positions---||-----Colors-----||
+            -.75, -.75,     1.f, 0.f, 0.f,
+               0,  .75,     0.f, 1.f, 0.f,
+             .75, -.75,     0.f, 0.f, 1.f
+        };
+
+        //! [Vertices]
 
         //! [Store Data in VRAM]
         vb.feedData(vertecies, gli::UseDynamicDraw);
