@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 find_library(glad_lib NAMES glad)
 find_path(glad_inc NAMES "glad/glad.h")
 
-if(${glad_lib} NOT STREQUAL "glad_lib-NOTFOUND" AND ${glad_inc} NOT STREQUAL "glad_inc-NOTFOUND")
+if(NOT ${glad_lib} STREQUAL "glad_lib-NOTFOUND" AND NOT ${glad_inc} STREQUAL "glad_inc-NOTFOUND")
 
     add_library(glad INTERFACE IMPORTED GLOBAL)
     target_link_libraries(glad INTERFACE glad_lib)

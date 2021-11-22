@@ -2,6 +2,8 @@
  * @mainpage GLider - OpenGL C++ Class Abstraction
  * @author Swarnava Ghosh
  * 
+ * @tableofcontents
+ * 
  * @section intro_sec Introduction
  * 
  * As from the title, it is clear that this is an OpenGL class abstraction library. It uses
