@@ -23,6 +23,33 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "GLider", "index.html", [
+    [ "GLider - OpenGL C++ Class Abstraction", "index.html", [
+      [ "Introduction", "index.html#intro_sec", null ],
+      [ "Usage", "index.html#usage_sec", [
+        [ "Section by Section Description", "index.html#sec_by_sec_desc", [
+          [ "Shader Sources", "index.html#shader_sources", null ],
+          [ "Handle Commandline Arguments", "index.html#handle_cmd_args", null ],
+          [ "SDL Initialization", "index.html#sdl_init", null ],
+          [ "GLider Initialization", "index.html#init", null ],
+          [ "Printing Info", "index.html#printing_info", null ],
+          [ "Glider Variable Declarations", "index.html#var_decl", null ],
+          [ "Vertex Data", "index.html#vertices", null ],
+          [ "Storing Vertex Data in VRAM", "index.html#store_to_vram", null ],
+          [ "Vertex Attribute Locations", "index.html#ver_attrib_loc", null ],
+          [ "Shader Compilation", "index.html#shader_comp", null ],
+          [ "Binding", "index.html#ensure_bind", null ],
+          [ "Rendering The Triangle", "index.html#draw", null ],
+          [ "Event Handling", "index.html#event_handling", null ],
+          [ "Program Closer", "index.html#cloer", null ]
+        ] ]
+      ] ]
+    ] ],
+    [ "Example Page", "page1.html", [
+      [ "An example section", "page1.html#sec", [
+        [ "The first subsection", "page1.html#subsection1", null ],
+        [ "The second subsection", "page1.html#subsection2", null ]
+      ] ]
+    ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
