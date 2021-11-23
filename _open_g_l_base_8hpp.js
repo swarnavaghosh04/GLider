@@ -1,6 +1,9 @@
 var _open_g_l_base_8hpp =
 [
-    [ "Binder", "classgli_1_1_binder.html", "classgli_1_1_binder" ],
+    [ "gli::Binder< Derived >", "classgli_1_1_binder.html", "classgli_1_1_binder" ],
+    [ "gli::IsAnyOf", "conceptgli_1_1_is_any_of.html", null ],
+    [ "gli::OpenGLType", "conceptgli_1_1_open_g_l_type.html", null ],
+    [ "gli::StdContainer", "conceptgli_1_1_std_container.html", null ],
     [ "INCORPORATE_DOUBLE", "_open_g_l_base_8hpp.html#a5f2ff815f6727756e39e171bc6af0357", null ],
     [ "BufferBit", "_open_g_l_base_8hpp.html#a4d0822fb45e7830e65620e4e28213f48", [
       [ "ColorBufferBit", "_open_g_l_base_8hpp.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095", null ],
@@ -65,8 +68,5 @@ var _open_g_l_base_8hpp =
     [ "enable", "_open_g_l_base_8hpp.html#a7c434c24d147030267a1e651a755e3e9", null ],
     [ "enable", "_open_g_l_base_8hpp.html#a996261480efcf69f60106cfa34bc2b8e", null ],
     [ "getOpenGLTypeEnum", "_open_g_l_base_8hpp.html#a3be2293aa623ad4bca4f795e995348c1", null ],
-    [ "getSizeOfOpenGLType", "_open_g_l_base_8hpp.html#ae951e367aacf336a374a8fd72c61b473", null ],
-    [ "IsAnyOf", "_open_g_l_base_8hpp.html#a3c7b0deeb4a6a97583c20e0d385e3f38", null ],
-    [ "OpenGLType", "_open_g_l_base_8hpp.html#a79f5fd54bba72a6d31cc2e1366a1d538", null ],
-    [ "StdContainer", "_open_g_l_base_8hpp.html#a223c596c9622e8594746c5ef1c190f6b", null ]
+    [ "getSizeOfOpenGLType", "_open_g_l_base_8hpp.html#ae951e367aacf336a374a8fd72c61b473", null ]
 ];

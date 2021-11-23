@@ -5,11 +5,11 @@ var indexSectionsWithContent =
   2: "g",
   3: "bfgmosv",
   4: "bcdefgiloprsv~",
-  5: "o",
-  6: "bcdnops",
-  7: "abcdfilmnpstuv",
-  8: "ov",
-  9: "gi",
+  5: "bcdnops",
+  6: "abcdfilmnpstuv",
+  7: "ov",
+  8: "gi",
+  9: "g",
   10: "g"
 };
 
@@ -20,12 +20,12 @@ var indexSectionNames =
   2: "namespaces",
   3: "files",
   4: "functions",
-  5: "variables",
-  6: "enums",
-  7: "enumvalues",
-  8: "related",
-  9: "defines",
-  10: "pages"
+  5: "enums",
+  6: "enumvalues",
+  7: "related",
+  8: "defines",
+  9: "pages",
+  10: "concepts"
 };
 
 var indexSectionLabels =
@@ -35,11 +35,11 @@ var indexSectionLabels =
   2: "Namespaces",
   3: "Files",
   4: "Functions",
-  5: "Variables",
-  6: "Enumerations",
-  7: "Enumerator",
-  8: "Friends",
-  9: "Macros",
-  10: "Pages"
+  5: "Enumerations",
+  6: "Enumerator",
+  7: "Friends",
+  8: "Macros",
+  9: "Pages",
+  10: "Concepts"
 };
 

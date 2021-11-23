@@ -2,7 +2,7 @@ var dir_b6092855b87fec4f068f27f88b7f0aca =
 [
     [ "Buffer.hpp", "_buffer_8hpp.html", "_buffer_8hpp" ],
     [ "FrameRate.hpp", "_frame_rate_8hpp.html", [
-      [ "FrameRate", "classgli_1_1_frame_rate.html", "classgli_1_1_frame_rate" ]
+      [ "gli::FrameRate", "classgli_1_1_frame_rate.html", "classgli_1_1_frame_rate" ]
     ] ],
     [ "GLErrorHandling.hpp", "_g_l_error_handling_8hpp.html", "_g_l_error_handling_8hpp" ],
     [ "GLider.hpp", "_g_lider_8hpp.html", "_g_lider_8hpp" ],

@@ -1,6 +1,6 @@
 var _shader_program_8hpp =
 [
-    [ "ShaderProgram", "classgli_1_1_shader_program.html", "classgli_1_1_shader_program" ],
+    [ "gli::ShaderProgram", "classgli_1_1_shader_program.html", "classgli_1_1_shader_program" ],
     [ "ProgramParameter", "_shader_program_8hpp.html#a5e2f8cedf6d9423e0b24df725eb2aa1f", [
       [ "DeleteStatus", "_shader_program_8hpp.html#a5e2f8cedf6d9423e0b24df725eb2aa1fa525555e40d298c51dba95b8c58ef6583", null ],
       [ "LinkStatus", "_shader_program_8hpp.html#a5e2f8cedf6d9423e0b24df725eb2aa1fa1704dfcf6f9625697ad14a03921d662d", null ],

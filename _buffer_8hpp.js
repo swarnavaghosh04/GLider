@@ -1,6 +1,6 @@
 var _buffer_8hpp =
 [
-    [ "Buffer", "classgli_1_1_buffer.html", "classgli_1_1_buffer" ],
+    [ "gli::Buffer< target >", "classgli_1_1_buffer.html", "classgli_1_1_buffer" ],
     [ "BufferTarget", "_buffer_8hpp.html#aacc389c0b9f70ac6c10415f1cc3708a0", [
       [ "VertexBuffer", "_buffer_8hpp.html#aacc389c0b9f70ac6c10415f1cc3708a0a36a7ed2656993db8236a8ac1a081ef2b", null ],
       [ "IndexBuffer", "_buffer_8hpp.html#aacc389c0b9f70ac6c10415f1cc3708a0a96a60ae6b14b83e7d37ab03f0065863f", null ],
@@ -22,6 +22,5 @@ var _buffer_8hpp =
     [ "Normalized", "_buffer_8hpp.html#a281c6ecbaf7d7b5ab6141f233e4e6fb4", [
       [ "Norm_FALSE", "_buffer_8hpp.html#a281c6ecbaf7d7b5ab6141f233e4e6fb4a89e5f0afdde438cab0b1a9226bd0f1a4", null ],
       [ "Norm_TRUE", "_buffer_8hpp.html#a281c6ecbaf7d7b5ab6141f233e4e6fb4ae2232a03fd13bc1f0c39150e42eec9fd", null ]
-    ] ],
-    [ "getBufferTargetBinding", "_buffer_8hpp.html#a9507d3ed68c4a449b1dd482fb196050a", null ]
+    ] ]
 ];
