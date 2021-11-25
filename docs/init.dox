@@ -1,0 +1,29 @@
+#include "GLider/GLider.hpp"
+
+int main(){
+
+    //! [Init GLider]
+
+    // If no OpenGL function getter present
+    gli::initialize();
+
+    // OR if using SDL
+    gli::initialize(SDL_GL_GetProcAddress);
+
+    // OR if using GLFW
+    gli::initialize(glfwGetProcAddress);
+
+    //! [Init GLider]
+
+    //! [swap]
+
+    // GLFW
+    glfwSwapBuffers(window);
+
+    // SDL
+    SDL_GL_SwapWindow(window);
+
+    //! [swap]
+
+    return 0;
+}

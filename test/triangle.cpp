@@ -39,8 +39,6 @@ const char* fragmentShader = R"CODE(
 
 int main(int argc, char* argv[]){
 
-    //! [Handle Cmd Args]
-
 	// if no arguments are passed, keep window open until terminated
 	// If valid float has been passed, keep window open for that many milliseconds
 
@@ -48,12 +46,9 @@ int main(int argc, char* argv[]){
     auto start = std::chrono::steady_clock::now();
 
     if(argc >= 2) openDuration_ms = std::atof(argv[1]);
-    
-    //! [Handle Cmd Args]
 
     try{
 
-        //! [SDL Init]
         SDL sdl(3,0);
 
         SDL_DisplayMode dm;
@@ -61,22 +56,10 @@ int main(int argc, char* argv[]){
             throw std::runtime_error(SDL_GetError());
 
         SDL::OpenGLWindow win{"Triangle", (dm.w*3)/4, (dm.h*3)/4};
-        //! [SDL Init]
 
         //! [GLider Init]
         gli::initialize(SDL_GL_GetProcAddress);
         //! [GLider Init]
-
-
-        //! [Print OpenGL Info]
-        
-        std::printf("OpenGL GLAD verision   : %d.%d\n", GLVersion.major, GLVersion.minor);
-        std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
-        std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-        std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));
-        std::printf("OpenGL Renderer        : %s \n", glGetString(GL_RENDERER));
-
-        //! [Print OpenGL Info]
 
         //! [GLider Variable Declarations]
         gli::VertexArray va;
@@ -85,14 +68,12 @@ int main(int argc, char* argv[]){
         //! [GLider Variable Declarations]
 
         //! [Vertices]
-
         std::array<float, 5*3> vertecies = {
         //---Positions---||-----Colors-----||
             -.75, -.75,     1.f, 0.f, 0.f,
                0,  .75,     0.f, 1.f, 0.f,
              .75, -.75,     0.f, 0.f, 1.f
         };
-
         //! [Vertices]
 
         //! [Store Data in VRAM]
@@ -133,10 +114,10 @@ int main(int argc, char* argv[]){
             //! [Draw]
             gli::clear(gli::ColorBufferBit | gli::DepthBufferBit);
             va.draw(gli::DrawTriangles, 0, 3);
-            win.swap();
             //! [Draw]
             
-            //! [Event Handler]
+            win.swap();
+            
             while(SDL_PollEvent(&e)){
 
                 switch(e.type){
@@ -154,9 +135,7 @@ int main(int argc, char* argv[]){
                 }
 
             }
-            //! [Event Handler]
 
-            //! [Program Close Handler]
             if(openDuration_ms > 0.f){
             	if(
             		std::chrono::duration_cast<std::chrono::duration<float, std::milli>>
@@ -164,7 +143,6 @@ int main(int argc, char* argv[]){
             	)
             		keepRunning = false;
             }
-            //! [Program Close Handler]
 
         }
 
@@ -172,10 +150,6 @@ int main(int argc, char* argv[]){
         std::printf("Error Occured: %s\n", typeid(e).name());
         std::printf("%s", e.what());
     }
-
-    //! [GLider Exit]
-    // gli::quit();
-    //! [GLider Exit]
 
     return 0;
 
