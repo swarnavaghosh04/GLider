@@ -97,33 +97,172 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#intro_sec">Introduction</a></li>
-<li class="level1"><a href="#usage_sec">Usage</a><ul><li class="level2"><a href="#sec_by_sec_desc">Section by Section Description</a><ul><li class="level3"><a href="#shader_sources">Shader Sources</a></li>
-<li class="level3"><a href="#handle_cmd_args">Handle Commandline Arguments</a></li>
-<li class="level3"><a href="#sdl_init">SDL Initialization</a></li>
-<li class="level3"><a href="#init">GLider Initialization</a></li>
-<li class="level3"><a href="#printing_info">Printing Info</a></li>
-<li class="level3"><a href="#var_decl">Glider Variable Declarations</a></li>
-<li class="level3"><a href="#vertices">Vertex Data</a></li>
-<li class="level3"><a href="#store_to_vram">Storing Vertex Data in VRAM</a></li>
-<li class="level3"><a href="#ver_attrib_loc">Vertex Attribute Locations</a></li>
-<li class="level3"><a href="#shader_comp">Shader Compilation</a></li>
-<li class="level3"><a href="#ensure_bind">Binding</a></li>
-<li class="level3"><a href="#draw">Rendering The Triangle</a></li>
-<li class="level3"><a href="#event_handling">Event Handling</a></li>
-<li class="level3"><a href="#cloer">Program Closer</a></li>
-</ul>
-</li>
+<li class="level1"><a href="#usage_sec">Usage</a><ul><li class="level2"><a href="#window">Window Creation</a></li>
+<li class="level2"><a href="#context">Acquire OpenGL Context</a></li>
+<li class="level2"><a href="#glider_init">Initialize GLider</a></li>
+<li class="level2"><a href="#shader_sources">Shader Sources</a></li>
+<li class="level2"><a href="#var_decl">Glider Variable Declarations</a></li>
+<li class="level2"><a href="#vertices">Vertex Data</a></li>
+<li class="level2"><a href="#store_to_vram">Storing Vertex Data in VRAM</a></li>
+<li class="level2"><a href="#ver_attrib_loc">Vertex Attribute Locations</a></li>
+<li class="level2"><a href="#shader_comp">Shader Compilation</a></li>
+<li class="level2"><a href="#ensure_bind">Binding</a></li>
+<li class="level2"><a href="#render">Render Loop</a></li>
+<li class="level2"><a href="#Buffer">Swap</a></li>
+<li class="level2"><a href="#event_handling">Event Handling</a></li>
+<li class="level2"><a href="#together">Everything Together</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Swarnava Ghosh</dd></dl>
+<div class="textblock"><p ><a href="https://github.com/jothepro/doxygen-awesome-css/releases/latest"><img src="https://img.shields.io/github/v/release/swarnavaghosh04/GLider" alt="GitHub release (latest by date)" class="inline"/></a> <a href="https://github.com/jothepro/doxygen-awesome-css/blob/main/LICENSE"><img src="https://img.shields.io/github/license/swarnavaghosh04/GLider" alt="GitHub" class="inline"/></a></p>
+<dl class="section author"><dt>Author</dt><dd>Swarnava Ghosh</dd></dl>
 <h1><a class="anchor" id="intro_sec"></a>
 Introduction</h1>
-<p >As from the title, it is clear that this is an OpenGL class abstraction library. It uses <a href="https://www.libsdl.org/index.php">SDL2</a> for window management, <a href="https://github.com/g-truc/glm">GLM</a> for the required mathematics, and <a href="https://glad.dav1d.de/">GLAD</a> for loading the OpenGL function pointers. It is highly recommended to use a <a href="https://cmake.org/cmake/help/v3.20/">CMake</a> based project since it manages all dependencies without a hassle. Support for Android and eventually IOS will also be avaliable.</p>
+<p >GLider is an OpenGL class abstraction library. It uses <a href="https://glad.dav1d.de/">glad</a> to load the OpenGL functions, which can be customized using <a href="https://cmake.org/cmake/help/latest/">CMake</a>.</p>
 <h1><a class="anchor" id="usage_sec"></a>
 Usage</h1>
-<p >To get the best idea on how to use this library, look at the code for rendering a triangle:</p>
+<p >To get the best idea on how to use this library, look at the code for rendering a triangle step by step:</p>
+<h2><a class="anchor" id="window"></a>
+Window Creation</h2>
+<p >Since window management is not part of the OpenGL specifications, this step is left to the user to accomplish. Good window managemenent libraries include <a href="https://www.glfw.org/">GLFW</a> and <a href="https://www.libsdl.org/">SDL</a></p>
+<h2><a class="anchor" id="context"></a>
+Acquire OpenGL Context</h2>
+<p >An OpenGL context must be acquired before initializing GLider. Since context creation is not part of OpenGL specifications, it is not part GLider. Normally, your window managerment library will provide functions to get this context. </p><pre class="fragment"> // GLFW
+ glfwMakeContextCurrent(window);
+
+ // SDL
+ SDL_GL_CreateContext(window);
+</pre> <h2><a class="anchor" id="glider_init"></a>
+Initialize GLider</h2>
+<p >Once you have the OpenGL context, we can initiate GLider. If you have a function that retrives OpenGL functions, you can pass this as an argument. Again, that OpenGL function getter may be provided to you by your window managment library.</p>
+<div class="fragment"><div class="line"> </div>
+<div class="line">    <span class="comment">// If no OpenGL function getter present</span></div>
+<div class="line">    <a class="code hl_function" href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a>();</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// OR if using SDL</span></div>
+<div class="line">    <a class="code hl_function" href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a>(SDL_GL_GetProcAddress);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// OR if using GLFW</span></div>
+<div class="line">    <a class="code hl_function" href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a>(glfwGetProcAddress);</div>
+<div class="line"> </div>
+<div class="ttc" id="anamespacegli_html_aa51ba5218c0dec022501cfd745df46da"><div class="ttname"><a href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a></div><div class="ttdeci">void initialize()</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="shader_sources"></a>
+Shader Sources</h2>
+<div class="fragment"><div class="line"> </div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* vertexShader = R<span class="stringliteral">&quot;CODE(</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    #version 140</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    in vec4 vertexPos;</span></div>
+<div class="line"><span class="stringliteral">    in vec3 vertexColor;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    out vec3 fragmentColor;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    void main(){</span></div>
+<div class="line"><span class="stringliteral">        gl_Position = vertexPos;</span></div>
+<div class="line"><span class="stringliteral">        fragmentColor = vertexColor;</span></div>
+<div class="line"><span class="stringliteral">    }</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">)CODE&quot;;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral"></span><span class="keyword">const</span> <span class="keywordtype">char</span>* fragmentShader = R<span class="stringliteral">&quot;CODE(</span></div>
+<div class="line"><span class="stringliteral">    #version 140</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    in vec3 fragmentColor;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">    void main(){</span></div>
+<div class="line"><span class="stringliteral">        gl_FragColor = vec4(fragmentColor, 1.f);</span></div>
+<div class="line"><span class="stringliteral">    }</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">)CODE&quot;;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+</div><!-- fragment --><p >This is the OpenGL shader source code. You can define a string, or you can write it in a seperate file.</p>
+<h2><a class="anchor" id="var_decl"></a>
+Glider Variable Declarations</h2>
+<div class="fragment"><div class="line">        <a class="code hl_class" href="classgli_1_1_vertex_array.html">gli::VertexArray</a> va;</div>
+<div class="line">        <a class="code hl_class" href="classgli_1_1_buffer.html">gli::Buffer&lt;gli::VertexBuffer&gt;</a> vb;</div>
+<div class="line">        <a class="code hl_class" href="classgli_1_1_shader_program.html">gli::ShaderProgram</a> shaders;</div>
+<div class="ttc" id="aclassgli_1_1_buffer_html"><div class="ttname"><a href="classgli_1_1_buffer.html">gli::Buffer</a></div><div class="ttdef"><b>Definition:</b> Buffer.hpp:63</div></div>
+<div class="ttc" id="aclassgli_1_1_shader_program_html"><div class="ttname"><a href="classgli_1_1_shader_program.html">gli::ShaderProgram</a></div><div class="ttdef"><b>Definition:</b> ShaderProgram.hpp:59</div></div>
+<div class="ttc" id="aclassgli_1_1_vertex_array_html"><div class="ttname"><a href="classgli_1_1_vertex_array.html">gli::VertexArray</a></div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:30</div></div>
+</div><!-- fragment --><p >Declares variables using GLider classes</p>
+<h2><a class="anchor" id="vertices"></a>
+Vertex Data</h2>
+<div class="fragment"><div class="line">        std::array&lt;float, 5*3&gt; vertecies = {</div>
+<div class="line">        <span class="comment">//---Positions---||-----Colors-----||</span></div>
+<div class="line">            -.75, -.75,     1.f, 0.f, 0.f,</div>
+<div class="line">               0,  .75,     0.f, 1.f, 0.f,</div>
+<div class="line">             .75, -.75,     0.f, 0.f, 1.f</div>
+<div class="line">        };</div>
+</div><!-- fragment --><p >Vertex data can be specified using any C++ standard container, as long as the containers have <code>data()</code> and <code>size()</code> member functions.</p>
+<h2><a class="anchor" id="store_to_vram"></a>
+Storing Vertex Data in VRAM</h2>
+<div class="fragment"><div class="line">        vb.<a class="code hl_function" href="classgli_1_1_buffer.html#abe4dd0023ea10590583d64dda55f7ca4">feedData</a>(vertecies, <a class="code hl_enumvalue" href="namespacegli.html#a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e">gli::UseDynamicDraw</a>);</div>
+<div class="line">        {</div>
+<div class="line">            <a class="code hl_class" href="classgli_1_1_layout.html">gli::Layout</a> layout;</div>
+<div class="line">            layout.<a class="code hl_function" href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">push</a>&lt;<span class="keywordtype">float</span>&gt;(<a class="code hl_enumvalue" href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238">gli::D2</a>, <span class="keyword">false</span>);</div>
+<div class="line">            layout.<a class="code hl_function" href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">push</a>&lt;<span class="keywordtype">float</span>&gt;(<a class="code hl_enumvalue" href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd">gli::D3</a>, <span class="keyword">false</span>);</div>
+<div class="line">            va.<a class="code hl_function" href="classgli_1_1_vertex_array.html#a138a036e6279817b4de3de536ab7a44d">readBufferData</a>(</div>
+<div class="line">                vb,</div>
+<div class="line">                layout</div>
+<div class="line">            );</div>
+<div class="line">        }</div>
+<div class="ttc" id="aclassgli_1_1_buffer_html_abe4dd0023ea10590583d64dda55f7ca4"><div class="ttname"><a href="classgli_1_1_buffer.html#abe4dd0023ea10590583d64dda55f7ca4">gli::Buffer::feedData</a></div><div class="ttdeci">void feedData(const T *data, unsigned int dataCount, BufferUsage usage)</div></div>
+<div class="ttc" id="aclassgli_1_1_layout_html"><div class="ttname"><a href="classgli_1_1_layout.html">gli::Layout</a></div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:14</div></div>
+<div class="ttc" id="aclassgli_1_1_layout_html_a69ebcc62b460bdbdba81bf77dfced240"><div class="ttname"><a href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">gli::Layout::push</a></div><div class="ttdeci">void push(Dimensions count, bool normalized)</div></div>
+<div class="ttc" id="aclassgli_1_1_vertex_array_html_a138a036e6279817b4de3de536ab7a44d"><div class="ttname"><a href="classgli_1_1_vertex_array.html#a138a036e6279817b4de3de536ab7a44d">gli::VertexArray::readBufferData</a></div><div class="ttdeci">void readBufferData(const Buffer&lt; VertexBuffer &gt; &amp;vb, const Layout &amp;layout, unsigned int startingAttribIndex=0)</div></div>
+<div class="ttc" id="anamespacegli_html_a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd"><div class="ttname"><a href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd">gli::D3</a></div><div class="ttdeci">@ D3</div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:11</div></div>
+<div class="ttc" id="anamespacegli_html_a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238"><div class="ttname"><a href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238">gli::D2</a></div><div class="ttdeci">@ D2</div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:11</div></div>
+<div class="ttc" id="anamespacegli_html_a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e"><div class="ttname"><a href="namespacegli.html#a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e">gli::UseDynamicDraw</a></div><div class="ttdeci">@ UseDynamicDraw</div><div class="ttdef"><b>Definition:</b> Buffer.hpp:48</div></div>
+</div><!-- fragment --><p >These lines are responsible for feeding the vertex data to OpenGL and telling it how to interpret the data. The first thing that needs to be done is to feed the data into a vertex buffer (through a gli::Buffer&lt;gli::VertexBuffer&gt; object). Once that is done, a vertex array is supposed to read and make sense of the data. For this, we need to specify the structure of the data using an array (or vector) of gli::LayoutElement objects.</p>
+<h2><a class="anchor" id="ver_attrib_loc"></a>
+Vertex Attribute Locations</h2>
+<div class="fragment"><div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">bindAttribLocation</a>(0, <span class="stringliteral">&quot;vertexPos&quot;</span>);</div>
+<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">bindAttribLocation</a>(1, <span class="stringliteral">&quot;vertexColor&quot;</span>);</div>
+<div class="ttc" id="aclassgli_1_1_shader_program_html_a5b04e912ff11447839ce46e3f06d270c"><div class="ttname"><a href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">gli::ShaderProgram::bindAttribLocation</a></div><div class="ttdeci">void bindAttribLocation(unsigned int index, const char *name) const noexcept</div></div>
+</div><!-- fragment --><p >We need to specify the appropriate vertex attribute locations so that the shader can find those attributes. This step is not necessary if you decide to use the <code>layout</code> qualifier within your shader source code.</p>
+<h2><a class="anchor" id="shader_comp"></a>
+Shader Compilation</h2>
+<div class="fragment"><div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">compileString</a>(gli::VertexShader, vertexShader);     <span class="comment">// shaders.compileFile() can also be used if you</span></div>
+<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">compileString</a>(gli::FragmentShader, fragmentShader); <span class="comment">// wrote your shader source in a separate file</span></div>
+<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a82f7a7211a85731c7dfe5c141b402e58">link</a>();</div>
+<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a393209072f047d00142ead2c4594e3bd">validate</a>();</div>
+<div class="ttc" id="aclassgli_1_1_shader_program_html_a393209072f047d00142ead2c4594e3bd"><div class="ttname"><a href="classgli_1_1_shader_program.html#a393209072f047d00142ead2c4594e3bd">gli::ShaderProgram::validate</a></div><div class="ttdeci">void validate() const</div></div>
+<div class="ttc" id="aclassgli_1_1_shader_program_html_a82f7a7211a85731c7dfe5c141b402e58"><div class="ttname"><a href="classgli_1_1_shader_program.html#a82f7a7211a85731c7dfe5c141b402e58">gli::ShaderProgram::link</a></div><div class="ttdeci">void link() const</div></div>
+<div class="ttc" id="aclassgli_1_1_shader_program_html_acad026884945e32060815b1ac2c6bf63"><div class="ttname"><a href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">gli::ShaderProgram::compileString</a></div><div class="ttdeci">void compileString(ShaderType shaderType, const char *sourceCode)</div></div>
+</div><!-- fragment --><p >A lot of the OpenGL shader compilation procedures are automated through GLider. If you wrote your source code in a seperate file, you can use <a class="el" href="classgli_1_1_shader_program.html#ac3fecfa32e86ac3dbf817e0f340bb58e">gli::ShaderProgram::compileFile(ShaderType, const char*)</a> instead of <a class="el" href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">gli::ShaderProgram::compileString(ShaderType, const char*)</a>.</p>
+<h2><a class="anchor" id="ensure_bind"></a>
+Binding</h2>
+<div class="fragment"><div class="line">        va.bind();</div>
+<div class="line">        shaders.bind();</div>
+</div><!-- fragment --><p >These lines just ensure that the correct objects are bound for OpenGl to read from.</p>
+<h2><a class="anchor" id="render"></a>
+Render Loop</h2>
+<div class="fragment"><div class="line">            <a class="code hl_function" href="namespacegli.html#a344da73d73d7f59c5ba03a3259d78a7f">gli::clear</a>(<a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095">gli::ColorBufferBit</a> | <a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf">gli::DepthBufferBit</a>);</div>
+<div class="line">            va.<a class="code hl_function" href="classgli_1_1_vertex_array.html#a1f423f2d39557dfa43257ab5d01ecb28">draw</a>(<a class="code hl_enumvalue" href="namespacegli.html#ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228">gli::DrawTriangles</a>, 0, 3);</div>
+<div class="ttc" id="aclassgli_1_1_vertex_array_html_a1f423f2d39557dfa43257ab5d01ecb28"><div class="ttname"><a href="classgli_1_1_vertex_array.html#a1f423f2d39557dfa43257ab5d01ecb28">gli::VertexArray::draw</a></div><div class="ttdeci">void draw(DrawType mode, int first, int count) const noexcept</div></div>
+<div class="ttc" id="anamespacegli_html_a344da73d73d7f59c5ba03a3259d78a7f"><div class="ttname"><a href="namespacegli.html#a344da73d73d7f59c5ba03a3259d78a7f">gli::clear</a></div><div class="ttdeci">void clear(BufferBit mask) noexcept</div></div>
+<div class="ttc" id="anamespacegli_html_a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf"><div class="ttname"><a href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf">gli::DepthBufferBit</a></div><div class="ttdeci">@ DepthBufferBit</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:117</div></div>
+<div class="ttc" id="anamespacegli_html_a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095"><div class="ttname"><a href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095">gli::ColorBufferBit</a></div><div class="ttdeci">@ ColorBufferBit</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:116</div></div>
+<div class="ttc" id="anamespacegli_html_ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228"><div class="ttname"><a href="namespacegli.html#ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228">gli::DrawTriangles</a></div><div class="ttdeci">@ DrawTriangles</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:103</div></div>
+</div><!-- fragment --><p >Once all the variables are set, we can loop through this piece of code to render triangle. It clears the color and depth buffers, and draws the shape described by the data we spent so long organizing for OpenGL.</p>
+<h2><a class="anchor" id="Buffer"></a>
+Swap</h2>
+<p >To actually update the contents of the screen, we must update the view buffer. This is not part of OpenGL specifications, and thus is left out of GLider. Your window management library should have some feature to swap the buffers.</p>
+<div class="fragment"><div class="line"> </div>
+<div class="line">    <span class="comment">// GLFW</span></div>
+<div class="line">    glfwSwapBuffers(window);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// SDL</span></div>
+<div class="line">    SDL_GL_SwapWindow(window);</div>
+<div class="line"> </div>
+</div><!-- fragment --><h2><a class="anchor" id="event_handling"></a>
+Event Handling</h2>
+<p >In the main render loop, after the drawing and swapping, comes your event handling code, which is again not the concern of OpenGL.</p>
+<h2><a class="anchor" id="together"></a>
+Everything Together</h2>
+<p >The following code does exactly what the above section does, with SDL as the window management library. Note that there is a seperate piece of helper code outside of view that makes managing SDL easier.</p>
 <div class="fragment"><div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;cstdio&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
@@ -161,8 +300,7 @@ Usage</h1>
 <div class="line"><span class="stringliteral">)CODE&quot;;</span></div>
 <div class="line"><span class="stringliteral"></span> </div>
 <div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral"></span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]){</div>
-<div class="line"> </div>
+<div class="line"><span class="stringliteral"></span><span class="keywordtype">int</span> <a class="code hl_function" href="init_8dox.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]){</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// if no arguments are passed, keep window open until terminated</span></div>
 <div class="line">    <span class="comment">// If valid float has been passed, keep window open for that many milliseconds</span></div>
@@ -171,7 +309,6 @@ Usage</h1>
 <div class="line">    <span class="keyword">auto</span> start = std::chrono::steady_clock::now();</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span>(argc &gt;= 2) openDuration_ms = std::atof(argv[1]);</div>
-<div class="line">    </div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">try</span>{</div>
 <div class="line"> </div>
@@ -185,19 +322,9 @@ Usage</h1>
 <div class="line"> </div>
 <div class="line">        <a class="code hl_function" href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a>(SDL_GL_GetProcAddress);</div>
 <div class="line"> </div>
-<div class="line"> </div>
-<div class="line">        </div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL GLAD verision   : %d.%d\n&quot;</span>, GLVersion.major, GLVersion.minor);</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Version         : %s \n&quot;</span>, glGetString(GL_VERSION));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Shading Version : %s \n&quot;</span>, glGetString(GL_SHADING_LANGUAGE_VERSION));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Vendor          : %s \n&quot;</span>, glGetString(GL_VENDOR));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Renderer        : %s \n&quot;</span>, glGetString(GL_RENDERER));</div>
-<div class="line"> </div>
-<div class="line"> </div>
 <div class="line">        <a class="code hl_class" href="classgli_1_1_vertex_array.html">gli::VertexArray</a> va;</div>
 <div class="line">        <a class="code hl_class" href="classgli_1_1_buffer.html">gli::Buffer&lt;gli::VertexBuffer&gt;</a> vb;</div>
 <div class="line">        <a class="code hl_class" href="classgli_1_1_shader_program.html">gli::ShaderProgram</a> shaders;</div>
-<div class="line"> </div>
 <div class="line"> </div>
 <div class="line">        std::array&lt;float, 5*3&gt; vertecies = {</div>
 <div class="line">        <span class="comment">//---Positions---||-----Colors-----||</span></div>
@@ -205,7 +332,6 @@ Usage</h1>
 <div class="line">               0,  .75,     0.f, 1.f, 0.f,</div>
 <div class="line">             .75, -.75,     0.f, 0.f, 1.f</div>
 <div class="line">        };</div>
-<div class="line"> </div>
 <div class="line"> </div>
 <div class="line">        vb.<a class="code hl_function" href="classgli_1_1_buffer.html#abe4dd0023ea10590583d64dda55f7ca4">feedData</a>(vertecies, <a class="code hl_enumvalue" href="namespacegli.html#a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e">gli::UseDynamicDraw</a>);</div>
 <div class="line">        {</div>
@@ -236,6 +362,7 @@ Usage</h1>
 <div class="line">            </div>
 <div class="line">            <a class="code hl_function" href="namespacegli.html#a344da73d73d7f59c5ba03a3259d78a7f">gli::clear</a>(<a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095">gli::ColorBufferBit</a> | <a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf">gli::DepthBufferBit</a>);</div>
 <div class="line">            va.<a class="code hl_function" href="classgli_1_1_vertex_array.html#a1f423f2d39557dfa43257ab5d01ecb28">draw</a>(<a class="code hl_enumvalue" href="namespacegli.html#ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228">gli::DrawTriangles</a>, 0, 3);</div>
+<div class="line">            </div>
 <div class="line">            win.swap();</div>
 <div class="line">            </div>
 <div class="line">            <span class="keywordflow">while</span>(SDL_PollEvent(&amp;e)){</div>
@@ -271,185 +398,12 @@ Usage</h1>
 <div class="line">        std::printf(<span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">// gli::quit();</span></div>
-<div class="line"><span class="comment"></span> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line"> </div>
 <div class="line">}</div>
 <div class="ttc" id="a_g_lider_8hpp_html"><div class="ttname"><a href="_g_lider_8hpp.html">GLider.hpp</a></div><div class="ttdoc">Main header file for GLider which includes all other header files.</div></div>
-<div class="ttc" id="aclassgli_1_1_buffer_html"><div class="ttname"><a href="classgli_1_1_buffer.html">gli::Buffer</a></div><div class="ttdef"><b>Definition:</b> Buffer.hpp:63</div></div>
-<div class="ttc" id="aclassgli_1_1_buffer_html_abe4dd0023ea10590583d64dda55f7ca4"><div class="ttname"><a href="classgli_1_1_buffer.html#abe4dd0023ea10590583d64dda55f7ca4">gli::Buffer::feedData</a></div><div class="ttdeci">void feedData(const T *data, unsigned int dataCount, BufferUsage usage)</div></div>
-<div class="ttc" id="aclassgli_1_1_layout_html"><div class="ttname"><a href="classgli_1_1_layout.html">gli::Layout</a></div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:14</div></div>
-<div class="ttc" id="aclassgli_1_1_layout_html_a69ebcc62b460bdbdba81bf77dfced240"><div class="ttname"><a href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">gli::Layout::push</a></div><div class="ttdeci">void push(Dimensions count, bool normalized)</div></div>
-<div class="ttc" id="aclassgli_1_1_shader_program_html"><div class="ttname"><a href="classgli_1_1_shader_program.html">gli::ShaderProgram</a></div><div class="ttdef"><b>Definition:</b> ShaderProgram.hpp:59</div></div>
-<div class="ttc" id="aclassgli_1_1_shader_program_html_a393209072f047d00142ead2c4594e3bd"><div class="ttname"><a href="classgli_1_1_shader_program.html#a393209072f047d00142ead2c4594e3bd">gli::ShaderProgram::validate</a></div><div class="ttdeci">void validate() const</div></div>
-<div class="ttc" id="aclassgli_1_1_shader_program_html_a5b04e912ff11447839ce46e3f06d270c"><div class="ttname"><a href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">gli::ShaderProgram::bindAttribLocation</a></div><div class="ttdeci">void bindAttribLocation(unsigned int index, const char *name) const noexcept</div></div>
-<div class="ttc" id="aclassgli_1_1_shader_program_html_a82f7a7211a85731c7dfe5c141b402e58"><div class="ttname"><a href="classgli_1_1_shader_program.html#a82f7a7211a85731c7dfe5c141b402e58">gli::ShaderProgram::link</a></div><div class="ttdeci">void link() const</div></div>
-<div class="ttc" id="aclassgli_1_1_shader_program_html_acad026884945e32060815b1ac2c6bf63"><div class="ttname"><a href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">gli::ShaderProgram::compileString</a></div><div class="ttdeci">void compileString(ShaderType shaderType, const char *sourceCode)</div></div>
-<div class="ttc" id="aclassgli_1_1_vertex_array_html"><div class="ttname"><a href="classgli_1_1_vertex_array.html">gli::VertexArray</a></div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:30</div></div>
-<div class="ttc" id="aclassgli_1_1_vertex_array_html_a138a036e6279817b4de3de536ab7a44d"><div class="ttname"><a href="classgli_1_1_vertex_array.html#a138a036e6279817b4de3de536ab7a44d">gli::VertexArray::readBufferData</a></div><div class="ttdeci">void readBufferData(const Buffer&lt; VertexBuffer &gt; &amp;vb, const Layout &amp;layout, unsigned int startingAttribIndex=0)</div></div>
-<div class="ttc" id="aclassgli_1_1_vertex_array_html_a1f423f2d39557dfa43257ab5d01ecb28"><div class="ttname"><a href="classgli_1_1_vertex_array.html#a1f423f2d39557dfa43257ab5d01ecb28">gli::VertexArray::draw</a></div><div class="ttdeci">void draw(DrawType mode, int first, int count) const noexcept</div></div>
-<div class="ttc" id="anamespacegli_html_a344da73d73d7f59c5ba03a3259d78a7f"><div class="ttname"><a href="namespacegli.html#a344da73d73d7f59c5ba03a3259d78a7f">gli::clear</a></div><div class="ttdeci">void clear(BufferBit mask) noexcept</div></div>
-<div class="ttc" id="anamespacegli_html_a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf"><div class="ttname"><a href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf">gli::DepthBufferBit</a></div><div class="ttdeci">@ DepthBufferBit</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:117</div></div>
-<div class="ttc" id="anamespacegli_html_a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095"><div class="ttname"><a href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095">gli::ColorBufferBit</a></div><div class="ttdeci">@ ColorBufferBit</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:116</div></div>
-<div class="ttc" id="anamespacegli_html_a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd"><div class="ttname"><a href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd">gli::D3</a></div><div class="ttdeci">@ D3</div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:11</div></div>
-<div class="ttc" id="anamespacegli_html_a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238"><div class="ttname"><a href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238">gli::D2</a></div><div class="ttdeci">@ D2</div><div class="ttdef"><b>Definition:</b> VertexArray.hpp:11</div></div>
-<div class="ttc" id="anamespacegli_html_a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e"><div class="ttname"><a href="namespacegli.html#a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e">gli::UseDynamicDraw</a></div><div class="ttdeci">@ UseDynamicDraw</div><div class="ttdef"><b>Definition:</b> Buffer.hpp:48</div></div>
-<div class="ttc" id="anamespacegli_html_aa51ba5218c0dec022501cfd745df46da"><div class="ttname"><a href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a></div><div class="ttdeci">void initialize()</div></div>
-<div class="ttc" id="anamespacegli_html_ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228"><div class="ttname"><a href="namespacegli.html#ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228">gli::DrawTriangles</a></div><div class="ttdeci">@ DrawTriangles</div><div class="ttdef"><b>Definition:</b> OpenGLBase.hpp:103</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="sec_by_sec_desc"></a>
-Section by Section Description</h2>
-<h3><a class="anchor" id="shader_sources"></a>
-Shader Sources</h3>
-<div class="fragment"><div class="line"> </div>
-<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* vertexShader = R<span class="stringliteral">&quot;CODE(</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    #version 140</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    in vec4 vertexPos;</span></div>
-<div class="line"><span class="stringliteral">    in vec3 vertexColor;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    out vec3 fragmentColor;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    void main(){</span></div>
-<div class="line"><span class="stringliteral">        gl_Position = vertexPos;</span></div>
-<div class="line"><span class="stringliteral">        fragmentColor = vertexColor;</span></div>
-<div class="line"><span class="stringliteral">    }</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">)CODE&quot;;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral"></span><span class="keyword">const</span> <span class="keywordtype">char</span>* fragmentShader = R<span class="stringliteral">&quot;CODE(</span></div>
-<div class="line"><span class="stringliteral">    #version 140</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    in vec3 fragmentColor;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">    void main(){</span></div>
-<div class="line"><span class="stringliteral">        gl_FragColor = vec4(fragmentColor, 1.f);</span></div>
-<div class="line"><span class="stringliteral">    }</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">)CODE&quot;;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-</div><!-- fragment --><p >This is the OpenGL shader source code. You can define a string, or you can write it in a seperate file.</p>
-<h3><a class="anchor" id="handle_cmd_args"></a>
-Handle Commandline Arguments</h3>
-<div class="fragment"><div class="line"> </div>
-<div class="line">    <span class="comment">// if no arguments are passed, keep window open until terminated</span></div>
-<div class="line">    <span class="comment">// If valid float has been passed, keep window open for that many milliseconds</span></div>
-<div class="line"> </div>
-<div class="line">    <span class="keywordtype">float</span> openDuration_ms = 0.f;</div>
-<div class="line">    <span class="keyword">auto</span> start = std::chrono::steady_clock::now();</div>
-<div class="line"> </div>
-<div class="line">    <span class="keywordflow">if</span>(argc &gt;= 2) openDuration_ms = std::atof(argv[1]);</div>
-<div class="line">    </div>
-</div><!-- fragment --><p >This is not part of the GLider, but it helps for testing purposes. The code is intended to see whether a valid float was passed in as the second command line argument which will be used as the time (in milliseconds) for this program to run and display the triangle.</p>
-<h3><a class="anchor" id="sdl_init"></a>
-SDL Initialization</h3>
-<div class="fragment"><div class="line">        SDL sdl(3,0);</div>
-<div class="line"> </div>
-<div class="line">        SDL_DisplayMode dm;</div>
-<div class="line">        <span class="keywordflow">if</span> (SDL_GetDesktopDisplayMode(0, &amp;dm) != 0)</div>
-<div class="line">            <span class="keywordflow">throw</span> std::runtime_error(SDL_GetError());</div>
-<div class="line"> </div>
-<div class="line">        SDL::OpenGLWindow win{<span class="stringliteral">&quot;Triangle&quot;</span>, (dm.w*3)/4, (dm.h*3)/4};</div>
-</div><!-- fragment --><p >I decided to use SDL2 as the window managemet software, but you can use anything you want. A popular alternative is GLFW. This section of code just deals with initializing SDL2 which has nothing to do with this library itself, but it is important to first acquire an OpenGL context before initializing GLider</p>
-<h3><a class="anchor" id="init"></a>
-GLider Initialization</h3>
-<div class="fragment"><div class="line">        <a class="code hl_function" href="namespacegli.html#aa51ba5218c0dec022501cfd745df46da">gli::initialize</a>(SDL_GL_GetProcAddress);</div>
-</div><!-- fragment --><p >This function initializes GLider using the SDL2 OpenGL function loader. Note that you do not have to provide a loader function. Instead, you can just use the overloaded method with no arguments that will use GLAD's default loader.</p>
-<h3><a class="anchor" id="printing_info"></a>
-Printing Info</h3>
-<div class="fragment"><div class="line">        </div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL GLAD verision   : %d.%d\n&quot;</span>, GLVersion.major, GLVersion.minor);</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Version         : %s \n&quot;</span>, glGetString(GL_VERSION));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Shading Version : %s \n&quot;</span>, glGetString(GL_SHADING_LANGUAGE_VERSION));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Vendor          : %s \n&quot;</span>, glGetString(GL_VENDOR));</div>
-<div class="line">        std::printf(<span class="stringliteral">&quot;OpenGL Renderer        : %s \n&quot;</span>, glGetString(GL_RENDERER));</div>
-<div class="line"> </div>
-</div><!-- fragment --><p >This is just for information printing, but it also demonstrates that the user is free to call OpenGL functions directly.</p>
-<h3><a class="anchor" id="var_decl"></a>
-Glider Variable Declarations</h3>
-<div class="fragment"><div class="line">        <a class="code hl_class" href="classgli_1_1_vertex_array.html">gli::VertexArray</a> va;</div>
-<div class="line">        <a class="code hl_class" href="classgli_1_1_buffer.html">gli::Buffer&lt;gli::VertexBuffer&gt;</a> vb;</div>
-<div class="line">        <a class="code hl_class" href="classgli_1_1_shader_program.html">gli::ShaderProgram</a> shaders;</div>
-</div><!-- fragment --><p >Declares variables using GLider classes</p>
-<h3><a class="anchor" id="vertices"></a>
-Vertex Data</h3>
-<div class="fragment"><div class="line"> </div>
-<div class="line">        std::array&lt;float, 5*3&gt; vertecies = {</div>
-<div class="line">        <span class="comment">//---Positions---||-----Colors-----||</span></div>
-<div class="line">            -.75, -.75,     1.f, 0.f, 0.f,</div>
-<div class="line">               0,  .75,     0.f, 1.f, 0.f,</div>
-<div class="line">             .75, -.75,     0.f, 0.f, 1.f</div>
-<div class="line">        };</div>
-<div class="line"> </div>
-</div><!-- fragment --><p >Vertex data can be specified using any C++ standard container, as long as the containers have <code>data()</code> and <code>size()</code> member functions.</p>
-<h3><a class="anchor" id="store_to_vram"></a>
-Storing Vertex Data in VRAM</h3>
-<div class="fragment"><div class="line">        vb.<a class="code hl_function" href="classgli_1_1_buffer.html#abe4dd0023ea10590583d64dda55f7ca4">feedData</a>(vertecies, <a class="code hl_enumvalue" href="namespacegli.html#a6e9a8c87c2e322e38132961b59a909b0abcc6b98021cd0cb90f96eea780d8543e">gli::UseDynamicDraw</a>);</div>
-<div class="line">        {</div>
-<div class="line">            <a class="code hl_class" href="classgli_1_1_layout.html">gli::Layout</a> layout;</div>
-<div class="line">            layout.<a class="code hl_function" href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">push</a>&lt;<span class="keywordtype">float</span>&gt;(<a class="code hl_enumvalue" href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3aca2dd6c6a97a996cc8e0d6e03d118238">gli::D2</a>, <span class="keyword">false</span>);</div>
-<div class="line">            layout.<a class="code hl_function" href="classgli_1_1_layout.html#a69ebcc62b460bdbdba81bf77dfced240">push</a>&lt;<span class="keywordtype">float</span>&gt;(<a class="code hl_enumvalue" href="namespacegli.html#a60faadfccf71e40f05892d937166c1b3ab23c81e3ba4d1afc076d2a1c37020cfd">gli::D3</a>, <span class="keyword">false</span>);</div>
-<div class="line">            va.<a class="code hl_function" href="classgli_1_1_vertex_array.html#a138a036e6279817b4de3de536ab7a44d">readBufferData</a>(</div>
-<div class="line">                vb,</div>
-<div class="line">                layout</div>
-<div class="line">            );</div>
-<div class="line">        }</div>
-</div><!-- fragment --><p >These lines are responsible for feeding the vertex data to OpenGL and telling it how to interpret the data. The first thing that needs to be done is to feed the data into a vertex buffer (through a gli::Buffer&lt;gli::VertexBuffer&gt; object). Once that is done, a vertex array is supposed to read and make sense of the data. For this, we need to specify the structure of the data using an array (or vector) of gli::LayoutElement objects.</p>
-<h3><a class="anchor" id="ver_attrib_loc"></a>
-Vertex Attribute Locations</h3>
-<div class="fragment"><div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">bindAttribLocation</a>(0, <span class="stringliteral">&quot;vertexPos&quot;</span>);</div>
-<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a5b04e912ff11447839ce46e3f06d270c">bindAttribLocation</a>(1, <span class="stringliteral">&quot;vertexColor&quot;</span>);</div>
-</div><!-- fragment --><p >We need to specify the appropriate vertex attribute locations so that the shader can find those attributes. This step is not necessary if you decide to use the <code>layout</code> qualifier within your shader source code.</p>
-<h3><a class="anchor" id="shader_comp"></a>
-Shader Compilation</h3>
-<div class="fragment"><div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">compileString</a>(gli::VertexShader, vertexShader);     <span class="comment">// shaders.compileFile() can also be used if you</span></div>
-<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#acad026884945e32060815b1ac2c6bf63">compileString</a>(gli::FragmentShader, fragmentShader); <span class="comment">// wrote your shader source in a separate file</span></div>
-<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a82f7a7211a85731c7dfe5c141b402e58">link</a>();</div>
-<div class="line">        shaders.<a class="code hl_function" href="classgli_1_1_shader_program.html#a393209072f047d00142ead2c4594e3bd">validate</a>();</div>
-</div><!-- fragment --><p >A lot of the OpenGL shader compilation procedures are automated through GLider. If you wrote your source code in a seperate file, you can use <code>compileFile()</code> instead of <code>compileString()</code>.</p>
-<h3><a class="anchor" id="ensure_bind"></a>
-Binding</h3>
-<div class="fragment"><div class="line">        va.bind();</div>
-<div class="line">        shaders.bind();</div>
-</div><!-- fragment --><p >These lines just ensure that the correct objects are bound for OpenGl to read from.</p>
-<h3><a class="anchor" id="draw"></a>
-Rendering The Triangle</h3>
-<div class="fragment"><div class="line">            <a class="code hl_function" href="namespacegli.html#a344da73d73d7f59c5ba03a3259d78a7f">gli::clear</a>(<a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48abd14b9446a215ffbb0f6a12cb09f2095">gli::ColorBufferBit</a> | <a class="code hl_enumvalue" href="namespacegli.html#a4d0822fb45e7830e65620e4e28213f48aa778c19b6f3e8d9387dabd40b203ccdf">gli::DepthBufferBit</a>);</div>
-<div class="line">            va.<a class="code hl_function" href="classgli_1_1_vertex_array.html#a1f423f2d39557dfa43257ab5d01ecb28">draw</a>(<a class="code hl_enumvalue" href="namespacegli.html#ac5fd795f98dc3c965ff428527c4cd223ad8dd1337744b623bad37b585a3171228">gli::DrawTriangles</a>, 0, 3);</div>
-<div class="line">            win.swap();</div>
-</div><!-- fragment --><p >Finally, we are ready to loop through, clear the color and depth buffers, and draw the shape described by the data we spent so long organizing for OpenGL. One thing to note is that we have the swap the buffers for any changes to show up on the screen.</p>
-<h3><a class="anchor" id="event_handling"></a>
-Event Handling</h3>
-<div class="fragment"><div class="line">            <span class="keywordflow">while</span>(SDL_PollEvent(&amp;e)){</div>
-<div class="line"> </div>
-<div class="line">                <span class="keywordflow">switch</span>(e.type){</div>
-<div class="line">                <span class="keywordflow">case</span> SDL_QUIT:</div>
-<div class="line">                    keepRunning = <span class="keyword">false</span>;</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                <span class="keywordflow">case</span> SDL_KEYDOWN:</div>
-<div class="line">                    <span class="keywordflow">switch</span>(e.key.keysym.sym){</div>
-<div class="line">                    <span class="keywordflow">case</span> SDLK_ESCAPE:</div>
-<div class="line">                        <span class="keywordflow">if</span>(e.key.keysym.mod &amp; KMOD_SHIFT)</div>
-<div class="line">                            keepRunning = <span class="keyword">false</span>;</div>
-<div class="line">                        <span class="keywordflow">break</span>;</div>
-<div class="line">                    }</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                }</div>
-<div class="line"> </div>
-<div class="line">            }</div>
-</div><!-- fragment --><p >This section is better understood through SDL's documentation, but it is clear what the intention is.</p>
-<h3><a class="anchor" id="cloer"></a>
-Program Closer</h3>
-<div class="fragment"><div class="line">            <span class="keywordflow">if</span>(openDuration_ms &gt; 0.f){</div>
-<div class="line">                <span class="keywordflow">if</span>(</div>
-<div class="line">                    std::chrono::duration_cast&lt;std::chrono::duration&lt;float, std::milli&gt;&gt;</div>
-<div class="line">                    (std::chrono::steady_clock::now() - start).count() &gt;= openDuration_ms</div>
-<div class="line">                )</div>
-<div class="line">                    keepRunning = <span class="keyword">false</span>;</div>
-<div class="line">            }</div>
-</div><!-- fragment --><p >This section just determines whether the program should remain open or closed after a certain time has passed </p>
-</div></div><!-- PageDoc -->
+<div class="ttc" id="ainit_8dox_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="init_8dox.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>Definition:</b> init.dox:3</div></div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.9.2-->

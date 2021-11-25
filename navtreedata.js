@@ -28,22 +28,20 @@ var NAVTREE =
     [ "GLider - OpenGL C++ Class Abstraction", "index.html", [
       [ "Introduction", "index.html#intro_sec", null ],
       [ "Usage", "index.html#usage_sec", [
-        [ "Section by Section Description", "index.html#sec_by_sec_desc", [
-          [ "Shader Sources", "index.html#shader_sources", null ],
-          [ "Handle Commandline Arguments", "index.html#handle_cmd_args", null ],
-          [ "SDL Initialization", "index.html#sdl_init", null ],
-          [ "GLider Initialization", "index.html#init", null ],
-          [ "Printing Info", "index.html#printing_info", null ],
-          [ "Glider Variable Declarations", "index.html#var_decl", null ],
-          [ "Vertex Data", "index.html#vertices", null ],
-          [ "Storing Vertex Data in VRAM", "index.html#store_to_vram", null ],
-          [ "Vertex Attribute Locations", "index.html#ver_attrib_loc", null ],
-          [ "Shader Compilation", "index.html#shader_comp", null ],
-          [ "Binding", "index.html#ensure_bind", null ],
-          [ "Rendering The Triangle", "index.html#draw", null ],
-          [ "Event Handling", "index.html#event_handling", null ],
-          [ "Program Closer", "index.html#cloer", null ]
-        ] ]
+        [ "Window Creation", "index.html#window", null ],
+        [ "Acquire OpenGL Context", "index.html#context", null ],
+        [ "Initialize GLider", "index.html#glider_init", null ],
+        [ "Shader Sources", "index.html#shader_sources", null ],
+        [ "Glider Variable Declarations", "index.html#var_decl", null ],
+        [ "Vertex Data", "index.html#vertices", null ],
+        [ "Storing Vertex Data in VRAM", "index.html#store_to_vram", null ],
+        [ "Vertex Attribute Locations", "index.html#ver_attrib_loc", null ],
+        [ "Shader Compilation", "index.html#shader_comp", null ],
+        [ "Binding", "index.html#ensure_bind", null ],
+        [ "Render Loop", "index.html#render", null ],
+        [ "Swap", "index.html#Buffer", null ],
+        [ "Event Handling", "index.html#event_handling", null ],
+        [ "Everything Together", "index.html#together", null ]
       ] ]
     ] ],
     [ "Namespaces", "namespaces.html", [
@@ -69,6 +67,7 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
