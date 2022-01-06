@@ -1,14 +1,16 @@
-# build/ can be generated using cmake:
+# build, bin, and lib can be generated using cmake:
 #   mkdir build && cd build
 #   cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 #   cmake --build .
 #   cmake --install .
 #   cd .. && rm -rf build
 build/
+bin/
+lib/
 
 # if needed, glad sources will be generated
-lib/glad/include/
-lib/glad/src/
+extern/glad/include/
+extern/glad/src/
 
 # ain't nobody need this
 .vscode/

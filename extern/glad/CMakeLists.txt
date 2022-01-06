@@ -64,10 +64,21 @@ else()
     target_include_directories(
         glad PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider/external>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider/extern>
     )
 
-    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider/external)
+    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider/extern)
+    
+    install(
+        TARGETS glad
+        EXPORT GLiderTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            COMPONENT GLider_Runtime
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+            COMPONENT GLider_Development
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/GLider
+            COMPONENT GLider_Development
+    )
 
 endif()
 
