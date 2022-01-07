@@ -1,9 +1,9 @@
-
 #include <cmath>
 #include <vector>
 #include <array>
 #include <cstdio>
 #include <iostream>
+#include <filesystem>
 
 #include "GLider/GLider.hpp"
 #include "util.hpp"
@@ -125,72 +125,6 @@ struct MotionVector3D{
 
 struct Cube{
 
-    static constexpr const char* const vertexShader = R"CODE(
-        #version 140
-
-        in vec3 position;
-
-        uniform mat4 u_mat;
-        uniform vec3 orientation;
-        // uniform float theta;
-
-        vec4 quat_mult(vec4 a, vec4 b)
-        {
-            return vec4(
-                ((a.w*b.x) + (a.x*b.w) + (a.y*b.z) - (a.z*b.y)), // x
-                ((a.w*b.y) - (a.x*b.z) + (a.y*b.w) + (a.z*b.x)), // y
-                ((a.w*b.z) + (a.x*b.y) - (a.y*b.x) + (a.z*b.w)), // z
-                ((a.w*b.w) - (a.x*b.x) - (a.y*b.y) - (a.z*b.z))  // w
-            );
-        }
-
-        vec4 quat_conj(vec4 q)
-        {
-            return vec4(-q.x, -q.y, -q.z, q.w);
-        }
-
-        vec4 quat_inv(vec4 q)
-        {
-            float mag_sqr = q.x*q.x + q.y*q.y + q.z*q.z * q.w*q.w;
-            return quat_conj(q)/mag_sqr;
-        }
-
-        vec4 quat_rot(float angle, vec3 axis){
-            float half_angle = angle/2;
-            float sin_half_angle = sin(half_angle);
-            return vec4(
-                axis.x * sin_half_angle,
-                axis.y * sin_half_angle,
-                axis.z * sin_half_angle,
-                cos(half_angle)
-            );
-        }
-
-        void main(){
-
-            vec4 pos = vec4(position, 1.f);
-
-            vec4 rotx = quat_rot(orientation.z, vec3(0.f, 0.f, 1.f));
-            vec4 roty = quat_rot(orientation.y, vec3(0.f, 1.f, 0.f));
-            vec4 rotz = quat_rot(orientation.x, vec3(1.f, 0.f, 0.f));
-
-            vec4 rot = quat_mult(rotz,quat_mult(roty,rotx));
-
-            gl_Position = u_mat * quat_mult(rot,quat_mult(pos, quat_conj(rot)));
-
-        }
-    )CODE";
-
-    static constexpr const char* const fragmentShader = R"CODE(
-        #version 140
-
-        uniform vec4 u_color;
-
-        void main(){
-            gl_FragColor = u_color;
-        }
-    )CODE";
-
     std::array<float,3*8>            vertexBufData;
     std::array<unsigned char, 6*6>   indexBufData;
 
@@ -247,7 +181,7 @@ struct Cube{
         }
     }
 
-    Cube():
+    Cube(std::filesystem::path exepath):
         translationBounds{-50.f, 50.f},
         rotationBounds{-KEYHITS_PER_ROTATION/2, KEYHITS_PER_ROTATION/2},
         observerPosition{ 0.f, 0.f, 5.f, translationBounds},
@@ -263,8 +197,9 @@ struct Cube{
         gli::Layout verBufLayout(1);
         verBufLayout.push<float>(gli::D3, false);
         vertexArray.readBufferData(vertexBuffer, verBufLayout);
-        shaders.compileString(gli::VertexShader, vertexShader);
-        shaders.compileString(gli::FragmentShader, fragmentShader);
+        auto res = exepath / "../share/GLider/test/";
+        shaders.compileFile(gli::VertexShader, (res / "cube.vs").string().c_str());
+        shaders.compileFile(gli::FragmentShader, (res / "cube.fs").string().c_str());
         shaders.link();
         shaders.validate();
         shaders.bind();
@@ -302,38 +237,9 @@ struct Cube{
 
 };
 
-constexpr const char* const Cube::vertexShader;
-constexpr const char* const Cube::fragmentShader;
-
-void test(){
-
-    #define printSize(x) GLI_PRINT_DEBUG("%-20s: %u \n", #x , (unsigned int)sizeof(x))
-
-    #undef printSize
-
-}
-
-// int initGli_exitOnError(){
-//     try{ gli::initialize(3,1); }
-//     catch(std::exception& ex){
-//         std::printf("%s occured! Cannot initialize GLider\n", typeid(ex).name());
-//         std::printf("%s", ex.what());
-//         return 1;
-//     }
-//     return 0;
-// }
-
 int main(int argc, char* argv[]){
 
     (void)argc;
-    (void)argv[0];
-
-    // {
-    //     int code = initGli_exitOnError();
-    //     if(code != 0) return code;
-    // }
-
-    // GLI_PRINT_DEBUG("size: %llu\n", sizeof(gli::Layout));
 
     try{
 
@@ -353,7 +259,8 @@ int main(int argc, char* argv[]){
         
         GLI_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
-        Cube cube;
+        auto exepath = std::filesystem::path(argv[0]).remove_filename();
+        Cube cube(exepath);
 
         GLI_PRINT_DEBUG("Cube Created\n");
 
@@ -394,9 +301,6 @@ int main(int argc, char* argv[]){
                     cube.observerPosition.getCurrent() + cube.observerForwards.getCurrent(),
                     cube.observerUpwards.getCurrent()
                 );
-                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.x.actual)+(PI_4) ) *
-                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4) ) *
-                // glm::rotate( (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0) );
 
             cube.shaders.setUniform("u_mat", mvp, false);
             cube.shaders.setUniform("orientation", glm::vec3(
@@ -404,7 +308,6 @@ int main(int argc, char* argv[]){
                 (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.y.actual)+(PI_4),
                 (PI2/KEYHITS_PER_ROTATION)*(cube.rotationState.z.actual)+(0)
             ));
-            //cube.shaders.setUniform("theta", glm::vec1(cube.theta.actual));
 
             /* Render here */
             gli::clear(gli::ColorBufferBit | gli::DepthBufferBit);
