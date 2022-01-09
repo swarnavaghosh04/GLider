@@ -79,6 +79,13 @@ namespace gli{
             const stdContainer<T, args...>& data,
             BufferUsage usage
         );
+        template<template<class, auto...> class stdContainer, class T, auto... args>
+            requires StdContainer<stdContainer, T, args...>
+        void feedData(
+            int index,
+            const stdContainer<T, args...>& data,
+            BufferUsage usage
+        );
         template<OpenGLType T>
         void draw(DrawType mode, unsigned int count, int offset = 0) noexcept;
     };

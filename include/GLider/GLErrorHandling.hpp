@@ -4,11 +4,9 @@
 #include <cstdio>
 #include "GLider/GLider_core.hpp"
 
-namespace gli{
-    
+namespace gli{    
     extern int numErrors; ///< @private
     void checkErrors() noexcept; ///< @private
-
 }
 
 #ifdef GLI_DEBUG
