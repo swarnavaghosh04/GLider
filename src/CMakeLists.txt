@@ -23,7 +23,7 @@ if(NOT glad_FOUND)
     )
 endif()
 
-target_link_libraries(GLider PUBLIC glad::glad ${OPENGL_opengl_LIBRARY})
+target_link_libraries(GLider PUBLIC glm::glm glad::glad ${OPENGL_opengl_LIBRARY})
  
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     target_compile_definitions(GLider PUBLIC GLI_DEBUG)
@@ -33,4 +33,5 @@ target_include_directories(
     GLider PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+        ${glm_incl}
 )

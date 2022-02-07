@@ -63,12 +63,17 @@ endif()
 # build dependency libraries
 
 find_package(OpenGL REQUIRED)
+find_package(glm CONFIG REQUIRED)
 find_package(glad CONFIG)
 
 # Dependency fixes
 
 if(NOT glad_FOUND)
     add_subdirectory(extern/glad)
+endif()
+
+if(NOT TARGET glm::glm)
+    add_library(glm::glm ALIAS glm)
 endif()
 
 # Set where library is going to be built
