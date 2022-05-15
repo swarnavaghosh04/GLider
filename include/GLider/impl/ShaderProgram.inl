@@ -5,15 +5,15 @@
 
 namespace gli{
 
-    inline ShaderProgram::ShaderProgram(unsigned int id) noexcept:
+    inline ShaderProgram::ShaderProgram(unsigned int id) noexcept(!GLI_DEBUG):
         OpenGLBase(id)
     {}
 
-    inline void ShaderProgram::bindID(unsigned int anotherID) noexcept{
+    inline void ShaderProgram::bindID(unsigned int anotherID) noexcept(!GLI_DEBUG){
         GL_CALL(glUseProgram(anotherID));
     }
 
-    inline unsigned int ShaderProgram::getBoundID() noexcept{
+    inline unsigned int ShaderProgram::getBoundID() noexcept(!GLI_DEBUG){
         int r;
         glGetIntegerv(GL_CURRENT_PROGRAM, &r);
         return static_cast<unsigned int>(r);
@@ -243,11 +243,11 @@ namespace gli{
     #undef SET_UNIFORM_MATRIX_N
     #undef SET_UNIFORM_MATRIX_RC
 
-    inline void ShaderProgram::bindAttribLocation(unsigned int index, const char* name) const noexcept{
+    inline void ShaderProgram::bindAttribLocation(unsigned int index, const char* name) const noexcept(!GLI_DEBUG){
         GL_CALL(glBindAttribLocation(this->id, index, name));
     }
 
-    inline int ShaderProgram::getParameter(ProgramParameter param) const noexcept{
+    inline int ShaderProgram::getParameter(ProgramParameter param) const noexcept(!GLI_DEBUG){
         int res;
         GL_CALL(glGetProgramiv(this->id, static_cast<unsigned int>(param), &res));
         return res;

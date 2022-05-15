@@ -29,12 +29,12 @@ namespace gli{
 
     class VertexArray : public OpenGLBase<VertexArray>{
         friend class OpenGLBase<VertexArray>;
-        VertexArray(unsigned int id) noexcept;
-        static void bindID(unsigned int id) noexcept;
-        static unsigned int getBoundID() noexcept;
+        VertexArray(unsigned int id) noexcept(!GLI_DEBUG);
+        static void bindID(unsigned int id) noexcept(!GLI_DEBUG);
+        static unsigned int getBoundID() noexcept(!GLI_DEBUG);
     public:
-        VertexArray() noexcept;
-        ~VertexArray() noexcept;
+        VertexArray() noexcept(!GLI_DEBUG);
+        ~VertexArray() noexcept(!GLI_DEBUG);
         void readBufferData(
             const Buffer<VertexBuffer>& vb,
             const Layout&               layout,
@@ -47,7 +47,7 @@ namespace gli{
         //     const stdContainer<gli::LayoutElement, args...>&    layout,
         //     unsigned int                                        startingAttribIndex = 0
         // );
-        void draw(DrawType mode, int first, int count) const noexcept;
+        void draw(DrawType mode, int first, int count) const noexcept(!GLI_DEBUG);
     };
 
 }

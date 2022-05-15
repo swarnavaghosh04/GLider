@@ -51,27 +51,27 @@ namespace gli{
     }
 
     template<BufferTarget target>
-    Buffer<target>::Buffer() noexcept{
+    Buffer<target>::Buffer() noexcept(!GLI_DEBUG){
         GL_CALL(glGenBuffers(1, &(this->id)));
     }
     
     template<BufferTarget target>
-    inline Buffer<target>::Buffer(unsigned int id) noexcept:
+    inline Buffer<target>::Buffer(unsigned int id) noexcept(!GLI_DEBUG):
         OpenGLBase<Buffer<target>>(id)
     {}
 
     template<BufferTarget target>
-    Buffer<target>::~Buffer() noexcept{
+    Buffer<target>::~Buffer() noexcept(!GLI_DEBUG){
         GL_CALL(glDeleteBuffers(1, &(this->id)));
     }
 
     template<BufferTarget target>
-    inline void Buffer<target>::bindID(unsigned int id) noexcept{
+    inline void Buffer<target>::bindID(unsigned int id) noexcept(!GLI_DEBUG){
         GL_CALL(glBindBuffer((unsigned int)target, id));
     }
     
     template<BufferTarget target>
-    inline unsigned int Buffer<target>::getBoundID() noexcept{
+    inline unsigned int Buffer<target>::getBoundID() noexcept(!GLI_DEBUG){
         int r;
         GL_CALL(glGetIntegerv(getBufferTargetBinding(target), &r));
         return static_cast<unsigned int>(r);
@@ -123,7 +123,7 @@ namespace gli{
     template<OpenGLType T>
     inline void Buffer<target>::draw(
         DrawType mode, unsigned int count, int offset
-    ) noexcept {
+    ) noexcept(!GLI_DEBUG) {
         static_assert((target == IndexBuffer), "Invalid draw call!");
         Binder b(*this);
         GL_CALL(glDrawElements(mode, count, getOpenGLTypeEnum<T>(), reinterpret_cast<void*>(offset*sizeof(T))));

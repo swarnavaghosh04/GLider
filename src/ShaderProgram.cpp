@@ -30,30 +30,30 @@ namespace gli
 
     public:
 
-        Shader(ShaderType type, const char* source) noexcept:
+        Shader(ShaderType type, const char* source) noexcept(!GLI_DEBUG):
             id{glCreateShader((unsigned int)type)}
         {
             GL_CALL();
             GL_CALL(glShaderSource(id, 1, &source, NULL));
         }
-        ~Shader() noexcept{
+        ~Shader() noexcept(!GLI_DEBUG){
             GL_CALL(glDeleteShader(id));
         }
         void compile(){
             GL_CALL(glCompileShader(id));
             checkIfCompileSuccessful();
         }
-        void attachToProgram(ShaderProgram* p) noexcept{
+        void attachToProgram(ShaderProgram* p) noexcept(!GLI_DEBUG){
             GL_CALL(glAttachShader(p->getID(), this->id));
         }
     };
 
-    ShaderProgram::ShaderProgram() noexcept
+    ShaderProgram::ShaderProgram() noexcept(!GLI_DEBUG)
     {
         GL_CALL(this->id = glCreateProgram());
     }
 
-    ShaderProgram::~ShaderProgram() noexcept
+    ShaderProgram::~ShaderProgram() noexcept(!GLI_DEBUG)
     {
         GL_CALL(glDeleteProgram(this->id));
     }

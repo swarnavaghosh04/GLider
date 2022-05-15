@@ -25,8 +25,6 @@ else()
         endif()
     endfunction()
 
-    message(STATUS "Generating Glad sources using python pip")
-
     project(glad LANGUAGES C)
 
     SET_GLAD_OPTION("profile" "core" "OpenGL profile (defaults to core)")
@@ -34,40 +32,48 @@ else()
     SET_GLAD_OPTION("spec" "" "Name of spec (gl, egl, glx or wgl)")
     SET_GLAD_OPTION("extensions" "" "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
 
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+        set(GLAD_GEN "c-debug")
+    else()
+        set(GLAD_GEN "c")
+    endif()
+
     add_library(glad OBJECT)
 
     if(
-        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c OR
-        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h OR
-        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h
+        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/src/glad.c OR
+        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/include/glad/glad.h OR
+        NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/include/KHR/khrplatform.h
     )
+        message(STATUS "generating glad sources using python pip")
         execute_process(
             COMMAND python3 -m pip install glad
         )
         execute_process(
-            COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR} ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=c
+            COMMAND python3 -m glad --out-path ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad ${GLAD_PROFILE} ${GLAD_API} ${GLAD_SPEC} ${GLAD_EXTENSIONS} --generator=${GLAD_GEN}
         )
+    else()
+        message(STATUS "using previously generated glad sources")
     endif()
 
-    file(
-        GLOB glad_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h
+    target_sources(
+        glad PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/src/glad.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/include/glad/glad.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/include/KHR/khrplatform.h
     )
 
-    target_sources(glad PRIVATE ${glad_SOURCES})
     target_link_libraries(glad INTERFACE ${CMAKE_DL_LIBS})
 
     include(GNUInstallDirs)
 
     target_include_directories(
         glad PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/extern/glad/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GLider/extern>
     )
 
-    install(DIRECTORY include/glad include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider/extern)
+    install(DIRECTORY extern/glad/include/glad extern/glad/include/KHR DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GLider/extern)
     
     install(
         TARGETS glad

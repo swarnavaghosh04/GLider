@@ -14,19 +14,13 @@ file(
 target_sources(
     GLider PRIVATE
     ${GLider_SOURCES}
+    $<TARGET_OBJECTS:glad::glad>
 )
-
-if(NOT glad_FOUND)
-    target_sources(
-        GLider PRIVATE
-        $<TARGET_OBJECTS:glad>
-    )
-endif()
 
 target_link_libraries(GLider PUBLIC glm::glm glad::glad ${OPENGL_opengl_LIBRARY})
  
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    target_compile_definitions(GLider PUBLIC GLI_DEBUG)
+    target_compile_definitions(GLider PUBLIC GLI_DEBUG=1)
 endif()
 
 target_include_directories(

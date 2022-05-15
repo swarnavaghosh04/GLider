@@ -10,44 +10,34 @@ namespace gli{
         layout.emplace_back(getOpenGLTypeEnum<T>(), dim, normalized);
     }
 
-    inline VertexArray::VertexArray() noexcept
+    inline VertexArray::VertexArray() noexcept(!GLI_DEBUG)
     {
         GL_CALL(glGenVertexArrays(1, &(this->id)));
     }
 
-    inline VertexArray::VertexArray(unsigned int id) noexcept:
+    inline VertexArray::VertexArray(unsigned int id) noexcept(!GLI_DEBUG):
         OpenGLBase(id)
     {}
 
-    inline VertexArray::~VertexArray() noexcept
+    inline VertexArray::~VertexArray() noexcept(!GLI_DEBUG)
     {
         GL_CALL(glDeleteVertexArrays(1, &(this->id)));
     }
 
-    inline void VertexArray::draw(DrawType mode, int first, int count) const noexcept
+    inline void VertexArray::draw(DrawType mode, int first, int count) const noexcept(!GLI_DEBUG)
     {
         GL_CALL(glDrawArrays(static_cast<unsigned int>(mode), first, count));
     }
 
-    inline void VertexArray::bindID(unsigned int id) noexcept{
+    inline void VertexArray::bindID(unsigned int id) noexcept(!GLI_DEBUG){
         GL_CALL(glBindVertexArray(id));
     }
 
-    inline unsigned int VertexArray::getBoundID() noexcept{
+    inline unsigned int VertexArray::getBoundID() noexcept(!GLI_DEBUG){
         int r;
         GL_CALL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &r));
         return static_cast<unsigned int>(r);
     }
-
-    // template<OpenGLType T, template<typename, auto...> class stdContainer, auto... args>
-    //     requires StdContainer<stdContainer, gli::LayoutElement, args...> && OpenGLType<T>
-    // inline void VertexArray::readBufferData(
-    //     const Buffer<VertexBuffer>& vb,
-    //     const stdContainer<gli::LayoutElement, args...>&    layout,
-    //     unsigned int                startingAttribIndex
-    // ){
-    //     readBufferData<T>(vb, layout.data(), layout.size(), startingAttribIndex);
-    // }
 
 }
 

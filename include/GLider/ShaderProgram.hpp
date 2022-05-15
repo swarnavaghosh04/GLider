@@ -59,25 +59,25 @@ namespace gli{
     class ShaderProgram : public OpenGLBase<ShaderProgram>{
     private:
         friend class OpenGLBase<ShaderProgram>;
-        ShaderProgram(unsigned int id) noexcept;
-        static void bindID(unsigned int id) noexcept;
-        static unsigned int getBoundID() noexcept;
+        ShaderProgram(unsigned int id) noexcept(!GLI_DEBUG);
+        static void bindID(unsigned int id) noexcept(!GLI_DEBUG);
+        static unsigned int getBoundID() noexcept(!GLI_DEBUG);
         void getInfoLog(char* buffer, unsigned int size) const;
         void throwErrorMessage() const;
     public:
-        ShaderProgram() noexcept;
-        ~ShaderProgram() noexcept;
+        ShaderProgram() noexcept(!GLI_DEBUG);
+        ~ShaderProgram() noexcept(!GLI_DEBUG);
         void compileString(ShaderType shaderType, const char* sourceCode);
         void compileFile(ShaderType shaderType, const char* sourceFilePath);
         void link() const;
         void validate() const;
-        int getParameter(ProgramParameter param) const noexcept;
+        int getParameter(ProgramParameter param) const noexcept(!GLI_DEBUG);
         unsigned int getUniformLocation(const char* name) const;
         template<int L, OpenGLType T, glm::qualifier Q>
         void setUniform(const char* name, const glm::vec<L,T,Q>& v);
         template<int R, int C, OpenGLType T, glm::qualifier Q>
         void setUniform(const char* name, const glm::mat<R,C,T,Q>& m, bool transpose);
-        void bindAttribLocation(unsigned int index, const char* name) const noexcept;
+        void bindAttribLocation(unsigned int index, const char* name) const noexcept(!GLI_DEBUG);
     };
 
 }

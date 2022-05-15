@@ -56,7 +56,7 @@ namespace gli{
      * @return OpenGL definition like GL_FLOAT, GL_UNSIGNED_INT, etc.
     */
     template<OpenGLType T>
-    constexpr OpenGLTypes getOpenGLTypeEnum() noexcept{
+    constexpr OpenGLTypes getOpenGLTypeEnum() noexcept(!GLI_DEBUG){
 
         constexpr OpenGLTypes returnValue = 
             std::is_same<T, char>() ||
@@ -169,22 +169,22 @@ namespace gli{
         friend class Binder;
     protected:
         unsigned int id;
-        OpenGLBase(unsigned int id) noexcept;         // Create Constructor from unsigned int in Derived class under private scope
-        static void bindID(unsigned int id) noexcept; // Define in Derived class under private scope
-        static unsigned int getBoundID() noexcept;    // Define in Derived class under private scope
+        OpenGLBase(unsigned int id) noexcept(!GLI_DEBUG);         // Create Constructor from unsigned int in Derived class under private scope
+        static void bindID(unsigned int id) noexcept(!GLI_DEBUG); // Define in Derived class under private scope
+        static unsigned int getBoundID() noexcept(!GLI_DEBUG);    // Define in Derived class under private scope
     public:
         OpenGLBase() noexcept = default;
         OpenGLBase(const OpenGLBase<Derived>&) = delete;
-        OpenGLBase(OpenGLBase<Derived>&& other) noexcept;
+        OpenGLBase(OpenGLBase<Derived>&& other) noexcept(!GLI_DEBUG);
         OpenGLBase<Derived>& operator= (const OpenGLBase<Derived>&) = delete;
-        OpenGLBase<Derived>& operator= (OpenGLBase<Derived>&& other) noexcept;
-        void bind() const noexcept;
-        static void bind(const OpenGLBase<Derived>& toBeBound) noexcept;
-        static void unbind() noexcept;
-        static OpenGLBase<Derived> getBound() noexcept;
-        bool isBound() const noexcept;
-        const unsigned int& getID() const noexcept {return id;}
-        unsigned int& getID() noexcept {return id;}
+        OpenGLBase<Derived>& operator= (OpenGLBase<Derived>&& other) noexcept(!GLI_DEBUG);
+        void bind() const noexcept(!GLI_DEBUG);
+        static void bind(const OpenGLBase<Derived>& toBeBound) noexcept(!GLI_DEBUG);
+        static void unbind() noexcept(!GLI_DEBUG);
+        static OpenGLBase<Derived> getBound() noexcept(!GLI_DEBUG);
+        bool isBound() const noexcept(!GLI_DEBUG);
+        const unsigned int& getID() const noexcept(!GLI_DEBUG) {return id;}
+        unsigned int& getID() noexcept(!GLI_DEBUG) {return id;}
     };
 
     template<class Derived>
@@ -192,19 +192,19 @@ namespace gli{
     private:
         unsigned int prevID;
     public:
-        Binder(const OpenGLBase<Derived>& base) noexcept;
-        ~Binder() noexcept;
+        Binder(const OpenGLBase<Derived>& base) noexcept(!GLI_DEBUG);
+        ~Binder() noexcept(!GLI_DEBUG);
     };
 
-    void clear(BufferBit mask) noexcept;
-    void enable(Capability_NI cap) noexcept;
-    void enable(Capability_I cap) noexcept;
-    void enable(Capability_I cap, unsigned int index) noexcept;
-    void disable(Capability_NI cap) noexcept;
-    void disable(Capability_I cap) noexcept;
-    void disable(Capability_I cap, unsigned int index) noexcept;
+    void clear(BufferBit mask) noexcept(!GLI_DEBUG);
+    void enable(Capability_NI cap) noexcept(!GLI_DEBUG);
+    void enable(Capability_I cap) noexcept(!GLI_DEBUG);
+    void enable(Capability_I cap, unsigned int index) noexcept(!GLI_DEBUG);
+    void disable(Capability_NI cap) noexcept(!GLI_DEBUG);
+    void disable(Capability_I cap) noexcept(!GLI_DEBUG);
+    void disable(Capability_I cap, unsigned int index) noexcept(!GLI_DEBUG);
     template<std::floating_point T>
-    void depthRange(T near, T far) noexcept;
+    void depthRange(T near, T far) noexcept(!GLI_DEBUG);
 
     //! @private
     template<template <typename, auto...> class T, typename U, auto... Args>

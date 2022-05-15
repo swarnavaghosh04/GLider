@@ -4,16 +4,14 @@
 #include <stdexcept>
 #include "glad/glad.h"
 
-#ifdef GLI_DEBUG
-    /*
-    This needs priority of SDL_LOG_CATEGORY_APPLICATION to be set to
-    SDL_LOG_PRIORITY_DEBUG Which is done in gli::initialize() which
-    is decalred in GLider.hpp
-    */
-    #define GLI_PRINT_DEBUG(format, ...)\
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, format, ##__VA_ARGS__);
-#else
-    #define GLI_PRINT_DEBUG(format, ...)
+#ifndef GLI_DEBUG
+#define GLI_DEBUG 0
+#endif
+
+#if GLI_DEBUG & !defined(GLAD_DEBUG)
+#error\
+    "GLI_DEBUG is on but GLAD_DEBUG is not defined! "\
+    "Please make sure GLAD is using c-debug as generator"
 #endif
 
 #endif

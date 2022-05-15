@@ -62,12 +62,12 @@ namespace gli{
     template<BufferTarget target>
     class Buffer : public OpenGLBase<Buffer<target>>{
         friend class OpenGLBase<Buffer<target>>;
-        Buffer(unsigned int id) noexcept;
-        static void bindID(unsigned int id) noexcept;
-        static unsigned int getBoundID() noexcept;
+        Buffer(unsigned int id) noexcept(!GLI_DEBUG);
+        static void bindID(unsigned int id) noexcept(!GLI_DEBUG);
+        static unsigned int getBoundID() noexcept(!GLI_DEBUG);
     public:
-        Buffer() noexcept;
-        ~Buffer() noexcept;
+        Buffer() noexcept(!GLI_DEBUG);
+        ~Buffer() noexcept(!GLI_DEBUG);
         template<class T>
         void feedData(
             const T* data,
@@ -87,7 +87,7 @@ namespace gli{
             BufferUsage usage
         );
         template<OpenGLType T>
-        void draw(DrawType mode, unsigned int count, int offset = 0) noexcept;
+        void draw(DrawType mode, unsigned int count, int offset = 0) noexcept(!GLI_DEBUG);
     };
     
 }

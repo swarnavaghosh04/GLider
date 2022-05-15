@@ -2,7 +2,6 @@
 #include <vector>
 #include <array>
 #include <cstdio>
-#include <iostream>
 #include <filesystem>
 
 #include "GLider/GLider.hpp"
@@ -40,6 +39,9 @@ this many seconds after a key is pressed once. */
 #endif
 #define PI2 (2.f*(float)M_PI)
 #define PI_4 ((float)M_PI/4.f)
+
+
+
 // Structures For Data Organization ============================================
 
 struct MotionVar{
@@ -190,7 +192,7 @@ struct Cube{
         rotationState{ 0.f,  0.f, 0.f, rotationBounds},
         theta{0, {0.f, 2.f*3.14159f}}
     {
-        GLI_PRINT_DEBUG("Cube Init\n");
+        PRINT_DEBUG("Cube Init\n");
         generateVertices(1, glm::vec3(0,0,0), vertexBufData, indexBufData);
         vertexBuffer.feedData(vertexBufData, gli::UseStaticDraw);
         indexBuffer.feedData(indexBufData, gli::UseStaticDraw);
@@ -256,19 +258,23 @@ int main(int argc, char* argv[]){
         SDL::OpenGLWindow window{"Cube", dm.w, dm.h};
 
         gli::initialize(SDL_GL_GetProcAddress);
+
+        unsigned int vtest = 46;
+
+        gli::VertexArray::bind(*(gli::VertexArray*)&vtest);
         
-        GLI_PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
+        PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
         auto exepath = std::filesystem::path(argv[0]).remove_filename();
         Cube cube(exepath);
 
-        GLI_PRINT_DEBUG("Cube Created\n");
+        PRINT_DEBUG("Cube Created\n");
 
         {
             int buffers, samples;
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &buffers );
             SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &samples );
-            GLI_PRINT_DEBUG("buf = %d, samples = %d\n", buffers, samples);
+            PRINT_DEBUG("buf = %d, samples = %d\n", buffers, samples);
         }
 
         // Setup MVP =============================
