@@ -258,10 +258,6 @@ int main(int argc, char* argv[]){
         SDL::OpenGLWindow window{"Cube", dm.w, dm.h};
 
         gli::initialize(SDL_GL_GetProcAddress);
-
-        unsigned int vtest = 46;
-
-        gli::VertexArray::bind(*(gli::VertexArray*)&vtest);
         
         PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
 
