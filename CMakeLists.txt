@@ -50,7 +50,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(OpenGL REQUIRED)
 find_package(glm CONFIG REQUIRED)
-find_package(glad MODULE REQUIRED)
+find_package(glad REQUIRED)
 
 # Dependency fixes
 
