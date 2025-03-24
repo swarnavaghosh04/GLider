@@ -29,7 +29,7 @@ jobs:
       - name: CMake Configure
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DBUILD_GLIDER_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++-10
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/test_install -DGLIDER_BUILD_TESTS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
       
       - name: Build
         run: cmake --build build --verbose
