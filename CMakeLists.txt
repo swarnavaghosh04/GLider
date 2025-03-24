@@ -130,5 +130,16 @@ if(NOT TARGET uninstall)
 
   add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake)
+endif()
 
+if(WIN32)
+	configure_file(
+	    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PKGBUILD-MSYS2.in
+	    ${CMAKE_CURRENT_BINARY_DIR}/PKGBUILD
+	@ONLY)
+else()
+	configure_file(
+	    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PKGBUILD-Archlinux.in
+	    ${CMAKE_CURRENT_BINARY_DIR}/PKGBUILD
+	@ONLY)
 endif()

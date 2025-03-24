@@ -1,0 +1,27 @@
+# Maintainer: Swarnava Ghosh <swarnavaghosh04@gmail.com>
+
+_realname=@PROJECT_NAME@
+pkgbase=mingw-w64-${_realname}
+pkgname=${MINGW_PACKAGE_PREFIX}-${_realname}
+pkgver=@PROJECT_VERSION@
+pkgrel=1
+pkgdesc="@PROJECT_DESCRIPTION@"
+arch=('x86_64' 'i686')
+license=('MIT')
+depends=()
+makedepends=(
+	"${MINGW_PACKAGE_PREFIX}-cmake"
+)
+source=()
+md5sums=('SKIP')
+url="@PROJECT_HOMEPAGE_URL@"
+build(){
+  cd ..
+  MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+  cmake .. -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX}
+  cmake --build .
+}
+package() {
+  cd ..
+  DESTDIR="$pkgdir" cmake --install .
+}
