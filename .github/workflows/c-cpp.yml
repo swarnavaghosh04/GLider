@@ -20,11 +20,18 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt install gcc-10 g++-10 git cmake python3-pip libsdl2-dev libglm-dev
+          sudo apt install cmake xorg-dev
+          git clone https://github.com/libsdl-org/SDL
+          cd SDL
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          sudo cmake --install .
+          sudo apt install python3-glad libglm-dev
       
       - name: Setup OpenGL
         run: |
-          sudo apt install mesa-utils linux-generic xserver-xorg-core xserver-xorg xserver-xorg-video-all xserver-xorg-input-all libwayland-egl1-mesa
+          sudo apt install libgl-dev libgl1-mesa-dev mesa-utils linux-generic xserver-xorg-core xserver-xorg xserver-xorg-video-all xserver-xorg-input-all libwayland-egl1-mesa
 
       - name: CMake Configure
         run: |
@@ -36,9 +43,9 @@ jobs:
         
       - name: Run Tests
         run: |
-          /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 800x600x24 -ac +extension GLX
+          /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 1 800x600x24 -ac +extension GLX
           export SDL_VIDEODRIVER=x11
-          export DISPLAY=:99.0
+          export DISPLAY=:99.1
           ctest --test-dir build -C Debug --output-on-failure
   
   # build-relese:

@@ -6,6 +6,8 @@
 #include "GLider/GLider.hpp"
 #include "util.hpp"
 
+#include <SDL3/SDL_main.h>
+
 //! [Shader Sources]
 
 const char* vertexShader = R"CODE(

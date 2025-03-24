@@ -55,7 +55,7 @@ public:
     };
 
     class OpenGLWindow : Window{
-        protected:
+    protected:
         Renderer renderer;
         OpenGLContext glContext;
     public:
