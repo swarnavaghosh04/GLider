@@ -199,7 +199,7 @@ struct Cube{
         gli::Layout verBufLayout(1);
         verBufLayout.push<float>(gli::D3, false);
         vertexArray.readBufferData(vertexBuffer, verBufLayout);
-        auto res = exepath / "../share/GLider/test/";
+        auto res = exepath / "../../share/GLider/test/";
         shaders.compileFile(gli::VertexShader, (res / "cube.vs").string().c_str());
         shaders.compileFile(gli::FragmentShader, (res / "cube.fs").string().c_str());
         shaders.link();
