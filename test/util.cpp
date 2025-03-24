@@ -4,7 +4,6 @@ SDL::Window::Window(const char* title, int width, int height, unsigned int windo
     window(
         SDL_CreateWindow(
             title,
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             width, height,
             windowFlags | SDL_WINDOW_OPENGL
         )
@@ -33,9 +32,9 @@ SDL::Window& SDL::Window::operator=(SDL::Window&& other) noexcept{
     return *this;
 }
 
-SDL::Renderer::Renderer(SDL::Window& window, unsigned int rendererFlags):
+SDL::Renderer::Renderer(SDL::Window& window):
     renderer(
-        SDL_CreateRenderer(window.get(), -1, rendererFlags)
+        SDL_CreateRenderer(window.get(), NULL)
     )
 {
     if(renderer == NULL)
@@ -70,7 +69,7 @@ SDL::OpenGLContext::OpenGLContext(SDL::Window& window):
 }
 
 SDL::OpenGLContext::~OpenGLContext() noexcept{
-    SDL_GL_DeleteContext(glContext);
+    SDL_GL_DestroyContext(glContext);
     PRINT_DEBUG("OpenGLContext Destroyed\n");
 }
 
@@ -94,7 +93,7 @@ SDL::OpenGLWindow::OpenGLWindow(
     unsigned int rendererFlags)
 :
     SDL::Window(title, width, height, windowFlags),
-    renderer(*(Window*)(&(this->window)), rendererFlags | SDL_WINDOW_OPENGL),
+    renderer(*(Window*)(&(this->window))),
     glContext(*(Window*)(&(this->window)))
 {}
 
@@ -104,7 +103,7 @@ int setAttributesWithVersion(int major, int minor){
         + SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major)
         + SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor)
         + SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)
-        + SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32)
+        + SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24)
         + SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1)
         + SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4)
         + SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -112,16 +111,17 @@ int setAttributesWithVersion(int major, int minor){
 
 SDL::SDL(int major, int minor){
 
-    SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO) < 0)
         throw std::runtime_error(SDL_GetError());
 
     int errorVal = setAttributesWithVersion(major, minor);
 
     if(errorVal < 0){
+        const char* msg = SDL_GetError();
         SDL_Quit();
-        throw std::runtime_error(SDL_GetError());
+        throw std::runtime_error(msg);
     }
 }
 

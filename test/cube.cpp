@@ -247,19 +247,16 @@ int main(int argc, char* argv[]){
 
         SDL sdl(3,1);
         
-        SDL_DisplayMode dm;
+        const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(1);
 
-        if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+        if (dm == nullptr)
             throw std::runtime_error(SDL_GetError());
 
-        int q = std::min(dm.h, dm.w) * 3.f/4.f;
-        dm.h = dm.w = q;
+        int q = std::min(dm->h, dm->w) * 3.f/4.f;
 
-        SDL::OpenGLWindow window{"Cube", dm.w, dm.h};
+        SDL::OpenGLWindow window{"Cube", q, q};
 
-        gli::initialize(SDL_GL_GetProcAddress);
-        
-        PRINT_DEBUG("GLVerion: %d.%d\n", GLVersion.major, GLVersion.minor);
+        gli::initialize((GLADloadfunc)SDL_GL_GetProcAddress);
 
         auto exepath = std::filesystem::path(argv[0]).remove_filename();
         Cube cube(exepath);
@@ -276,7 +273,7 @@ int main(int argc, char* argv[]){
         // Setup MVP =============================
 
         glm::mat4 mvp, projection = 
-            glm::perspective(70.f*3.14159f/180.f, (float)dm.w/(float)dm.h, 0.001f, 1000.f);
+            glm::perspective(70.f*3.14159f/180.f, (float)dm->w/(float)dm->h, 0.001f, 1000.f);
 
         gli::enable(gli::Capability_NI::DepthTest);
         gli::depthRange(0.01, 1000.0);
@@ -322,14 +319,14 @@ int main(int argc, char* argv[]){
             /* Poll for and process events */
             while(SDL_PollEvent(&event)){
                 
-                #define shiftModifiersActived event.key.keysym.mod & KMOD_SHIFT
+                #define shiftModifiersActived event.key.mod & SDL_KMOD_SHIFT
 
                 switch(event.type){
-                case SDL_QUIT:
+                case SDL_EVENT_QUIT:
                     keepRunning = false;
                     break;
-                case SDL_KEYDOWN:
-                    switch(event.key.keysym.sym){
+                case SDL_EVENT_KEY_DOWN:
+                    switch(event.key.key){
                     case SDLK_LEFT:
                         if(shiftModifiersActived)
                             cube.observerPosition.x.decrementDesired();
@@ -366,10 +363,10 @@ int main(int argc, char* argv[]){
                         else
                             cube.rotationState.z.incrementDesired();
                         break;
-                    case SDLK_w:
+                    case SDLK_W:
                         cube.theta.desired += 3.14159/18.f; // + 10 degrees
                         break;
-                    case SDLK_s:
+                    case SDLK_S:
                         cube.theta.desired -= 3.14159/18.f; // - 10 degrees
                         break;
                     case SDLK_SPACE:

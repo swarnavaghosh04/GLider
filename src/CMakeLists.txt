@@ -18,9 +18,10 @@ target_sources(
 )
 
 target_link_libraries(GLider PUBLIC glm::glm glad::glad ${OPENGL_opengl_LIBRARY})
- 
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    target_compile_definitions(GLider PUBLIC GLI_DEBUG=1)
+    # target_compile_definitions(GLider PUBLIC GLI_DEBUG=1)
+    message(STATUS "debug logging yet to be handled")
 endif()
 
 target_include_directories(

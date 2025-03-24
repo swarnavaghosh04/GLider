@@ -46,8 +46,8 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 namespace gli{
 
-    void initialize();
-    void initialize(GLADloadproc loader);
+    // void initialize();
+    void initialize(GLADloadfunc loader);
 
 }
 

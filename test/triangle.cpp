@@ -51,14 +51,14 @@ int main(int argc, char* argv[]){
 
         SDL sdl(3,0);
 
-        SDL_DisplayMode dm;
-        if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+        const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(1);
+        if (dm == nullptr)
             throw std::runtime_error(SDL_GetError());
 
-        SDL::OpenGLWindow win{"Triangle", (dm.w*3)/4, (dm.h*3)/4};
+        SDL::OpenGLWindow win{"Triangle", (dm->w*3)/4, (dm->h*3)/4};
 
         //! [GLider Init]
-        gli::initialize(SDL_GL_GetProcAddress);
+        gli::initialize((GLADloadfunc)SDL_GL_GetProcAddress);
         //! [GLider Init]
 
         //! [GLider Variable Declarations]
@@ -121,13 +121,13 @@ int main(int argc, char* argv[]){
             while(SDL_PollEvent(&e)){
 
                 switch(e.type){
-                case SDL_QUIT:
+                case SDL_EVENT_QUIT:
                     keepRunning = false;
                     break;
-                case SDL_KEYDOWN:
-                    switch(e.key.keysym.sym){
+                case SDL_EVENT_KEY_DOWN:
+                    switch(e.key.key){
                     case SDLK_ESCAPE:
-                        if(e.key.keysym.mod & KMOD_SHIFT)
+                        if(e.key.mod & SDL_KMOD_SHIFT)
                             keepRunning = false;
                         break;
                     }

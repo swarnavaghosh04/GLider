@@ -6,32 +6,24 @@
 #include "GLider/GLider.hpp"
 #include "util.hpp"
 
-void printInfo(){
-    std::printf("OpenGL GLAD verision   : %d.%d\n", GLVersion.major, GLVersion.minor);
-    std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
-    std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-    std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));
-    std::printf("OpenGL Renderer        : %s \n", glGetString(GL_RENDERER));
-}
-
 bool testVersion(std::pair<int,int> version){
 
-    std::printf("\n");
-
-    SDL sdl(version.first, version.second);
-
-    bool working;
-    {
+    try{
+        SDL sdl(version.first, version.second);
         SDL::OpenGLWindow win("Test Window", 100, 100);
         gli::initialize(SDL_GL_GetProcAddress);
-        working = GLVersion.major == version.first && GLVersion.minor == version.second;
-        if(working){
-            printInfo();
-            gli::clear(gli::ColorBufferBit);
-            win.swap();
-        }
+        std::printf("OpenGL Version         : %s \n", glGetString(GL_VERSION));
+        std::printf("OpenGL Shading Version : %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        std::printf("OpenGL Vendor          : %s \n", glGetString(GL_VENDOR));
+        std::printf("OpenGL Renderer        : %s \n", glGetString(GL_RENDERER));
+        gli::clear(gli::ColorBufferBit);
+        win.swap();
+
+    }catch(std::exception& e){
+        return false;
     }
-    return working;
+    
+    return true;
 }
 
 std::pair<int,int> findMaxOpenGLVersion(){

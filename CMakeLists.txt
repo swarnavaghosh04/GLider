@@ -7,26 +7,13 @@ project(
     DESCRIPTION "A simple library that abstracts OpenGL into classes."
 )
 
+set(GLIDER_BUILD_TESTS FALSE CACHE BOOL "Build the unit tests")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
-
-set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build")
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-
-set(BUILD_GLIDER_TESTS FALSE CACHE BOOL "Build the unit tests (inside `test` directory)")
-
-string(
-    APPEND _opts
-    "$<IF:$<CXX_COMPILER_ID:MSVC>,"
-        "/W4;$<$<CONFIG:RELEASE>:/O2>,"
-        "-Wall;-Wextra;"
-            "$<$<CONFIG:RELEASE>:-O3>"
-    ">"
-)
-add_compile_options("${_opts}")
 
 include(GNUInstallDirs)
 
@@ -34,17 +21,7 @@ if(NOT APPLE)
     set(CMAKE_INSTALL_RPATH $ORIGIN)
 endif()
 
-# Set where dependency libraries are going to be built
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_LIBDIR}/GLider)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_LIBDIR}/GLider)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_BINDIR})
-
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_LIBDIR}/GLider)
-set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_LIBDIR}/GLider)
-set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_BINDIR})
-
-# build dependency libraries
+# dependency libraries
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -61,7 +38,7 @@ endif()
 # build library
 
 add_subdirectory(src)
-if(BUILD_GLIDER_TESTS)
+if(GLIDER_BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()
@@ -78,7 +55,7 @@ install(
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT GLider_Development
 )
-if(BUILD_GLIDER_TESTS)
+if(GLIDER_BUILD_TESTS)
     install(
         TARGETS cube triangle init
         EXPORT GLiderTargets
