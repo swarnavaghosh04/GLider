@@ -84,12 +84,8 @@ namespace gli{
         unsigned int dataCount,
         BufferUsage usage
     ){
-        #if GL_VERSION_4_5
-        GL_CALL(glNamedBufferData(this->id, dataCount*sizeof(T), data, usage));
-        #else
         Binder b(*this);
         GL_CALL(glBufferData(target, dataCount*sizeof(T), data, usage));
-        #endif
     }
 
     template<BufferTarget target>
@@ -99,8 +95,7 @@ namespace gli{
         const stdContainer<T,args...>& data,
         BufferUsage usage
     ){
-        Binder b(*this);
-        GL_CALL(glBufferData(target, data.size()*sizeof(T), data.data(), usage));
+        this->feedData(data.data(), data.size(), usage);
     }
 
     template<BufferTarget target>
